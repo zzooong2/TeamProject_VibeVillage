@@ -1,0 +1,144 @@
+/* 공통 값에 대한 변수 */
+:root {
+    --main-bg-color: #000;
+    --hover-bg-color: #555;
+    --text-color: white;
+    --link-color: white;
+    --link-hover-color: #ddd;
+    --font-family: Arial, sans-serif;
+    --content-width: 80%;
+    --padding: 10px;
+}
+
+/* 전체 레이아웃 */
+body, html {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    height: 100%; /* 페이지 높이를 100%로 설정 */
+    background-color: #f8f8f8;
+}
+
+.wrapper {
+    min-height: 100%; /* 콘텐츠가 푸터를 밀어내도록 설정 */
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1; /* 메인 콘텐츠가 가능한 많은 공간을 차지하도록 설정 */
+    padding: 20px;
+}
+
+/* 게시판 스타일 */
+table {
+    width: var(--content-width);
+    margin: 10px auto;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: var(--padding);
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* 버튼 스타일 */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    width: var(--content-width);
+    margin: 60px auto;
+}
+
+.left-button {
+    margin-right: auto;
+}
+
+.right-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* 검색 스타일 */
+.search-container {
+    width: var(--content-width);
+    margin: 20px auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-container input[type="text"] {
+    padding: var(--padding);
+    width: 200px;
+    border: 1px solid #ddd;
+}
+
+.search-container button {
+    padding: var(--padding) 20px;
+    border: none;
+    background-color: var(--main-bg-color);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: var(--hover-bg-color);
+}
+
+/* 수정된 CSS */
+.main-content {
+    width: var(--content-width);
+    margin: 0 auto;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* 테이블이 가로로 넘칠 경우 스크롤 가능하도록 설정 */
+}
+
+table {
+    width: 80%; /* 테이블을 컨테이너의 너비에 맞추도록 설정 */
+}
+
+/* Pagination 스타일 */
+.pagination-container {
+    width: var(--content-width);
+    margin: 20px auto; /* 상단과 하단 여백을 추가 */
+    text-align: center;
+}
+
+.pagination {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+}
+
+.pagination li {
+    display: inline;
+    margin: 0 5px;
+}
+
+.pagination a {
+    text-decoration: none;
+    color: var(--main-bg-color);
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    background-color: white;
+}
+
+.pagination a:hover {
+    background-color: var(--hover-bg-color);
+    color: var(--text-color);
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link th:href="@{css/talentGroupBoard/talentGroupBoard.css}" rel="stylesheet" />
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+<body>
+<div th:replace="~{common/nav :: nav}"></div>
+
+<section class="module">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <h4 class="font-alt mb-0">모임 만들기</h4>
+                <hr class="divider-w mt-10 mb-20">
+                <form class="form" role="form">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="sub"> 방장 : </label>
+                            <input type="text" class="form-control" name="person" id="sub"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone"> 휴대폰 : </label>
+                            <input type="tel" class="form-control" name="tell" id="phone" placeholder="010-0000-0000" pattern="(01[0-9]{1})-[0-9]{3,4}-[0-9]{4}"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="person">모집인원:</label>
+                            <select class="form-control" name="person" id="person" size="1">
+                                <option value="2">2명</option>
+                                <option value="3">3명</option>
+                                <option value="4">4명</option>
+                                <option value="5">5명</option>
+                                <option value="6">6명</option>
+                                <option value="7">7명</option>
+                                <option value="8">8명</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <legend>날짜 선택 및 시간 선택</legend>
+                            <input type="date" class="form-control" name="reservation_date"/>
+                            <input type="time" class="form-control" name="reservation_time" min="09:00" max="20:00"/>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" placeholder="제목을 입력해주세요."/>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">카테고리</label>
+                            <select class="form-control" id="category" name="category">
+                                <option value="general">운동</option>
+                                <option value="info">취미</option>
+                                <option value="tech">친목</option>
+                                <option value="question">스터디</option>
+                                <option value="review">맛집탐방</option>
+                                <option value="review">반려동물</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageUpload">이미지 업로드:</label>
+                            <input type="file" class="form-control-file" id="imageUpload" name="imageUpload" accept="image/* "onchange="previewImage(event)"/>
+                            <img id="imagePreview" style="margin-top: 10px; max-width: 100%; display: none;" />
+                        </div>
+                        <div class="form-group">
+                            <textarea class="form-control" rows="7" placeholder="내용을 입력해주세요."></textarea>
+                        </div>
+                    </fieldset>
+                    <div class="form-actions">
+                        <button class="btn btn-g btn-circle" type="submit">등록</button>
+                        <button class="btn btn-g btn-circle" type="button" onclick="location.href='경험 및 공유 게시판.html'">취소</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+</body>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+</html>

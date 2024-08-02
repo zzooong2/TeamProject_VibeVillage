@@ -35,8 +35,9 @@ dependencies {
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
 	// Thymeleaf 의존성 주입
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
+    runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
@@ -44,6 +45,10 @@ dependencies {
 	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	
+	// 스프링 부트 리로드 툴
+	implementation("org.springframework.boot:spring-boot-devtools:3.2.4")
+
 }
 
 tasks.withType<Test> {

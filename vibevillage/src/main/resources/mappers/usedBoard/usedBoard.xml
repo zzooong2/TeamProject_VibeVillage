@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper">
+
+    <resultMap id="usedBoardMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+<!--        게시글-->
+        <result column="used_post_id" property="usedBoardId"/>
+        <result column="used_post_title" property="usedBoardTitle"/>
+        <result column="used_post_content" property="usedBoardContent"/>
+        <result column="used_post_status" property="usedBoardStatus"/>
+        <result column="used_create_at" property="usedBoardCreateAt"/>
+        <result column="views" property="usedBoardViews"/>
+        <result column="product_name" property="usedBoardProductName"/>
+        <result column="product_price" property="usedBoardProductPrice"/>
+<!--       카테고리-->
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+    </resultMap>
+
+    <select id="usedBoardListXML" resultMap="usedBoardMap">
+        SELECT u.used_post_id, used_post_title,
+               used_post_content, used_create_at,used_post_status,
+               views, p.product_Name, c.category_Name,p.product_price
+        FROM USED_BOARD u
+        join product p  on p.used_post_id = u.used_post_id
+        join category c on c.category_id = p.category_id
+    </select>
+    <select id="usedBoardDetailXML" resultMap="usedBoardMap">
+        SELECT u.used_post_id, used_post_title,
+               used_post_content, used_create_at,used_post_status,
+               views, p.product_Name, c.category_Name,p.product_price
+        FROM USED_BOARD u
+        join product p  on p.used_post_id = u.used_post_id
+        join category c on c.category_id = p.category_id
+        where p.used_post_id = #{id}
+    </select>
+
+    <insert id="usedBoardEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+        INSERT INTO USED_BOARD VALUES (USED_BOARD_SEQ.NEXTVAL, 1, #{usedBoardTitle}, #{usedBoardContent}, #{usedBoardLocation}, 3, 3, default, null, default, default, 0)
+    </insert>
+
+    <insert id="usedBoardImageXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
+        INSERT INTO USED_BOARD_IMAGE VALUES (USED_BOARD_IMAGE_SEQ.NEXTVAL, #{usedBoardId}, #{uploadOriginName}, #{uploadUniqueName}, #{uploadImagePath}, #{uploadImageType})
+    </insert>
+
+
+</mapper>

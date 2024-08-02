@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class TestController {
@@ -16,12 +17,8 @@ public class TestController {
         this.testService = testService;
     }
 
-    @GetMapping("/test")
-    public String databaseConnectionTest(Model model) {
-        String result = testService.testXML();
-
-        model.addAttribute("result", result);
-
-        return "index";
+    @RequestMapping("/test")
+    public String databaseConnectionTest() {
+        return "/usedBoard/usedBoardCreate";
     }
 }

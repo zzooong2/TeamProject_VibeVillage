@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head>
+
+  <div th:replace="~{common/head :: head}"></div>
+  <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+  <script th:src="@{//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services}"></script>
+  <style>
+    .preview {
+      display: inline-block;
+      margin: 10px;
+    }
+    .preview img {
+      width: 100px;
+      height: 100px;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<main>
+  <div class="page-loader">
+    <div class="loader">Loading...</div>
+  </div>
+  <div th:replace="~{common/nav :: nav}"></div>
+  <div class="main">
+    <section class="module">
+      <div class="container">
+        <form th:action="@{/used/boardEnroll}" th:object="${usedBoard}" method="POST" enctype="multipart/form-data">
+          <div class="row">
+             <button class="btn btn-g btn-circle">
+              <input class="gallery" type="file" multiple id="file-input" name="files">
+             </button>
+            <div class="col-sm-6 mb-sm-40">
+              <div class="gallery" id="preview-container">
+              </div>
+              <ul class="product-gallery">
+                <li>
+                  <a class="gallery" th:href="@{/img/shop/product-8.jpg}"></a>
+                  <img th:src="@{/img/shop/product-8.jpg}" alt="Single Product"/>
+                </li>
+                <li>
+                  <a class="gallery" th:href="@{/img/shop/product-9.jpg}"></a>
+                  <img th:src="@{/img/shop/product-9.jpg}" alt="Single Product"/>
+                </li>
+                <li>
+                  <a class="gallery" th:href="@{/img/shop/product-10.jpg}"></a>
+                  <img th:src="@{/img/shop/product-10.jpg}" alt="Single Product"/>
+                </li>
+              </ul>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h1 class="product-title font-alt"></h1>
+                  <div class="form-group">
+                    <input class="form-control input-lg" type="text" placeholder="제목" th:field="*{usedBoardTitle}"/>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-20">
+                <div class="col-sm-12">
+                  <span><i class="fa fa-star star"></i></span>
+                  <span><i class="fa fa-star star"></i></span>
+                  <span><i class="fa fa-star star"></i></span>
+                  <span><i class="fa fa-star star"></i></span>
+                  <span><i class="fa fa-star star-off"></i></span>
+                  <a class="open-tab section-scroll" href="#reviews">-2 customer reviews</a>
+                </div>
+              </div>
+              <div class="row mb-20">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <input class="form-control input-lg" type="text" placeholder="상품이름" th:field="*{usedBoardProductName}"/>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control input-lg" type="text" placeholder="가격" th:field="*{usedBoardProductPrice}"/>
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-20">
+                <div class="col-sm-12">
+                  <div class="description">
+                    <div class="form-group">
+                      <textarea class="form-control" rows="7" placeholder="내용" th:field="*{usedBoardContent}"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-20">
+                <div class="col-sm-4 mb-sm-20">
+                  <input type="text" id="sample5_address" class="form-control" placeholder="주소" th:field="*{usedBoardLocation}" >
+                </div>
+                <div class="col-sm-4">
+                  <input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-g btn-circle" value="주소 검색">
+                </div>
+              </div>
+
+              <div class="row mb-20">
+                <div class="col-sm-4 mb-sm-20">
+                  <select class="form-control" th:field="*{categoryId}" >
+                  <option value="1">디지털기기</option>
+                  <option value="2">가구/인테리어</option>
+                  <option value="3">유아동</option>
+                  <option value="4">여성의류</option>
+                  <option value="5">여성잡화</option>
+                  <option value="6">남성패션/잡화</option>
+                  <option value="7">생활가전</option>
+                  <option value="8">생활/주방</option>
+                  <option value="9">스포츠/레저</option>
+                  <option value="10">취미/게임/음반</option>
+                  <option value="11">뷰티/미용</option>
+                  <option value="12">식물</option>
+                  <option value="13">가공식품</option>
+                  <option value="14">건강기능식품</option>
+                  <option value="15">반려동물용품</option>
+                  <option value="16">티켓/교환권</option>
+                  <option value="17">도서</option>
+                  <option value="18">유아도서</option>
+                  <option value="19">기타중고물품</option>
+                  </select>
+                </div>
+                <div class="col-sm-8">
+                  <button type="submit" class="btn btn-g btn-round">제출</button>
+                </div>
+              </div>
+
+
+              <br>
+              <div id="map" style="width:300px;height:300px;margin-top:10px;display:none"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <hr class="divider-d">
+    </section>
+  </div>
+  <div class="scroll-up">
+    <a href="#totop"><i class="fa fa-angle-double-up"></i></a>
+  </div>
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+<script th:src="@{/js/kakaoMaps.js}"></script>
+<script th:src="@{/js/preview.js}"></script>
+</body>
+</html>

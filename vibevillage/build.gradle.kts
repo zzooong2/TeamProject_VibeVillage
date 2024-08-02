@@ -35,6 +35,7 @@ dependencies {
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
 	// Thymeleaf 의존성 주입
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf")
+	developmentOnly ("org.springframework.boot:spring-boot-devtools")
 
 	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<div th:replace="~{common/nav :: nav}"></div>
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse"
+                        data-target="#custom-collapse"><span class="sr-only">Toggle navigation</span><span
+                        class="icon-bar"></span><span class="icon-bar"></span><span
+                        class="icon-bar"></span></button><a class="navbar-brand" href="index.html">VibeVillage</a>
+            </div>
+            <div class="collapse navbar-collapse" id="custom-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="index.html">홈</a>
+                    </li>
+                    <li><a href="customerServiceCenter.html">고객센터</a>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">게시판</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="shop_product_col_4.html">중고거래 게시판</a></li>
+                            <li><a href="blog_grid_col_3.html">재능모임 게시판</a></li>
+                            <li><a href="levelupBoard.html">등업 게시판</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown">마이페이지</a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown"><a class="dropdown-toggle" href="#"
+                                                    data-toggle="dropdown">Product</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="shop_product_col_3.html">3 columns</a></li>
+                                    <li><a href="shop_product_col_4.html">4 columns</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="shop_single_product.html">Single Product</a></li>
+                            <li><a href="shop_checkout.html">Checkout</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="login_register.html">로그인 및 회원가입</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="main">
+        <section class="module bg-dark-30 about-page-header" data-background="resources/images/about_bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h1 class="module-title font-alt mb-0">등업신청</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="module">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h4 class="font-alt mb-0">등업신청서</h4>
+                        <hr class="divider-w mt-10 mb-20">
+                        <form class="form" role="form">
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="제목" />
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="닉네임" disabled="" />
+                            </div>
+                            <textarea class="form-control" rows="7" placeholder="내용"></textarea>
+                            <div style="margin-top: 10px; float: right;">
+                                <button class="btn btn-g btn-circle" type="submit">신 청</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+</body>
+</html>

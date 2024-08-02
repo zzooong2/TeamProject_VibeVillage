@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<div th:replace="~{common/nav :: nav}"></div>
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+
+    <!-- 관리자만 작성 가능 -->
+    <div class="main">
+        <section class="module bg-dark-30 about-page-header" data-background="resources/images/about_bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h1 class="module-title font-alt mb-0">공지사항</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="module">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h4 class="font-alt mb-0">공지사항</h4>
+                        <hr class="divider-w mt-10 mb-20">
+                        <form class="form" role="form">
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="제목" />
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="관리자 닉네임" disabled="" />
+                            </div>
+                            <textarea class="form-control" rows="7" placeholder="내용"></textarea>
+                            <div style="margin-top: 10px; float: right;">
+                                <button class="btn btn-g btn-circle" type="submit">작 성</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+</body>
+</html>

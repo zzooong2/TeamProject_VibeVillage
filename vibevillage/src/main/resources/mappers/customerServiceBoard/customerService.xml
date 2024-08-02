@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.customerServiceBoard.mapper.CustomerServiceMapper">
+
+        <resultMap id="csbResultSet" type="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+            <result column="nb_no" property="csbNo"></result>
+            <result column="nb_title" property="csbTitle"></result>
+            <result column="nb_content" property="csbContent"></result>
+            <result column="nb_indate" property="csbIndate"></result>
+            <result column="nb_update" property="csbUpdate"></result>
+            <result column="nb_delete" property="csbDelete"></result>
+            <result column="nb_delete_yn" property="csbDeleteYN"></result>
+            <result column="nb_views" property="csbViews"></result>
+            <result column="u_no" property="userNo"></result>
+        </resultMap>
+
+    <select id="customerServiceXML" resultType="csbResultSet">
+        select * from NOTICE_BOARD
+    </select>
+
+</mapper>

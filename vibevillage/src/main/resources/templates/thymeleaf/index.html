@@ -1,16 +1,227 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Hello thymeleaf</title>
-</head>
-<body>
-    <h1>Hello thymeleaf</h1>
 
-    <!-- Thymeleaf 사용 -->
-    <div th:if="true">
-        <div th:text="${result}">${result}</div>
+<head th:replace="~{common/head :: head}">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
     </div>
+    <nav th:replace="~{common/nav :: nav}">
+    </nav>
+    <div class="main">
+        <section class="module bg-dark-60 faq-page-header" style="background-color: #587379cf;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3" style="padding-top: 20px;">
+                        <h2 class="module-title font-alt">고 객 센 터</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="module" style="padding-top: 100px;">
+            <div class="container">
+                <div class="row mb-60">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <form role="form">
+                            <div class="search-box">
+                                <input class="form-control" type="text" placeholder="Search..."/>
+                                <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div role="tabpanel">
+                            <ul class="nav nav-tabs font-alt" role="tablist">
+                                <li class="active"><a href="#notice_board" data-toggle="tab"><span></span>공지사항</a></li>
+                                <li><a href="#question" data-toggle="tab"><span></span>자주 묻는 질문</a></li>
+                                <li><a href="#inquiry" data-toggle="tab"><span></span>1:1 문의</a></li>
+                                <!-- 관리자만 보이기 -->
+                                <li><a href="noticeBoardEnroll.html"><span></span>공지사항 쓰기</a></li>
+                                <li><a href="questionAnswerEnroll.html"><span></span>자주 묻는 질문하기</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="notice_board">
+                                    <!-- 관리자만 공지사항 등록 보임 -->
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#notice_board1">공지사항 1</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse in" id="notice_board1">
+                                                <div class="panel-body">내용내용
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 관리자만이 삭제 수정 가능 -->
+                                        <div style="margin-top: 10px; margin-bottom: 50px;">
+                                            <div style="float: right;">
+                                                <button style="padding: 5px 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>
+                                            </div>
+                                            <div style="float: right;">
+                                                <a href="noticeBoardEnroll.html" style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">수 정</a>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#notice_board2">공지사항 2</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" id="notice_board2">
+                                                <div class="panel-body">내용내용
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#notice_board3">공지사항 3</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" id="notice_board3">
+                                                <div class="panel-body">내용내용
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="question">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#question1">질문 1</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse in" id="question1">
+                                                <div class="panel-body">내용내용
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 관리자만이 삭제 수정 가능 -->
+                                        <div style="margin-top: 10px; margin-bottom: 50px;">
+                                            <div style="float: right;">
+                                                <button style="padding: 5px 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>
+                                            </div>
+                                            <div style="float: right;">
+                                                <a href="questionAnswer_Enroll.html" style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">수 정</a>
+                                            </div>
+                                        </div>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#question2">질문 2</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" id="question2">
+                                                <div class="panel-body">내용내용
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="inquiry">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry1">문의</a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse in" id="inquiry1">
+                                                <div class="panel-body">
+                                                    <textarea class="form-control" rows="7" placeholder="Textarea">내용내용</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 10px; float: right;">
+                                            <button class="btn btn-g btn-circle" type="submit">등 록</button>
+                                        </div>
+                                        <div role="tabpanel" style="padding-top: 20px;">
+                                            <!-- 질문한 회원만 보임 -->
+                                            <!-- 답변은 관리자만이 가능 -->
+                                            <div class="tab-pane active" id="inquiry_answer" style="padding-top: 40px; padding-bottom: 20px;">
+                                                <div class="panel-group" id="accordion">
+                                                    <div class="panel panel-default">
+                                                        <div class="panel-heading">
+                                                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_answer1">답변</a></h4>
+                                                        </div>
+                                                        <div class="panel-collapse collapse in" id="inquiry_answer1">
+                                                            <div class="panel-body">
+                                                                <textarea class="form-control" rows="7" placeholder="Textarea">내용내용</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="margin-top: 10px; float: right;">
+                                                        <button class="btn btn-g btn-circle" type="submit">등 록</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" style="padding-top: 10px;">
+                                        <ul class="nav nav-tabs font-alt" role="tablist">
+                                            <!-- 질문한 회원만 보임 -->
+                                            <!-- 답변은 관리자만이 가능 -->
+                                            <li class="active"><a href="#inquiry_list" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li><span style="margin-left: 5px; float: right; vertical-align: middle; position: relative; top: 5px">※답변은 3일이내로 드립니다.</span>
+                                        </ul>
+                                        <div class="tab-pane active" id="inquiry_list" style="padding-top: 20px; padding-bottom: 20px;">
+                                            <div class="panel-group" id="accordion">
+                                                <div class="panel panel-default">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_list1">질문 내용</a></h4>
+                                                        <span>질문날짜</span>
+                                                    </div>
+                                                    <div class="panel-collapse collapse in" id="inquiry_list1">
+                                                        <div class="panel-body">답변중
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- 관리자 답변이 없을 때만 직접 쓴 회원만이 삭제 가능 -->
+                                                <div style="margin-top: 10px; margin-bottom: 50px;">
+                                                    <div style="float: right;">
+                                                        <button style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>
+                                                    </div>
+                                                </div>
+                                                <div class="panel panel-default" style="margin-top: 50px;">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_list2">질문 내용</a></h4>
+                                                    </div>
+                                                    <div class="panel-collapse collapse in" id="inquiry_list2">
+                                                        <div class="panel-body">답변답변
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+        <footer th:replace="~{common/footer :: footer}">
+        </footer>
+</main>
 
 </body>
 </html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Hello thymeleaf</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Hello thymeleaf</h1>-->
+
+<!--    &lt;!&ndash; Thymeleaf 사용 &ndash;&gt;-->
+<!--    <div th:if="true">-->
+<!--        <div th:text="${result}">${result}</div>-->
+<!--    </div>-->
+
+<!--</body>-->
+<!--</html>-->

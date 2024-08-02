@@ -18,7 +18,7 @@ public class TestServiceImpl implements TestService {
         this.env = env;
     }
 
-    // maper 객체 생성
+    // mapper 객체 생성
     @Autowired
     TestMapper testMapper;
 

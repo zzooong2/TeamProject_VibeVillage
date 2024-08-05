@@ -10,5 +10,4 @@ public class UsedBoardImageDto extends UsedBoardDto {
     private String uploadUniqueName;
     private String uploadImagePath;
     private String uploadImageType;
-
 }

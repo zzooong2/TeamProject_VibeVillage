@@ -30,14 +30,8 @@ public class UsedBoardController {
 
         @GetMapping("/boardList")
         public String getUsedBoardList(Model model){
-            System.out.println("컨트롤러");
             List<UsedBoardDto> usedList = usedBoardService.getUsedBoardList();
-            System.out.println("컨트롤러 나옴");
-            System.out.println(usedList.size());
-            for(UsedBoardDto i : usedList){
-                System.out.println(i.getUsedBoardId());
-            }
-            System.out.println(usedList);
+
             model.addAttribute("usedList", usedList);
             return USE+"List";
         }
@@ -58,9 +52,12 @@ public class UsedBoardController {
 
 
         @GetMapping("/boardDetail/{id}")
-         public String getUsedBoardDetail(Model model, @PathVariable String id){
-            System.out.println(id);
-        UsedBoardDto board = usedBoardService.getUsedBoardDetail(id);
+         public String getUsedBoardDetail(Model model, @PathVariable("id") String id){
+            int boardId = Integer.parseInt(id);
+        UsedBoardDto board = usedBoardService.getUsedBoardDetail(boardId);
+            System.out.println(board.getUsedBoardLocation()+"로케이션");
+
+            List<UsedBoardImageDto> images = board.getImages();
 
         model.addAttribute("usedBoard", board);
         return USE+"Detail";

@@ -7,8 +7,8 @@ $(document).ready(function(){
                 var reader = new FileReader();
                 reader.onload = function(e){
                     // 이미지와 삭제 버튼을 담는 div 생성
-                    var previewItem = $("<div class='preview-item'></div>");
-                    $("<img class='gallery' src='" + e.target.result + "'>").appendTo(previewItem);
+                    var previewItem = $("<li class='preview-item'></li>");
+                    $("<img class='gallery' src='" + e.target.result + "' style='width: 212px; height: 240px;'>").appendTo(previewItem);
                     $("<button class='delete'>Delete</button>").appendTo(previewItem);
                     $("#preview-container").append(previewItem);
                 };

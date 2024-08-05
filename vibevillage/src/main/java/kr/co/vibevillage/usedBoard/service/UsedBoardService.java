@@ -9,7 +9,7 @@ public interface UsedBoardService {
 
     // 포스트 가져오기
     public List<UsedBoardDto> getUsedBoardList();
-    public UsedBoardDto getUsedBoardDetail(String id);
+    public UsedBoardDto getUsedBoardDetail(int id);
     public String createUsedBoard();
 
     int enrollUsedBoard(UsedBoardDto usedBoard);

@@ -2,6 +2,8 @@
 <html lang="en-US" dir="ltr">
   <head>
     <div th:replace="~{common/head :: head}"></div>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services"></script>
+
   </head>
   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
     <main>
@@ -17,8 +19,11 @@
                 <a class="gallery" href="">
                   <img src="" alt="Single Product Image"/>
                 </a>
-                <ul class="product-gallery">
+                <ul class="product-gallery" th:each="item:${usedBoard.images}">
+                  <li>
+                    <img th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}" />
 
+                  </li>
                 </ul>
               </div>
               <div class="col-sm-6">
@@ -39,10 +44,18 @@
                 <div class="row mb-20">
                   <div class="col-sm-12">
                     <div class="description">
+                      <p th:text="${usedBoard.usedBoardProductName}"></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-20">
+                  <div class="col-sm-12">
+                    <div class="description">
                       <p th:text="${usedBoard.usedBoardContent}"></p>
                     </div>
                   </div>
                 </div>
+
                 <div class="row mb-20">
                   <div class="col-sm-4 mb-sm-20">
                     <input class="form-control input-lg" type="number" name="" value="1" max="40" min="1" required="required"/>
@@ -166,179 +179,11 @@
           </div>
         </section>
         <hr class="divider-w">
-        <section class="module-small">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Related Products</h2>
-              </div>
-            </div>
-            <div class="row multi-columns-row">
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="shop-item">
-                  <div class="shop-item-image"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-11.jpg" alt="Accessories Pack"/>
-                    <div class="shop-item-detail"><a class="btn btn-round btn-b"><span class="icon-basket">Add To Cart</span></a></div>
-                  </div>
-                  <h4 class="shop-item-title font-alt"><a href="#">Accessories Pack</a></h4>£9.00
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="shop-item">
-                  <div class="shop-item-image"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-12.jpg" alt="Men’s Casual Pack"/>
-                    <div class="shop-item-detail"><a class="btn btn-round btn-b"><span class="icon-basket">Add To Cart</span></a></div>
-                  </div>
-                  <h4 class="shop-item-title font-alt"><a href="#">Men’s Casual Pack</a></h4>£12.00
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="shop-item">
-                  <div class="shop-item-image"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-13.jpg" alt="Men’s Garb"/>
-                    <div class="shop-item-detail"><a class="btn btn-round btn-b"><span class="icon-basket">Add To Cart</span></a></div>
-                  </div>
-                  <h4 class="shop-item-title font-alt"><a href="#">Men’s Garb</a></h4>£6.00
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-3 col-lg-3">
-                <div class="shop-item">
-                  <div class="shop-item-image"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-14.jpg" alt="Cold Garb"/>
-                    <div class="shop-item-detail"><a class="btn btn-round btn-b"><span class="icon-basket">Add To Cart</span></a></div>
-                  </div>
-                  <h4 class="shop-item-title font-alt"><a href="#">Cold Garb</a></h4>£14.00
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <hr class="divider-w">
-        <section class="module">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h2 class="module-title font-alt">Exclusive products</h2>
-                <div class="module-subtitle font-serif">The languages only differ in their grammar, their pronunciation and their most common words.</div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="owl-carousel text-center" data-items="5" data-pagination="false" data-navigation="false">
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-1.jpg" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Leather belt</a></h4>£12.00
-                    </div>
-                  </div>
-                </div>
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-3.jpg" alt="Derby shoes"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Derby shoes</a></h4>£54.00
-                    </div>
-                  </div>
-                </div>
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-2.jpg" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Leather belt</a></h4>£19.00
-                    </div>
-                  </div>
-                </div>
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-4.jpg" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Leather belt</a></h4>£14.00
-                    </div>
-                  </div>
-                </div>
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-5.jpg" alt="Chelsea boots"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Chelsea boots</a></h4>£44.00
-                    </div>
-                  </div>
-                </div>
-                <div class="owl-item">
-                  <div class="col-sm-12">
-                    <div class="ex-product"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/shop/product-6.jpg" alt="Leather belt"/></a>
-                      <h4 class="shop-item-title font-alt"><a href="#">Leather belt</a></h4>£19.00
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <div class="module-small bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">About Titan</h5>
-                  <p>The languages only differ in their grammar, their pronunciation and their most common words.</p>
-                  <p>Phone: +1 234 567 89 10</p>Fax: +1 234 567 89 10
-                  <p>Email:<a href="#">somecompany@example.com</a></p>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Recent Comments</h5>
-                  <ul class="icon-list">
-                    <li>Maria on <a href="#">Designer Desk Essentials</a></li>
-                    <li>John on <a href="#">Realistic Business Card Mockup</a></li>
-                    <li>Andy on <a href="#">Eco bag Mockup</a></li>
-                    <li>Jack on <a href="#">Bottle Mockup</a></li>
-                    <li>Mark on <a href="#">Our trip to the Alps</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Blog Categories</h5>
-                  <ul class="icon-list">
-                    <li><a href="#">Photography - 7</a></li>
-                    <li><a href="#">Web Design - 3</a></li>
-                    <li><a href="#">Illustration - 12</a></li>
-                    <li><a href="#">Marketing - 1</a></li>
-                    <li><a href="#">Wordpress - 16</a></li>
-                  </ul>
-                </div>
-              </div>
-              <div class="col-sm-3">
-                <div class="widget">
-                  <h5 class="widget-title font-alt">Popular Posts</h5>
-                  <ul class="widget-posts">
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/rp-1.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Designer Desk Essentials</a></div>
-                        <div class="widget-posts-meta">23 january</div>
-                      </div>
-                    </li>
-                    <li class="clearfix">
-                      <div class="widget-posts-image"><a href="#"><img src="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/assets/images/rp-2.jpg" alt="Post Thumbnail"/></a></div>
-                      <div class="widget-posts-body">
-                        <div class="widget-posts-title"><a href="#">Realistic Business Card Mockup</a></div>
-                        <div class="widget-posts-meta">15 February</div>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr class="divider-d">
-        <footer class="footer bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6">
-                <p class="copyright font-alt">&copy; 2017&nbsp;<a href="../../../../../../../../../../Users/kngkn/OneDrive/바탕%20화면/titan-master/live/index.html">TitaN</a>, All Rights Reserved</p>
-              </div>
-              <div class="col-sm-6">
-                <div class="footer-social-links"><a href="#"><i class="fa fa-facebook"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-dribbble"></i></a><a href="#"><i class="fa fa-skype"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
+
+        <div id="map" style="width:100%;height:350px;"></div>
+
+
+
       </div>
       <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
     </main>
@@ -347,6 +192,46 @@
     JavaScripts
     =============================================
     -->
+
     <div th:replace="~{common/js :: js}"></div>
+
+    <script th:inline="javascript">
+      var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+              mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+              };
+
+      // 지도를 생성합니다
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+
+      // 주소-좌표 변환 객체를 생성합니다
+      var geocoder = new kakao.maps.services.Geocoder();
+
+      // 주소로 좌표를 검색합니다
+      geocoder.addressSearch(`[(${usedBoard.usedBoardLocation})]`, function(result, status) {
+
+        // 정상적으로 검색이 완료됐으면
+        if (status === kakao.maps.services.Status.OK) {
+
+          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+          });
+
+          // 인포윈도우로 장소에 대한 설명을 표시합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">거래장소</div>'
+          });
+          infowindow.open(map, marker);
+
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+        }
+      });
+    </script>
   </body>
 </html>

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/common")
-public class FormController {
+public class FormCon {
 //    @Autowired
 //    public FormController() {
 //

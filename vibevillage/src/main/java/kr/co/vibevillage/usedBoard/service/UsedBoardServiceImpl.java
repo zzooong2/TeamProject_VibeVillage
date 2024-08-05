@@ -25,9 +25,7 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     // 포스트 가져오기
     @Override
     public List<UsedBoardDto> getUsedBoardList() {
-        System.out.println("service 들어옴");
         List<UsedBoardDto> list = usedBoardMapper.usedBoardListXML();
-        System.out.println("mapper에서 나옴");
         return list;
     }
     @Override
@@ -36,15 +34,21 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         return "";
     }
     @Override
-    public UsedBoardDto getUsedBoardDetail(String id){
+    public UsedBoardDto getUsedBoardDetail(int id) {
         UsedBoardDto result = usedBoardMapper.usedBoardDetailXML(id);
-
+        List<UsedBoardImageDto> imageList = usedBoardMapper.usedBoardImageListXML(id);
+        result.setImages(imageList);
+        System.out.println(result.getImages().size()+"이미지 개수");
         return result;
     }
-
     @Override
     public int enrollUsedBoard(UsedBoardDto usedBoard){
         int result = usedBoardMapper.usedBoardEnrollXML(usedBoard);
+        System.out.println(usedBoard.getUsedBoardContent());
+        System.out.println(usedBoard.getUsedBoardId());
+
+        System.out.println(usedBoard.getUsedBoardProductName());
+        usedBoardMapper.usedBoardProductEnrollXML(usedBoard);
         if (result > 0) {
             for (UsedBoardImageDto image : usedBoard.getImages()) {
                 image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정

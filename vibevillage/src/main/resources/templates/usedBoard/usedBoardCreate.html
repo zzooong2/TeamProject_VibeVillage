@@ -29,24 +29,12 @@
         <form th:action="@{/used/boardEnroll}" th:object="${usedBoard}" method="POST" enctype="multipart/form-data">
           <div class="row">
              <button class="btn btn-g btn-circle">
-              <input class="gallery" type="file" multiple id="file-input" name="files">
              </button>
             <div class="col-sm-6 mb-sm-40">
-              <div class="gallery" id="preview-container">
+              <div class="gallery">
+              <input class="gallery" type="file" multiple id="file-input" name="files">
               </div>
-              <ul class="product-gallery">
-                <li>
-                  <a class="gallery" th:href="@{/img/shop/product-8.jpg}"></a>
-                  <img th:src="@{/img/shop/product-8.jpg}" alt="Single Product"/>
-                </li>
-                <li>
-                  <a class="gallery" th:href="@{/img/shop/product-9.jpg}"></a>
-                  <img th:src="@{/img/shop/product-9.jpg}" alt="Single Product"/>
-                </li>
-                <li>
-                  <a class="gallery" th:href="@{/img/shop/product-10.jpg}"></a>
-                  <img th:src="@{/img/shop/product-10.jpg}" alt="Single Product"/>
-                </li>
+              <ul class="product-gallery" id="preview-container">
               </ul>
             </div>
             <div class="col-sm-6">
@@ -142,7 +130,7 @@
 </main>
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
-<script th:src="@{/js/kakaoMaps.js}"></script>
-<script th:src="@{/js/preview.js}"></script>
+<script th:src="@{/js/usedBoard/common/locationSearch.js}"></script>
+<script th:src="@{/js/usedBoard/common/preview.js}"></script>
 </body>
 </html>

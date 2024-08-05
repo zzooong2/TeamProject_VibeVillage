@@ -17,4 +17,6 @@ public class FormController {
     public String myPageForm() {
         return "member/myPage";
     }
+
+
 }

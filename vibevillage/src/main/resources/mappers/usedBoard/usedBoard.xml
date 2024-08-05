@@ -9,34 +9,53 @@
         <result column="used_post_content" property="usedBoardContent"/>
         <result column="used_post_status" property="usedBoardStatus"/>
         <result column="used_create_at" property="usedBoardCreateAt"/>
+        <result column="location" property="usedBoardLocation"/>
         <result column="views" property="usedBoardViews"/>
         <result column="product_name" property="usedBoardProductName"/>
         <result column="product_price" property="usedBoardProductPrice"/>
 <!--       카테고리-->
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
+<!--       이미지-->
+        <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
+        <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
+    </resultMap>
+
+    <resultMap id="usedBoardImageMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
+        <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
+        <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
     </resultMap>
 
     <select id="usedBoardListXML" resultMap="usedBoardMap">
-        SELECT u.used_post_id, used_post_title,
-               used_post_content, used_create_at,used_post_status,
-               views, p.product_Name, c.category_Name,p.product_price
+        SELECT *
         FROM USED_BOARD u
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
     </select>
     <select id="usedBoardDetailXML" resultMap="usedBoardMap">
-        SELECT u.used_post_id, used_post_title,
-               used_post_content, used_create_at,used_post_status,
-               views, p.product_Name, c.category_Name,p.product_price
+        SELECT *
         FROM USED_BOARD u
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
         where p.used_post_id = #{id}
     </select>
 
-    <insert id="usedBoardEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
-        INSERT INTO USED_BOARD VALUES (USED_BOARD_SEQ.NEXTVAL, 1, #{usedBoardTitle}, #{usedBoardContent}, #{usedBoardLocation}, 3, 3, default, null, default, default, 0)
+    <select id="usedBoardImageListXML"  resultMap="usedBoardImageMap">
+        SELECT UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH
+        FROM USED_BOARD_IMAGE WHERE used_post_id = #{id}
+    </select>
+
+    <insert id="usedBoardEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto" >
+        <selectKey keyProperty="usedBoardId" resultType="_int" order="BEFORE">
+            SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
+        VALUES (#{usedBoardId}, 1, #{usedBoardTitle}, #{usedBoardContent}, #{usedBoardLocation}, 3, 3, default, null, default, default, 0)
+    </insert>
+
+    <insert id="usedBoardProductEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto" >
+        INSERT INTO PRODUCT (USED_POST_ID,PRODUCT_NAME,PRODUCT_PRICE,CATEGORY_ID)
+        VALUES (#{usedBoardId},#{usedBoardProductName},#{usedBoardProductPrice},#{categoryId})
     </insert>
 
     <insert id="usedBoardImageXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">

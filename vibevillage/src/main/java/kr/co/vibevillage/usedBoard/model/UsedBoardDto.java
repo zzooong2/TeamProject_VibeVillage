@@ -31,11 +31,6 @@ public class UsedBoardDto {
 
  // 업로드 관련;
  private List<UsedBoardImageDto> images;
- private String uploadOriginName;
- private String uploadUniqueName;
- private String uploadImagePath;
- private String uploadImageType;
-
 
  // 물품
  private String usedBoardProductName;
@@ -44,4 +39,7 @@ public class UsedBoardDto {
  // 카테고리
  private int categoryId;
  private String categoryName;
+
+
 }
+

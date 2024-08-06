@@ -48,6 +48,7 @@ dependencies {
 	
 	// 스프링 부트 리로드 툴
 	implementation("org.springframework.boot:spring-boot-devtools:3.2.4")
+	implementation("org.springframework.boot:spring-boot-starter-websocket:3.2.1")
 
 }
 

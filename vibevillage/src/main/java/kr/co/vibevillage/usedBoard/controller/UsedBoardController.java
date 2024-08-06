@@ -36,13 +36,14 @@ public class UsedBoardController {
             return USE+"List";
         }
         @GetMapping("/boardCreate")
-         public String createUsedBoard(Model model, UsedBoardDto usedBoard){
+         public String createUsedBoard(Model model,UsedBoardDto usedBoard){
             model.addAttribute("usedBoard", usedBoard);
         return USE+"Create";
         }
 
     @PostMapping("/boardEnroll")
-    public String enrollUsedBoard(@RequestParam("files") List<MultipartFile> files, @ModelAttribute("usedBoard") UsedBoardDto usedBoard){
+    public String enrollUsedBoard(@RequestParam("files") List<MultipartFile> files,
+                                  @ModelAttribute("usedBoard") UsedBoardDto usedBoard){
         List<UsedBoardImageDto> images = uploadFile.upload(files);
         usedBoard.setImages(images);
         int result = usedBoardService.enrollUsedBoard(usedBoard);

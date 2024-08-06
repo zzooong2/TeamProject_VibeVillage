@@ -16,14 +16,7 @@
 <!--       카테고리-->
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
-<!--       이미지-->
-        <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
-        <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
-    </resultMap>
 
-    <resultMap id="usedBoardImageMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
-        <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
-        <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
     </resultMap>
 
     <select id="usedBoardListXML" resultMap="usedBoardMap">
@@ -40,27 +33,17 @@
         where p.used_post_id = #{id}
     </select>
 
-    <select id="usedBoardImageListXML"  resultMap="usedBoardImageMap">
-        SELECT UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH
-        FROM USED_BOARD_IMAGE WHERE used_post_id = #{id}
-    </select>
+        <insert id="usedBoardEnrollXML"  >
+            <selectKey keyProperty="usedBoard.usedBoardId" resultType="_int" order="BEFORE">
+                SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
+            </selectKey>
+            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
+            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0)
+        </insert>
 
-    <insert id="usedBoardEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto" >
-        <selectKey keyProperty="usedBoardId" resultType="_int" order="BEFORE">
-            SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
-        VALUES (#{usedBoardId}, 1, #{usedBoardTitle}, #{usedBoardContent}, #{usedBoardLocation}, 3, 3, default, null, default, default, 0)
-    </insert>
-
-    <insert id="usedBoardProductEnrollXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto" >
+    <insert id="usedBoardProductEnrollXML" >
         INSERT INTO PRODUCT (USED_POST_ID,PRODUCT_NAME,PRODUCT_PRICE,CATEGORY_ID)
-        VALUES (#{usedBoardId},#{usedBoardProductName},#{usedBoardProductPrice},#{categoryId})
+        VALUES (#{usedBoard.usedBoardId},#{usedBoard.usedBoardProductName},#{usedBoard.usedBoardProductPrice},#{usedBoard.categoryId})
     </insert>
-
-    <insert id="usedBoardImageXML" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
-        INSERT INTO USED_BOARD_IMAGE VALUES (USED_BOARD_IMAGE_SEQ.NEXTVAL, #{usedBoardId}, #{uploadOriginName}, #{uploadUniqueName}, #{uploadImagePath}, #{uploadImageType})
-    </insert>
-
 
 </mapper>

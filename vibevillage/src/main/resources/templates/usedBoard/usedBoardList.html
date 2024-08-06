@@ -75,7 +75,8 @@
             <div class="row multi-columns-row" >
               <div class="col-sm-6 col-md-3 col-lg-3" th:each="item:${usedList}">
                 <div class="shop-item">
-                  <div class="shop-item-image"><img src="" alt="Accessories Pack"/>
+                  <div class="shop-item-image" th:each="image,iterStat:${item.images}">
+                    <img  th:if="${iterStat.index == 0}" th:src="@{${image.PROJECTREACTOR} + ${image.uploadUniqueName}}" alt="Accessories Pack"/>
                     <div class="shop-item-detail"><a class="btn btn-round btn-b"><span class="icon-basket">Add To Cart</span></a></div>
                   </div>
                   <h4 class="shop-item-title font-alt"> <a th:href="@{/used/boardDetail/{id}(id=${item.usedBoardId})}" th:text="${item.usedBoardTitle}"></a></h4><p th:text="${item.usedBoardProductName}"></p>

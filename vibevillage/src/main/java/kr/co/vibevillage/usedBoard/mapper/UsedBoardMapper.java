@@ -10,9 +10,7 @@ import java.util.List;
 @Mapper
 public interface UsedBoardMapper {
     public List<UsedBoardDto> usedBoardListXML();
-    public UsedBoardDto usedBoardDetailXML(int id);
-    public int usedBoardEnrollXML(UsedBoardDto usedBoard);
-    public int usedBoardImageXML(UsedBoardImageDto image);
-    public List<UsedBoardImageDto> usedBoardImageListXML(int id);
-    public int usedBoardProductEnrollXML(UsedBoardDto usedBoard);
+    public UsedBoardDto usedBoardDetailXML(@Param("id") int id);
+    public int usedBoardEnrollXML(@Param("usedBoard") UsedBoardDto usedBoard);
+    public int usedBoardProductEnrollXML(@Param("usedBoard")UsedBoardDto usedBoard);
 }

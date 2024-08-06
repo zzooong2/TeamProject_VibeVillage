@@ -19,6 +19,14 @@
             <result column="qa_update" property="qaUpdate"></result>
             <result column="qa_delete" property="qaDelete"></result>
             <result column="qa_delete_yn" property="qaDeleteYN"></result>
+            <result column="ib_no" property="ibNo"></result>
+            <result column="ib_content" property="ibContent"></result>
+            <result column="ib_indate" property="ibIndate"></result>
+            <result column="ia_no" property="iaNo"></result>
+            <result column="ia_content" property="iaContent"></result>
+            <result column="ia_indate" property="iaIndate"></result>
+            <result column="ic_no" property="icNo"></result>
+            <result column="ic_content" property="icContent"></result>
             <result column="u_no" property="userNo"></result>
         </resultMap>
 
@@ -31,5 +39,15 @@
         select QA_TITLE, QA_CONTENT
         from QA_BOARD qb
     </select>
+
+    <insert id="setibCustomerService" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
+        insert into INQUIRY_BOARD (IB_NO, IB_CONTENT, IB_INDATE, U_NO, IC_NO)
+        values (INQUIRY_BOARD_SEQ.NEXTVAL, #{ibContent}, sysdate, 1, 1)
+    </insert>
+
+<!--    <select id="getiaCustomerService" resultMap="csbResultSet">-->
+<!--        select IA_CONTENT, IA_INDATE-->
+<!--        from INQUIRY_ANSWER ia-->
+<!--    </select>-->
 
 </mapper>

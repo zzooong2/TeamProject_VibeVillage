@@ -46,6 +46,7 @@
                                 <!-- 관리자만 보이기 -->
                                 <li><a th:href="@{noticeBoardEnroll.html}"><span></span>공지사항 쓰기</a></li>
                                 <li><a th:href="@{questionAnswerEnroll.html}"><span></span>자주 묻는 질문하기</a></li>
+                                <li><a th:href="@{inquiryAnswer.html}"><span></span>1:1 문의 답변하기</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="notice_board">
@@ -56,21 +57,15 @@
                                                 <h4 class="panel-title font-alt">
                                                     <!-- 고유한 ID를 부여하여 collapse 동작을 제어합니다. -->
                                                     <a data-toggle="collapse" data-parent="#accordion" th:href="'#notice_board' + ${iterStat.index}" th:text="${csnbList.nbTitle}"></a>
+<!--                                                    &lt;!&ndash; 관리자만 수정/삭제 가능 &ndash;&gt;-->
+<!--                                                    <button style="padding: 5px 5px" class="btn btn-g btn-circle" type="submit">수정</button>-->
+<!--                                                    <button style="padding: 5px 5px" class="btn btn-g btn-circle" type="submit">삭제</button>-->
                                                 </h4>
                                             </div>
                                             <div class="panel-collapse collapse" th:id="'notice_board' + ${iterStat.index}">
                                                 <a><div class="panel-body" th:text="${csnbList.nbContent}"></div></a>
                                             </div>
                                         </div>
-                                        <!-- 관리자만이 삭제 수정 가능 -->
-<!--                                        <div style="margin-top: 10px; margin-bottom: 50px;">-->
-<!--                                            <div style="float: right;">-->
-<!--                                                <button style="padding: 5px 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>-->
-<!--                                            </div>-->
-<!--                                            <div style="float: right;">-->
-<!--                                                <a th:href="@{noticeBoardEnroll.html}" style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">수 정</a>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="question">
@@ -84,24 +79,6 @@
                                                 <a><div class="panel-body" th:text="${csqaList.qaContent}"></div></a>
                                             </div>
                                         </div>
-<!--                                        &lt;!&ndash; 관리자만이 삭제 수정 가능 &ndash;&gt;-->
-<!--                                        <div style="margin-top: 10px; margin-bottom: 50px;">-->
-<!--                                            <div style="float: right;">-->
-<!--                                                <button style="padding: 5px 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>-->
-<!--                                            </div>-->
-<!--                                            <div style="float: right;">-->
-<!--                                                <a th:href="@{questionAnswerEnroll.html}" style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">수 정</a>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <div class="panel panel-default">-->
-<!--                                            <div class="panel-heading">-->
-<!--                                                <h4 class="panel-title font-alt"><a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#question2">질문 2</a></h4>-->
-<!--                                            </div>-->
-<!--                                            <div class="panel-collapse collapse" id="question2">-->
-<!--                                                <div class="panel-body">내용내용-->
-<!--                                                </div>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
                                     </div>
                                 </div>
                                 <div class="tab-pane" id="inquiry">
@@ -112,36 +89,17 @@
                                             </div>
                                             <div class="panel-collapse collapse in" id="inquiry1">
                                                 <div class="panel-body">
-                                                    <textarea class="form-control" rows="7" placeholder="Textarea">내용내용</textarea>
+                                                    <form th:action="@{/inquiryBoard}" th:object="${customerServiceDTO}" method="post">
+                                                    <textarea class="form-control" th:field="*{ibContent}" rows="7" placeholder="Textarea">내용내용</textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div style="margin-top: 10px; float: right;">
                                             <button class="btn btn-g btn-circle" type="submit">등 록</button>
                                         </div>
-                                        <div role="tabpanel" style="padding-top: 20px;">
-                                            <!-- 질문한 회원만 보임 -->
-                                            <!-- 답변은 관리자만이 가능 -->
-                                            <div class="tab-pane active" id="inquiry_answer" style="padding-top: 40px; padding-bottom: 20px;">
-                                                <div class="panel-group" id="accordion">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading">
-                                                            <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_answer1">답변</a></h4>
-                                                        </div>
-                                                        <div class="panel-collapse collapse in" id="inquiry_answer1">
-                                                            <div class="panel-body">
-                                                                <textarea class="form-control" rows="7" placeholder="Textarea">내용내용</textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div style="margin-top: 10px; float: right;">
-                                                        <button class="btn btn-g btn-circle" type="submit">등 록</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
-                                    <div role="tabpanel" style="padding-top: 10px;">
+                                    <div role="tabpanel" style="padding-top: 40px;">
                                         <ul class="nav nav-tabs font-alt" role="tablist">
                                             <!-- 질문한 회원만 보임 -->
                                             <!-- 답변은 관리자만이 가능 -->
@@ -159,20 +117,6 @@
                                                     </div>
                                                 </div>
                                                 <!-- 관리자 답변이 없을 때만 직접 쓴 회원만이 삭제 가능 -->
-                                                <div style="margin-top: 10px; margin-bottom: 50px;">
-                                                    <div style="float: right;">
-                                                        <button style="padding: 5px 5px; margin-right: 5px;" class="btn btn-g btn-circle" type="submit">삭 제</button>
-                                                    </div>
-                                                </div>
-                                                <div class="panel panel-default" style="margin-top: 50px;">
-                                                    <div class="panel-heading">
-                                                        <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_list2">질문 내용</a></h4>
-                                                    </div>
-                                                    <div class="panel-collapse collapse in" id="inquiry_list2">
-                                                        <div class="panel-body">답변답변
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

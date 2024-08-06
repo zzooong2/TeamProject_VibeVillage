@@ -2,6 +2,7 @@ package kr.co.vibevillage.customerServiceBoard.mapper;
 
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface CustomerServiceMapper {
     List<CustomerServiceDTO> getnbCustomerService();
 
     List<CustomerServiceDTO> getqaCustomerService();
+
+    int setibCustomerService(CustomerServiceDTO customerServiceDTO);
 }

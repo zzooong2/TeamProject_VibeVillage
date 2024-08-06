@@ -31,4 +31,10 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     List<CustomerServiceDTO> qaList = customerServiceMapper.getqaCustomerService();
     return qaList;
     }
+
+    @Override
+    public int setibCustomerService(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.setibCustomerService(customerServiceDTO);
+    }
 }

@@ -9,4 +9,7 @@ public interface CustomerServiceService {
     public List<CustomerServiceDTO> getnbCustomerService();
 
     public List<CustomerServiceDTO> getqaCustomerService();
+
+    public int setibCustomerService(CustomerServiceDTO customerServiceDTO);
+
 }

@@ -8,13 +8,20 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CustomerServiceDTO {
-    private int csbNo;
-    private String csbTitle;
-    private String csbContent;
-    private String csbIndate;
-    private String csbUpdate;
-    private String csbDelete;
-    private String csbDeleteYN;
-    private String csbViews;
+    private int nbNo;
+    private String nbTitle;
+    private String nbContent;
+    private String nbIndate;
+    private String nbUpdate;
+    private String nbDelete;
+    private String nbDeleteYN;
+    private String nbViews;
+    private int qaNo;
+    private String qaTitle;
+    private String qaContent;
+    private String qaIndate;
+    private String qaUpdate;
+    private String qaDelete;
+    private String qaDeleteYN;
     private int userNo;
 }

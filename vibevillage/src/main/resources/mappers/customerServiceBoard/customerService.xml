@@ -4,19 +4,32 @@
 <mapper namespace="kr.co.vibevillage.customerServiceBoard.mapper.CustomerServiceMapper">
 
         <resultMap id="csbResultSet" type="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
-            <result column="nb_no" property="csbNo"></result>
-            <result column="nb_title" property="csbTitle"></result>
-            <result column="nb_content" property="csbContent"></result>
-            <result column="nb_indate" property="csbIndate"></result>
-            <result column="nb_update" property="csbUpdate"></result>
-            <result column="nb_delete" property="csbDelete"></result>
-            <result column="nb_delete_yn" property="csbDeleteYN"></result>
-            <result column="nb_views" property="csbViews"></result>
+            <result column="nb_no" property="nbNo"></result>
+            <result column="nb_title" property="nbTitle"></result>
+            <result column="nb_content" property="nbContent"></result>
+            <result column="nb_indate" property="nbIndate"></result>
+            <result column="nb_update" property="nbUpdate"></result>
+            <result column="nb_delete" property="nbDelete"></result>
+            <result column="nb_delete_yn" property="nbDeleteYN"></result>
+            <result column="nb_views" property="nbViews"></result>
+            <result column="qa_no" property="qaNo"></result>
+            <result column="qa_title" property="qaTitle"></result>
+            <result column="qa_content" property="qaContent"></result>
+            <result column="qa_indate" property="qaIndate"></result>
+            <result column="qa_update" property="qaUpdate"></result>
+            <result column="qa_delete" property="qaDelete"></result>
+            <result column="qa_delete_yn" property="qaDeleteYN"></result>
             <result column="u_no" property="userNo"></result>
         </resultMap>
 
-    <select id="customerServiceXML" resultType="csbResultSet">
-        select * from NOTICE_BOARD
+    <select id="getnbCustomerService" resultMap="csbResultSet">
+        select NB_TITLE, NB_CONTENT
+        from NOTICE_BOARD nb
+    </select>
+
+    <select id="getqaCustomerService" resultMap="csbResultSet">
+        select QA_TITLE, QA_CONTENT
+        from QA_BOARD qb
     </select>
 
 </mapper>

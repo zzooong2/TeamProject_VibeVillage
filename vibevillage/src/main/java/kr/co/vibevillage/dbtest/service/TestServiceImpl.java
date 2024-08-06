@@ -1,13 +1,12 @@
-package kr.co.vibevillage.database.service;
+package kr.co.vibevillage.dbtest.service;
 
-import kr.co.vibevillage.database.mapper.TestMapper;
+import kr.co.vibevillage.dbtest.mapper.TestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kr.co.vibevillage.env.Env;
 
 @Service
 public class TestServiceImpl implements TestService {
-
 
     // env 객체 생성
     private final Env env;

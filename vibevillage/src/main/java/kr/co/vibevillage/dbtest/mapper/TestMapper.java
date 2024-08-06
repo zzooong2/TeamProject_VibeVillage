@@ -1,4 +1,4 @@
-package kr.co.vibevillage.database.mapper;
+package kr.co.vibevillage.dbtest.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

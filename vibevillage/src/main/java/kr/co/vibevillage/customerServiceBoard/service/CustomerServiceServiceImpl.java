@@ -37,4 +37,22 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
         return customerServiceMapper.setibCustomerService(customerServiceDTO);
     }
+
+    @Override
+    public List<CustomerServiceDTO> getiaCustomerService() {
+        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService();
+        return iaList;
+    }
+
+    @Override
+    public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO);
+    }
+
+    @Override
+    public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.setQuestionAnswerEnroll(customerServiceDTO);
+    }
 }

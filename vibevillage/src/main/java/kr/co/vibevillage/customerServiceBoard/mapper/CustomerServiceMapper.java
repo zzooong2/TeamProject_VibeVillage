@@ -15,4 +15,10 @@ public interface CustomerServiceMapper {
     List<CustomerServiceDTO> getqaCustomerService();
 
     int setibCustomerService(CustomerServiceDTO customerServiceDTO);
+
+    List<CustomerServiceDTO> getiaCustomerService();
+
+    int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
+
+    int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
 }

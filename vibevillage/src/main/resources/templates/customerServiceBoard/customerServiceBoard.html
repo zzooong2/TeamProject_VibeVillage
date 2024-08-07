@@ -44,9 +44,9 @@
                                 <li><a href="#question" data-toggle="tab"><span></span>자주 묻는 질문</a></li>
                                 <li><a href="#inquiry" data-toggle="tab"><span></span>1:1 문의</a></li>
                                 <!-- 관리자만 보이기 -->
-                                <li><a th:href="@{noticeBoardEnroll.html}"><span></span>공지사항 쓰기</a></li>
-                                <li><a th:href="@{questionAnswerEnroll.html}"><span></span>자주 묻는 질문하기</a></li>
-                                <li><a th:href="@{inquiryAnswer.html}"><span></span>1:1 문의 답변하기</a></li>
+                                <li><a th:href="@{noticeBoard}"><span></span>공지사항 쓰기</a></li>
+                                <li><a th:href="@{questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
+                                <li><a th:href="@{inquiryAnswer}"><span></span>1:1 문의 답변하기</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="notice_board">
@@ -63,7 +63,7 @@
                                                 </h4>
                                             </div>
                                             <div class="panel-collapse collapse" th:id="'notice_board' + ${iterStat.index}">
-                                                <a><div class="panel-body" th:text="${csnbList.nbContent}"></div></a>
+                                                <a th:href="@{noticeBoardDetail}"><div class="panel-body" th:text="${csnbList.nbContent}"></div></a>
                                             </div>
                                         </div>
                                     </div>
@@ -75,8 +75,8 @@
                                                 <h4 class="panel-title font-alt">
                                                     <a data-toggle="collapse" data-parent="#accordion" th:href="'#question' + ${iterStat.index}" th:text="${csqaList.qaTitle}"></a></h4>
                                             </div>
-                                            <div class="panel-collapse collapse in" th:id="'question' + ${iterStat.index}">
-                                                <a><div class="panel-body" th:text="${csqaList.qaContent}"></div></a>
+                                            <div class="panel-collapse collapse" th:id="'question' + ${iterStat.index}">
+                                                <a th:href="@{questionAnswerDetail}"><div class="panel-body" th:text="${csqaList.qaContent}"></div></a>
                                             </div>
                                         </div>
                                     </div>
@@ -87,10 +87,10 @@
                                             <div class="panel-heading">
                                                 <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry1">문의</a></h4>
                                             </div>
-                                            <div class="panel-collapse collapse in" id="inquiry1">
+                                            <div class="panel-collapse collapse" id="inquiry1">
                                                 <div class="panel-body">
                                                     <form th:action="@{/inquiryBoard}" th:object="${customerServiceDTO}" method="post">
-                                                    <textarea class="form-control" th:field="*{ibContent}" rows="7" placeholder="Textarea">내용내용</textarea>
+                                                    <textarea class="form-control" th:field="*{ibContent}" rows="7" placeholder="Textarea"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -107,16 +107,17 @@
                                         </ul>
                                         <div class="tab-pane active" id="inquiry_list" style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion">
-                                                <div class="panel panel-default">
+                                                <div class="panel panel-default" th:each="csiaList, iterStat : ${csiaList}">
                                                     <div class="panel-heading">
-                                                        <h4 class="panel-title font-alt"><a data-toggle="collapse" data-parent="#accordion" href="#inquiry_list1">질문 내용</a></h4>
-                                                        <span>질문날짜</span>
+                                                        <h4 class="panel-title font-alt">
+                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_list' + ${iterStat.index}" th:text="${csiaList.ibContent}"></a></h4>
+                                                        <span th:text="${csiaList.ibIndate}"></span>
                                                     </div>
-                                                    <div class="panel-collapse collapse in" id="inquiry_list1">
-                                                        <div class="panel-body">답변중</div>
+                                                    <div class="panel-collapse collapse" th:id="'inquiry_list' + ${iterStat.index}">
+                                                        <a th:href="@{inquiryAnswer}"><div class="panel-body" th:text="${csiaList.iaContent}"></div></a>
                                                     </div>
                                                 </div>
-                                                <!-- 관리자 답변이 없을 때만 직접 쓴 회원만이 삭제 가능 -->
+                                                <!-- 관리자 답변이 없을 때는 안보임 -->
                                             </div>
                                         </div>
                                     </div>

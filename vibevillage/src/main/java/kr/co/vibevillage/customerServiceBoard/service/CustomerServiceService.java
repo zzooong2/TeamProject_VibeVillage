@@ -12,4 +12,9 @@ public interface CustomerServiceService {
 
     public int setibCustomerService(CustomerServiceDTO customerServiceDTO);
 
+    public List<CustomerServiceDTO> getiaCustomerService();
+
+    public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
+
+    public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
 }

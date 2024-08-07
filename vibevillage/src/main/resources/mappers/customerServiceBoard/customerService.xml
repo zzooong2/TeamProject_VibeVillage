@@ -45,9 +45,23 @@
         values (INQUIRY_BOARD_SEQ.NEXTVAL, #{ibContent}, sysdate, 1, 1)
     </insert>
 
-<!--    <select id="getiaCustomerService" resultMap="csbResultSet">-->
-<!--        select IA_CONTENT, IA_INDATE-->
-<!--        from INQUIRY_ANSWER ia-->
-<!--    </select>-->
+    <select id="getiaCustomerService" resultMap="csbResultSet">
+        select IB_CONTENT, IB_INDATE, IA_CONTENT
+        from INQUIRY_BOARD ib
+        full join INQUIRY_ANSWER ia
+        on ia.IB_NO = ib.IB_NO
+    </select>
+
+    <insert id="setNoticeBoardEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        insert into NOTICE_BOARD (NB_NO, NB_TITLE, NB_CONTENT, NB_INDATE, NB_UPDATE, NB_DELETE, NB_DELETE_YN, NB_VIEWS, U_NO)
+        VALUES (NOTICE_BOARD_SEQ.NEXTVAL, #{nbTitle}, #{nbContent}, SYSDATE, NULL, NULL, 'N', 1, 1)
+    </insert>
+
+    <insert id="setQuestionAnswerEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        INSERT INTO QA_BOARD (QA_NO, QA_TITLE, QA_CONTENT, QA_INDATE, QA_UPDATE, QA_DELETE, QA_DELETE_YN, U_NO)
+        VALUES (QA_BOARD_SEQ.NEXTVAL, #{qaTitle}, #{qaContent}, SYSDATE, NULL, NULL, 'N', 1)
+    </insert>
+
+
 
 </mapper>

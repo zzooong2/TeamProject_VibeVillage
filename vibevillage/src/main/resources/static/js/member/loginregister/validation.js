@@ -7,6 +7,8 @@ let nickNameFlag = false;
 let phoneFlag = false;
 let postCodeFlag = false;
 let detailAddressFlag = false;
+let checkIdFlag = false;
+let checkNickNameFlag = false;
 
 function idValidation() {
     // 유저가 입력한 값
@@ -146,6 +148,62 @@ function postCodeValidation() {
     }
 }
 
+// 계정 중복검사
+function checkId() {
+    const userId = document.getElementById("userId").value;
+
+    if(userId === "") {
+        swal("계정을 입력해주세요.", "", "error");
+    } else {
+        $.ajax({
+            type: "GET",
+            url: "/checkId",
+            data: {
+                userId : userId,
+            },
+            success: function success(res){
+                if(res === "중복") {
+                    swal("이미 사용중인 계정입니다.", "", "error")
+                } else if (res === "가능") {
+                    checkIdFlag = true;
+                    swal("사용 가능한 계정입니다.", "", "success")
+                }
+            },
+            error: function error(err) {
+            }
+        });
+    }
+}
+
+// 닉네임 중복검사
+function checkNickName() {
+    const nickName = document.getElementById("nickName").value;
+
+    if(nickName === ""){
+        swal("닉네임을 입력해주세요.", "", "error");
+    } else {
+        $.ajax({
+            type: "GET",
+            url: "/checkNickName",
+            data: {
+                userNickName : nickName,
+            },
+            success: function success(res){
+                if(res === "중복") {
+                    swal("이미 사용중인 닉네임입니다.", "", "error")
+                } else if (res === "가능") {
+                    checkNickNameFlag = true;
+                    swal("사용 가능한 닉네임입니다.", "", "success")
+                }
+            },
+            error: function error(err) {
+
+            }
+        });
+    }
+}
+
+
 // 회원가입
 function register() {
     const userName = document.getElementById("userName").value;
@@ -170,34 +228,37 @@ function register() {
     console.log("detailAddress: " + detailAddressFlag);
 
     if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag ){
-        $.ajax({
-            type: "POST",
-            url: "/register",
-            data: {
-                userName : userName,
-                userBirthDate : userBirthDate,
-                userId : userId,
-                userPassword : userPassword,
-                userNickName : userNickName,
-                userPhone : userPhone,
-                userPostCode : userPostCode,
-                userAddress : userAddress,
-                userDetailAddress : userDetailAddress,
-                userExtraAddress : userExtraAddress,
-            },
-            success: function success(res) {
-                if(res === "성공") {
-                    swal("회원가입 성공", "반갑습니다." , "success");
-                    document.location.reload();
-                } else {
-                    swal("회원가입 실패", "입력하신 정보를 확인해주세요.", "error");
+        if(checkIdFlag && checkNickNameFlag) {
+            $.ajax({
+                type: "POST",
+                url: "/register",
+                data: {
+                    userName : userName,
+                    userBirthDate : userBirthDate,
+                    userId : userId,
+                    userPassword : userPassword,
+                    userNickName : userNickName,
+                    userPhone : userPhone,
+                    userPostCode : userPostCode,
+                    userAddress : userAddress,
+                    userDetailAddress : userDetailAddress,
+                    userExtraAddress : userExtraAddress,
+                },
+                success: function success(res) {
+                    if(res === "성공") {
+                        swal("회원가입 성공", "반갑습니다." , "success");
+                        document.location.reload();
+                    } else {
+                        swal("회원가입 실패", "입력하신 정보를 확인해주세요.", "error");
+                    }
+                },
+                error: function error(err) {
                 }
-            },
-            error: function error(err) {
-            }
-        });
+            });
+        } else {
+            swal("계정, 닉네임에 대한 중복검사를 진행해주세요.", "", "error");
+        }
     } else {
         swal("회원정보를 모두 입력해주세요.", "", "error");
     }
 }
-

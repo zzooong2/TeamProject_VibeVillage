@@ -27,40 +27,82 @@
             <result column="ia_indate" property="iaIndate"></result>
             <result column="ic_no" property="icNo"></result>
             <result column="ic_content" property="icContent"></result>
-            <result column="u_no" property="userNo"></result>
+            <result column="u_no" property="uNo"></result>
         </resultMap>
 
+    <!--공지사항 조회-->
     <select id="getnbCustomerService" resultMap="csbResultSet">
-        select NB_TITLE, NB_CONTENT
+        select NB_TITLE, NB_CONTENT, NB_NO, NB_INDATE, NB_VIEWS
         from NOTICE_BOARD nb
+        where NB_DELETE_YN = 'N'
     </select>
 
+    <!--Q&A 조회-->
     <select id="getqaCustomerService" resultMap="csbResultSet">
-        select QA_TITLE, QA_CONTENT
+        select QA_TITLE, QA_CONTENT, QA_NO
         from QA_BOARD qb
+        where QA_DELETE_YN = 'N'
     </select>
 
+    <!--1:1 문의 고객이 질문한것-->
     <insert id="setibCustomerService" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
         insert into INQUIRY_BOARD (IB_NO, IB_CONTENT, IB_INDATE, U_NO, IC_NO)
         values (INQUIRY_BOARD_SEQ.NEXTVAL, #{ibContent}, sysdate, 1, 1)
     </insert>
 
+    <!--1:1 문의 질문 조회하기-->
     <select id="getiaCustomerService" resultMap="csbResultSet">
-        select IB_CONTENT, IB_INDATE, IA_CONTENT
+        select IB_CONTENT, IB_INDATE, IA_CONTENT, ib.IB_NO
         from INQUIRY_BOARD ib
         full join INQUIRY_ANSWER ia
         on ia.IB_NO = ib.IB_NO
     </select>
 
+    <!--공지사항 등록하기-->
     <insert id="setNoticeBoardEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
         insert into NOTICE_BOARD (NB_NO, NB_TITLE, NB_CONTENT, NB_INDATE, NB_UPDATE, NB_DELETE, NB_DELETE_YN, NB_VIEWS, U_NO)
         VALUES (NOTICE_BOARD_SEQ.NEXTVAL, #{nbTitle}, #{nbContent}, SYSDATE, NULL, NULL, 'N', 1, 1)
     </insert>
 
+    <!--Q&A 등록하기-->
     <insert id="setQuestionAnswerEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
         INSERT INTO QA_BOARD (QA_NO, QA_TITLE, QA_CONTENT, QA_INDATE, QA_UPDATE, QA_DELETE, QA_DELETE_YN, U_NO)
         VALUES (QA_BOARD_SEQ.NEXTVAL, #{qaTitle}, #{qaContent}, SYSDATE, NULL, NULL, 'N', 1)
     </insert>
+
+    <update id="nbAddViews" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update NOTICE_BOARD
+        set NB_VIEWS = NB_VIEWS+1
+        where NB_NO = #{nbNo}
+    </update>
+
+
+    <!--공지사항 디테일 조회-->
+    <select id="getNoticeBoardDetail" resultMap="csbResultSet">
+        select NB_NO, NB_TITLE, NB_CONTENT, NB_VIEWS, NB_INDATE, U_NO
+        from NOTICE_BOARD nb
+        where NB_NO = #{nbNo}
+    </select>
+
+    <update id="nbDelete" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update Notice_BOARD
+        set NB_DELETE = default,
+        NB_DELETE_YN = 'Y'
+        where NB_NO = #{nbNo}
+    </update>
+
+    <update id="setNoticeBoardEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update NOTICE_BOARD
+        set NB_TITLE = #{nbTitle},
+            NB_UPDATE = default,
+            NB_CONTENT = #{nbContent}
+        where NB_NO = #{nbNo}
+    </update>
+
+    <!--자주 묻는 질문 디테일 조회-->
+    <select id="" >
+
+    </select>
 
 
 

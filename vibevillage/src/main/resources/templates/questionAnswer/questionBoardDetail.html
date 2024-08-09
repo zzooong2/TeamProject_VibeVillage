@@ -21,7 +21,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
-                        <h1 class="module-title font-alt mb-0">공지사항</h1>
+                        <h1 class="module-title font-alt mb-0">자주 묻는 질문</h1>
                     </div>
                 </div>
             </div>
@@ -30,18 +30,20 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2">
-                        <h4 class="font-alt mb-0">공지사항</h4>
+                        <h4 class="font-alt mb-0">자주 묻는 질문</h4>
                         <hr class="divider-w mt-10 mb-20">
-                        <form class="form" role="form" th:action="@{/noticeBoardEnroll}" th:object="${customerServiceDTO}" method="post">
+                        <form class="form" role="form">
+<!--                            <input type="hidden" name="nbNo" th:value="${nbNo}">-->
+
                             <div class="form-group">
-                                <input class="form-control" type="text" placeholder="제목" th:field="*{nbTitle}" />
+                                <p class="form-control" type="text" th:text="*{nbDetail.nbTitle}"/>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="text" th:field="*{uNo}" disabled="" />
+                                <input class="form-control" type="text" placeholder="관리자" disabled="" />
                             </div>
-                            <textarea class="form-control" rows="7" placeholder="내용" th:field="*{nbContent}"></textarea>
+                            <textarea class="form-control" rows="7" th:text="*{nbDetail.nbContent}"></textarea>
                             <div style="margin-top: 10px; float: right;">
-                                <button class="btn btn-g btn-circle" type="submit">작 성</button>
+                                <button class="btn btn-g btn-circle" type="submit">수 정</button>
                             </div>
                         </form>
                     </div>

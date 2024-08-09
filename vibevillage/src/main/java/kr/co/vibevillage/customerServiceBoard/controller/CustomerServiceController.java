@@ -1,17 +1,16 @@
 package kr.co.vibevillage.customerServiceBoard.controller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceService;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sound.midi.Soundbank;
+import java.nio.file.FileStore;
 import java.util.List;
 
 @Controller
@@ -69,14 +68,57 @@ public class CustomerServiceController {
         return "redirect:/customerService";
     }
 
+    // 공지사항 Detail
+    @GetMapping("/noticeBoardDetail/{nbNo}")
+    public String getNoticeBoardDetail(@PathVariable("nbNo") String nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
+        int nbno = Integer.parseInt(nbNo);
+
+        int result = customerServiceService.nbAddViews(customerServiceDTO);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbno);
+        model.addAttribute("nbDetail", nbDetail);
+
+        return "noticeBoard/noticeBoardDetail";
+    }
+
+    @GetMapping("/noticeBoardDelete/{nbNo}")
+    public String noticeBoardDelete(@PathVariable("nbNo") String nbNo, CustomerServiceDTO customerServiceDTO) {
+
+        int result = customerServiceService.nbDelete(customerServiceDTO);
+
+        return "redirect:/customerService";
+    }
+
+    @GetMapping("/noticeBoardEditForm/{nbNo}")
+    public String noticeBoardEditForm(@PathVariable("nbNo") String nbNo, Model model) {
+
+        int nbno = Integer.parseInt(nbNo);
+        System.out.println(nbno);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbno);
+        model.addAttribute("nbDetail", nbDetail);
+
+        return "noticeBoard/noticeBoardEdit";
+    }
+
+
+    @PostMapping("/noticeBoardEdit/{nbNo}")
+    public String noticeBoardEdit(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
+
+        int nbEdit = customerServiceService.setNoticeBoardEdit(customerServiceDTO);
+        model.addAttribute("nbEdit", nbEdit);
+
+        return "redirect:/customerService";
+    }
+
+
     @GetMapping("/questionAnswer")
     public String questionAnswer(CustomerServiceDTO customerServiceDTO) {
 
         return "questionAnswer/questionAnswerEnroll";
     }
 
+    // Q&A 작성
     @PostMapping("/questionAnswerEnroll")
-    public String setquestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
+    public String setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
         System.out.println(customerServiceDTO.getQaTitle());
         int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO);
         System.out.println(customerServiceDTO.getQaContent());

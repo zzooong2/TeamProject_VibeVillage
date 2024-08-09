@@ -50,6 +50,32 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO);
     }
 
+
+    @Override
+    public int nbAddViews(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.nbAddViews(customerServiceDTO);
+    }
+
+    @Override
+    public CustomerServiceDTO getNoticeBoardDetail(int nbNo) {
+
+        return customerServiceMapper.getNoticeBoardDetail(nbNo);
+    }
+
+    @Override
+    public int nbDelete(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.nbDelete(customerServiceDTO);
+    }
+
+    @Override
+    public int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.setNoticeBoardEdit(customerServiceDTO);
+    }
+
+
     @Override
     public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
 

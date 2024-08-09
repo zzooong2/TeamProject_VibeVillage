@@ -21,4 +21,12 @@ public interface CustomerServiceMapper {
     int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
 
     int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
+
+    int nbAddViews(CustomerServiceDTO customerServiceDTO);
+
+    CustomerServiceDTO getNoticeBoardDetail(int nbNo);
+
+    int nbDelete(CustomerServiceDTO customerServiceDTO);
+
+    int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO);
 }

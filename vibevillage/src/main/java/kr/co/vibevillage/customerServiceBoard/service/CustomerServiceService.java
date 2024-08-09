@@ -17,4 +17,12 @@ public interface CustomerServiceService {
     public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
 
     public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
+
+    public int nbAddViews(CustomerServiceDTO customerServiceDTO);
+
+    public CustomerServiceDTO getNoticeBoardDetail(int nbNo);
+
+    public int nbDelete(CustomerServiceDTO customerServiceDTO);
+
+    public int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO);
 }

@@ -203,6 +203,12 @@ function checkNickName() {
     }
 }
 
+function checkCertification() {
+    // 인증번호 입력 값
+    const certification = document.getElementById("certification").value;
+
+}
+
 
 // 회원가입
 function register() {
@@ -216,16 +222,6 @@ function register() {
     const userAddress = document.getElementById("address").value;
     const userDetailAddress = document.getElementById("detailAddress").value;
     const userExtraAddress = document.getElementById("extraAddress").value;
-
-    console.log("name: " + nameFlag);
-    console.log("birthDate: " + birthDateFlag);
-    console.log("id: " + idFlag);
-    console.log("password: " + passwordFlag);
-    console.log("rePassword: " + rePasswordFlag);
-    console.log("nickName: " + nickNameFlag);
-    console.log("phone: " + phoneFlag);
-    console.log("postCode: " + postCodeFlag);
-    console.log("detailAddress: " + detailAddressFlag);
 
     if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag ){
         if(checkIdFlag && checkNickNameFlag) {

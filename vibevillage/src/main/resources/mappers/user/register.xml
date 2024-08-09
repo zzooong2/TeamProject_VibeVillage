@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="kr.co.vibevillage.user.mapper.RegisterMapper">
+<mapper namespace="kr.co.vibevillage.user.model.mapper.RegisterMapper">
 
-    <insert id="register" parameterType="kr.co.vibevillage.user.dto.UserDTO">
+    <insert id="register" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
         INSERT INTO USER_VIBEVILLAGE VALUES (USER_VIBEVILLAGE_SEQ.nextval,
                                              #{userName},
                                              #{userId},

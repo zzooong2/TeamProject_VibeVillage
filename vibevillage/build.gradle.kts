@@ -34,6 +34,8 @@ dependencies {
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf") // Thymeleaf 의존성 주입
 	implementation("org.springframework.boot:spring-boot-devtools:3.2.8") // devtools 의존성 주입
+	implementation("net.nurigo:sdk:4.3.0") // coolsms 의존성 주입
+	implementation("org.springframework.boot:spring-boot-starter-data-redis") // redis 의존성 주입
 
 	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")

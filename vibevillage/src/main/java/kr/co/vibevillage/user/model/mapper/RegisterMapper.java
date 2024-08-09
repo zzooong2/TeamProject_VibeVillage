@@ -1,6 +1,6 @@
-package kr.co.vibevillage.user.mapper;
+package kr.co.vibevillage.user.model.mapper;
 
-import kr.co.vibevillage.user.dto.UserDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

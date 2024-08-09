@@ -1,9 +1,8 @@
 package kr.co.vibevillage.user.controller;
 
-import kr.co.vibevillage.user.dto.UserDTO;
-import kr.co.vibevillage.user.service.RegisterServiceImpl;
+import kr.co.vibevillage.user.model.dto.UserDTO;
+import kr.co.vibevillage.user.model.service.RegisterServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,4 +59,17 @@ public class RegisterController {
         }
     }
 
+    // 문자 인증
+    @PostMapping("/sendCertificationNumber")
+    @ResponseBody
+    public void certification(String userPhone) {
+        registerService.sendSms(userPhone);
+    }
+
+    // 인증 시작
+    @PostMapping("/certification")
+    @ResponseBody
+    public String startCertification(String userPhone,String certificationInput) {
+        return registerService.verify(userPhone, certificationInput);
+    }
 }

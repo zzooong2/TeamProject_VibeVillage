@@ -1,7 +1,7 @@
 package kr.co.vibevillage.user.controller;
 
-import kr.co.vibevillage.user.dto.UserDTO;
-import kr.co.vibevillage.user.service.RegisterServiceImpl;
+import kr.co.vibevillage.user.model.dto.UserDTO;
+import kr.co.vibevillage.user.model.service.RegisterServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

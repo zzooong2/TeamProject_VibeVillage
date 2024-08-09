@@ -1,6 +1,6 @@
-package kr.co.vibevillage.user.service;
+package kr.co.vibevillage.user.model.service;
 
-import kr.co.vibevillage.user.dto.UserDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 
 public interface RegisterService {
 
@@ -12,4 +12,8 @@ public interface RegisterService {
 
     // 계정 중복검사
     public int checkId(String userId);
+
+    // 문자인증
+    public void sendSms(String userPhone);// 문자인증
+
 }

@@ -1,4 +1,4 @@
-package kr.co.vibevillage.user.mapper;
+package kr.co.vibevillage.user.model.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

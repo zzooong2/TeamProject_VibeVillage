@@ -1,6 +1,6 @@
 package kr.co.vibevillage;
 
-import kr.co.vibevillage.user.dto.UserDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

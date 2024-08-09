@@ -52,6 +52,7 @@ public class CustomerServiceController {
         return "redirect:/customerService";
     }
 
+    // 공지사항 페이지 이동
     @GetMapping("/noticeBoard")
     public String noticeBoard(CustomerServiceDTO customerServiceDTO) {
 
@@ -64,7 +65,7 @@ public class CustomerServiceController {
 
         int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO);
 
-        System.out.println(customerServiceDTO.getNbContent());
+//        System.out.println(customerServiceDTO.getNbContent());
         return "redirect:/customerService";
     }
 
@@ -80,26 +81,17 @@ public class CustomerServiceController {
         return "noticeBoard/noticeBoardDetail";
     }
 
-    @GetMapping("/noticeBoardDelete/{nbNo}")
-    public String noticeBoardDelete(@PathVariable("nbNo") String nbNo, CustomerServiceDTO customerServiceDTO) {
 
-        int result = customerServiceService.nbDelete(customerServiceDTO);
-
-        return "redirect:/customerService";
-    }
-
+    // 공지사항 수정/삭제폼
     @GetMapping("/noticeBoardEditForm/{nbNo}")
-    public String noticeBoardEditForm(@PathVariable("nbNo") String nbNo, Model model) {
+    public String noticeBoardEditForm(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
-        int nbno = Integer.parseInt(nbNo);
-        System.out.println(nbno);
-        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbno);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo);
         model.addAttribute("nbDetail", nbDetail);
-
         return "noticeBoard/noticeBoardEdit";
     }
 
-
+    // 공시사항 수정
     @PostMapping("/noticeBoardEdit/{nbNo}")
     public String noticeBoardEdit(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
@@ -109,7 +101,16 @@ public class CustomerServiceController {
         return "redirect:/customerService";
     }
 
+    // 공지사항 삭제(update문)
+    @GetMapping("/noticeBoardDelete/{nbNo}")
+    public String noticeBoardDelete(@PathVariable("nbNo") int nbNo, CustomerServiceDTO customerServiceDTO) {
 
+        int result = customerServiceService.nbDelete(customerServiceDTO);
+
+        return "redirect:/customerService";
+    }
+
+    // Q&A 등록 페이지 이동
     @GetMapping("/questionAnswer")
     public String questionAnswer(CustomerServiceDTO customerServiceDTO) {
 

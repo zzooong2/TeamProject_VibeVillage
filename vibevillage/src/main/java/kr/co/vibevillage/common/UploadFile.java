@@ -17,43 +17,57 @@ import java.util.stream.Collectors;
 @Component
 public class UploadFile {
 
+
+	// UPLOAD_PATH에 이미지가 담길 경로를 써주세요
+
 	private final String UPLOAD_PATH = "C:/DEV/IntelliJ/FINAL_PROJECT/TeamProject_VibeVillage/vibevillage/src/main/resources/static/uploadUsedImages/";
 
-	public List<UsedBoardImageDto> upload(List<MultipartFile> uploads) {
-		return uploads.stream().map(upload -> {
-			if (!upload.isEmpty()) {
-				String originName = upload.getOriginalFilename();
-				String extension = originName.substring(originName.lastIndexOf('.'));
-				LocalDateTime now = LocalDateTime.now();
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmmss");
-				String output = now.format(formatter);
+	public List<UsedBoardImageDto> upload(List<MultipartFile> mainImage, List<MultipartFile> previewImages) {
+		List<UsedBoardImageDto> mainImageDtos = mainImage.stream()
+				.map(file -> uploadSingleFile(file, "MAIN"))
+				.collect(Collectors.toList());
 
-				int stringLength = 8;
-				String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-				Random random = new Random();
-				String randomString = random.ints(stringLength, 0, characters.length())
-						.mapToObj(characters::charAt)
-						.map(Object::toString)
-						.collect(Collectors.joining());
+		List<UsedBoardImageDto> previewImageDtos = previewImages.stream()
+				.map(file -> uploadSingleFile(file, "PREVIEW"))
+				.collect(Collectors.toList());
 
-				String fileName = output + "_" + randomString + extension;
-				String filePathName = UPLOAD_PATH + fileName;
-				Path filePath = Paths.get(filePathName);
+		mainImageDtos.addAll(previewImageDtos);
+		return mainImageDtos;
+	}
 
-				try {
-					upload.transferTo(filePath);
-					UsedBoardImageDto imageDto = new UsedBoardImageDto();
-					imageDto.setUploadOriginName(originName);
-					imageDto.setUploadUniqueName(fileName);
-					imageDto.setUploadImagePath(UPLOAD_PATH);
-					imageDto.setUploadImageType(extension);
-					return imageDto;
-				} catch (IllegalStateException | IOException e) {
-					System.out.println("오류");
-					e.printStackTrace();
-				}
+	private UsedBoardImageDto uploadSingleFile(MultipartFile upload, String imageType) {
+		if (!upload.isEmpty()) {
+			String originName = upload.getOriginalFilename();
+			String extension = originName.substring(originName.lastIndexOf('.'));
+			LocalDateTime now = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMddHHmmss");
+			String output = now.format(formatter);
+
+			int stringLength = 8;
+			String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			Random random = new Random();
+			String randomString = random.ints(stringLength, 0, characters.length())
+					.mapToObj(characters::charAt)
+					.map(Object::toString)
+					.collect(Collectors.joining());
+
+			String fileName = output + "_" + randomString + extension;
+			String filePathName = UPLOAD_PATH + fileName;
+			Path filePath = Paths.get(filePathName);
+
+			try {
+				upload.transferTo(filePath);
+				UsedBoardImageDto imageDto = new UsedBoardImageDto();
+				imageDto.setUploadOriginName(originName);
+				imageDto.setUploadUniqueName(fileName);
+				imageDto.setUploadImagePath(UPLOAD_PATH);
+				imageDto.setUploadImageType(imageType); // Set the image type here
+				return imageDto;
+			} catch (IllegalStateException | IOException e) {
+				System.out.println("오류");
+				e.printStackTrace();
 			}
-			return null;
-		}).collect(Collectors.toList());
+		}
+		return null;
 	}
 }

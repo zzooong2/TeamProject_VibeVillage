@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.usedBoard.mapper.UsedBoardImageMapper">
+
+    <resultMap id="usedBoardImageMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
+        <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
+        <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
+    </resultMap>
+
+
+
+        <insert id="usedBoardEnrollImageXML">
+                INSERT INTO USED_BOARD_IMAGE
+                VALUES (USED_BOARD_IMAGE_SEQ.NEXTVAL, #{image.usedBoardId}, #{image.uploadOriginName}, #{image.uploadUniqueName}, #{image.uploadImagePath}, #{image.uploadImageType})
+        </insert>
+
+        <select id="usedBoardGetImageListXML"  resultMap="usedBoardImageMap" >
+        SELECT UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH
+        FROM USED_BOARD_IMAGE WHERE used_post_id = #{id} and upload_image_type = 'PREVIEW'
+        </select>
+    <select id="usedBoardGetImageListOnceXML" resultMap="usedBoardImageMap">
+        SELECT UPLOAD_UNIQUE_NAME, UPLOAD_IMAGE_PATH
+        FROM USED_BOARD_IMAGE WHERE used_post_id = #{id} and upload_image_type = 'MAIN'
+    </select>
+
+</mapper>

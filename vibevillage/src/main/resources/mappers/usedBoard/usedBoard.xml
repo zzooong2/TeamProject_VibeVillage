@@ -25,6 +25,29 @@
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
     </select>
+
+<!--    여기하던중-->
+    <select id="usedBoardPaginationXML" resultMap="usedBoardMap">
+        SELECT *
+        FROM (
+                 SELECT
+                     u.U_NO,
+                     u.USED_POST_ID,
+                     u.USED_POST_TITLE,
+                     u.USED_POST_CONTENT,
+                     u.USED_POST_STATUS,
+                     u.USED_DELETE,
+                     u.USED_UPDATE_AT,
+                     p.PRODUCT_NAME,
+                     p.PRODUCT_PRICE,
+                     c.CATEGORY_NAME,
+                     ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
+                 FROM USED_BOARD u
+                          JOIN product p ON p.used_post_id = u.used_post_id
+                          JOIN category c ON c.category_id = p.category_id
+             ) subquery
+        WHERE subquery.rn BETWEEN #{pi.startPage} AND #{pi.endPage}*#{pi.boardLimit}
+    </select>
     <select id="usedBoardDetailXML" resultMap="usedBoardMap">
         SELECT *
         FROM USED_BOARD u
@@ -45,5 +68,6 @@
         INSERT INTO PRODUCT (USED_POST_ID,PRODUCT_NAME,PRODUCT_PRICE,CATEGORY_ID)
         VALUES (#{usedBoard.usedBoardId},#{usedBoard.usedBoardProductName},#{usedBoard.usedBoardProductPrice},#{usedBoard.categoryId})
     </insert>
+
 
 </mapper>

@@ -36,6 +36,7 @@
                      u.USED_POST_TITLE,
                      u.USED_POST_CONTENT,
                      u.USED_POST_STATUS,
+                     u.LOCATION,
                      u.USED_DELETE,
                      u.USED_UPDATE_AT,
                      p.PRODUCT_NAME,

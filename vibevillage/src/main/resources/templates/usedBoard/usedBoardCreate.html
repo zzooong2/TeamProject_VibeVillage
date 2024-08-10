@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head>
+  <style>
+    .input-image{
+      display: none;
+    }
+  </style>
   <div th:replace="~{common/head :: head}"></div>
   <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
 </head>
@@ -16,17 +21,15 @@
         <form id="upload-form" method="POST">
           <div class="row">
             <div class="col-sm-6 mb-sm-40">
+              메인 이미지
               <div class="gallery" id="mainImg">
-              </div>
-                  <button>
-                  <input class="gallery" type="file" id="main-file-input" name="mainFile" >
-                  </button>
-              <ul class="product-gallery" id="preview-container">
 
+              </div>
+                  <input class="btn btn-g btn-circle" type="file" id="main-file-input" name="mainFile">
+              서브 이미지
+              <ul class="product-gallery" id="preview-container">
               </ul>
-                  <button>
-                  <input class="gallery" type="file" multiple id="preview-file-input" name="previewFiles">
-                  </button>
+                  <input class="btn btn-g btn-circle" type="file" multiple id="preview-file-input" name="previewFiles">
             </div>
             <div class="col-sm-6">
               <div class="row">

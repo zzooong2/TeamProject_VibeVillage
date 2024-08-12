@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head th:replace="~{common/head :: head}">
-
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
 <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
@@ -50,64 +51,70 @@
                         <h4 class="font-alt">회원가입</h4>
                         <hr class="divider-w mb-10">
 
-                        <form class="form">
+                        <form class="form" th:action="@{/register}" th:object="${userDTO}" method="post">
 
                             <div class="form-group">
-                                <input class="form-control" id="userName" type="text" name="userName" placeholder="이름" onkeyup="nameValidation()"/>
+                                <input class="form-control" th:field="*{userName}" id="userName" type="text" placeholder="이름" onkeyup="nameValidation()"/>
                                 <div class="hj-validation-name" id="showName"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="birthDate" type="text" name="birthDate" placeholder="생년월일(yyyymmdd)" onkeyup="birthDateValidation()"/>
+                                <input class="form-control" th:field="*{userBirthDate}" id="birthDate" type="text" placeholder="생년월일(yyyymmdd)" onkeyup="birthDateValidation()"/>
                                 <div class="hj-validation-name" id="showBirthDate"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="email" type="text" name="email" placeholder="계정" onkeyup="emailValidation()"/>
-                                <div class="hj-validation-name" id="showEmail"></div>
+                                <input class="form-control hj-address-number" th:field="*{userId}" id="userId" type="text" placeholder="계정" onkeyup="idValidation()"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="checkId()">중복확인</button>&nbsp;
+                                <div class="hj-validation-name" id="showId"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="password" type="password" name="password" placeholder="암호" onkeyup="passwordValidation()"/>
+                                <input class="form-control" th:field="*{userPassword}" id="password" type="password" placeholder="암호" onkeyup="passwordValidation()"/>
                                 <div class="hj-validation-name" id="showPassword"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="rePassword" type="password" name="rePassword" placeholder="암호확인" onkeyup="rePasswordValidation()"/>
+                                <input class="form-control" id="rePassword" type="password" placeholder="암호확인" onkeyup="rePasswordValidation()"/>
                                 <div class="hj-validation-name" id="showRePassword"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control hj-address-number" id="nickName" type="text" name="nickName" placeholder="닉네임" onkeyup="nickNameValidation()"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">중복확인</button>&nbsp;
+                                <input class="form-control hj-address-number" th:field="*{userNickName}" id="nickName" type="text" placeholder="닉네임" onkeyup="nickNameValidation()"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="checkNickName()">중복확인</button>&nbsp;
                                 <div class="hj-validation-name" id="showNickName"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control hj-address-number" id="phone" type="text" name="phone" placeholder="연락처" onkeyup="phoneValidation()"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">인증하기</button>&nbsp;
+                                <input class="form-control hj-address-number" th:field="*{userPhone}" id="phone" type="text" placeholder="연락처" onkeyup="phoneValidation()"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="certification()">본인인증</button>&nbsp;
                                 <div class="hj-validation-name" id="showPhone"></div>
                             </div>
-
-                            <div class="form-group">
-                                <input class="form-control hj-address-number" id="postCode" type="text" name="postCode" placeholder="우편번호" disabled/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="addressSearch()">주소찾기</button>&nbsp;
+                            <div class="form-group" style="display: none" id="certificationArea">
+                                <input class="form-control hj-address-number" id="certificationInput" type="text" placeholder="인증번호"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="startCertification()">인증하기</button>&nbsp;
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="address" type="text" name="address" placeholder="주소" disabled/>
+                                <input class="form-control hj-address-number" th:field="*{userPostCode}" id="postCode" type="text" placeholder="우편번호" readonly />
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="addressSearch()">주소찾기</button>&nbsp;
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="detailAddress" type="text" name="detailAddress" placeholder="상세주소"/>
+                                <input class="form-control" th:field="*{userAddress}" id="address" type="text" placeholder="주소" readonly/>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="extraAddress" type="text" name="extraAddress" placeholder="참고항목"/>
+                                <input class="form-control" th:field="*{userDetailAddress}" id="detailAddress" type="text" placeholder="상세주소" onkeyup="postCodeValidation()"/>
+                                <div class="hj-validation-name" id="showAddress"></div>
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-block btn-round btn-g">회원가입</button>
+                                <input class="form-control" th:field="*{userExtraAddress}" id="extraAddress" type="text" placeholder="참고항목"/>
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-block btn-round btn-g" type="button" th:onclick="register()">회원가입</button>
                             </div>
                         </form>
                     </div>
@@ -121,9 +128,10 @@
     <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
 </main>
 
-<script src="/js/member/loginregister/validation.js"></script>
-<script src="/js/member/common/common.js"></script>
-<script src="/js/member/address/kakaoAddressAPI.js"></script>
+<script src="/js/user/loginregister/validation.js"></script>
+<script src="/js/user/common/common.js"></script>
+<script src="/js/user/address/kakaoAddressAPI.js"></script>
+<script src="/js/user/coolsms/coolsms.js"></script>
 
 <!-- Sweet Alert -->
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

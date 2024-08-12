@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @Component
 public class UploadFile {
 
-
-	// UPLOAD_PATH에 이미지가 담길 경로를 써주세요
-
+	
+	// UPLOAD_PATH에는 이미지를 담을 경로를 써주세요
 	private final String UPLOAD_PATH = "C:/DEV/IntelliJ/FINAL_PROJECT/TeamProject_VibeVillage/vibevillage/src/main/resources/static/uploadUsedImages/";
 
+	// 메인이미지와 프리뷰이미지를 구분
 	public List<UsedBoardImageDto> upload(List<MultipartFile> mainImage, List<MultipartFile> previewImages) {
 		List<UsedBoardImageDto> mainImageDtos = mainImage.stream()
 				.map(file -> uploadSingleFile(file, "MAIN"))
@@ -34,7 +34,7 @@ public class UploadFile {
 		mainImageDtos.addAll(previewImageDtos);
 		return mainImageDtos;
 	}
-
+	// 파일 이름 암호화 및 경로 지정 후 DTO에 담기
 	private UsedBoardImageDto uploadSingleFile(MultipartFile upload, String imageType) {
 		if (!upload.isEmpty()) {
 			String originName = upload.getOriginalFilename();

@@ -28,7 +28,7 @@ public class ChatController {
         this.chatRoomService = chatRoomService;
         this.chatMessageService = chatMessageService;
     }
-
+    // 채팅방 생성
     @PostMapping("/start")
     public ResponseEntity<Map<String, Long>> startChat(@RequestBody Map<String, Long> request) {
         Long currentUserId = request.get("currentUserId");
@@ -42,7 +42,7 @@ public class ChatController {
     }
 
 
-
+    // 채팅방 입장
     @GetMapping("/room/{roomId}")
     public String getChatRoomPage(@PathVariable Long roomId, Model model) {
         ChatRoom chatRoom = chatRoomService.findRoomById(roomId);
@@ -53,12 +53,15 @@ public class ChatController {
         model.addAttribute("chatRoom", chatRoom);
         return "chat/chatRoom"; // 채팅방 페이지로 이동
     }
+    
+    // 메세지 송신
     @MessageMapping("/chat.sendMessage/{roomId}")
     @SendTo("/topic/{roomId}")
     public ChatMessage sendMessage(@DestinationVariable String roomId, ChatMessage chatMessage) {
         return chatMessage;
     }
-
+    
+    // 송신자 전송
     @MessageMapping("/chat.addUser/{roomId}")
     @SendTo("/topic/{roomId}")
     public ChatMessage addUser(@DestinationVariable String roomId, ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {

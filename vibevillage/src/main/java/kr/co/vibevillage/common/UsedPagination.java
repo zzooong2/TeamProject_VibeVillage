@@ -3,6 +3,7 @@ package kr.co.vibevillage.common;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
 import org.springframework.stereotype.Component;
 
+// 중고 거래 게시판 페이지네이션
 @Component
 public class UsedPagination {
     public UsedPageInfoDto getPageInfo(int listCount, int currentPage,

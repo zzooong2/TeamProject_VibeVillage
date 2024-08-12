@@ -33,9 +33,7 @@ public class UsedBoardController {
         private final UploadFile uploadFile;
         private final UsedBoardServiceImpl usedBoardService;
         private final String USE = "usedBoard/usedBoard";
-    private final UsedBoardCommentServiceImpl usedBoardCommentServiceImpl;
-
-    public String kakaoMap;
+        public String kakaoMap;
 
         @Autowired
         public UsedBoardController(UsedBoardServiceImpl usedBoardService,
@@ -49,7 +47,6 @@ public class UsedBoardController {
             this.kakaoMap = env.test().get("KAKAOMAP");
             this.usedPagination = usedPagination;
             this.commentService = commentService;
-            this.usedBoardCommentServiceImpl = usedBoardCommentServiceImpl;
         }
 // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")
@@ -62,7 +59,7 @@ public class UsedBoardController {
         int boardLimit = 20;
         int row = listCount - (cpage-1) * boardLimit;
         UsedPageInfoDto pi = usedPagination.getPageInfo(listCount, cpage, pageLimit, boardLimit);
-        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi);
+        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi); // 메인 이미지만 전송
         model.addAttribute("usedList", usedList);
         model.addAttribute("pi", pi);
         return USE + "List";
@@ -74,6 +71,7 @@ public class UsedBoardController {
             model.addAttribute("usedBoard", usedBoard);
         return USE+"Create";
         }
+
 // 게시글 작성
     @PostMapping("/boardEnroll")
     @ResponseBody
@@ -86,13 +84,12 @@ public class UsedBoardController {
             model.addAttribute("kakaoMap", kakaoMap);
 
             List<MultipartFile> mainImages = List.of(mainFile);
-            List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles);
+            List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles); // 메인 이미지와 프리뷰 이미지를 병합
             usedBoard.setImages(images);
-
-            int result = usedBoardService.enrollUsedBoard(usedBoard);
-
+            usedBoardService.enrollUsedBoard(usedBoard);
             response.put("message", "Upload successful!");
             return new ResponseEntity<>(response, HttpStatus.OK);
+
         } catch (Exception e) {
             e.printStackTrace();
             response.put("message", "Upload failed!");
@@ -106,20 +103,21 @@ public class UsedBoardController {
                                           @PathVariable("id") String id,
                                           UsedBoardCommentDto comment){
             int boardId = Integer.parseInt(id);
-            UsedBoardDto board = usedBoardService.getUsedBoardDetail(boardId);
+            UsedBoardDto board = usedBoardService.getUsedBoardDetail(boardId); // 게시글 내용 조회
 
-            List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(boardId);
+            List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(boardId); // 메인 이미지와 프리뷰 이미지 조회
             List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(boardId);
-            List<UsedBoardCommentDto> commentList = commentService.getCommentList(boardId);
+            List<UsedBoardCommentDto> commentList = commentService.getCommentList(boardId); // 댓글 리스트 조회
         model.addAttribute("usedBoard", board);
         model.addAttribute("mainImages", mainImages);
         model.addAttribute("subImages", subImages);
         model.addAttribute("comment",comment);
         model.addAttribute("commentList",commentList);
-        model.addAttribute("commentSize",commentList.size());
+        model.addAttribute("commentSize",commentList.size()); // 댓글 수
 
         return USE+"Detail";
         }
+
 // 게시글 댓글 작성
     @PostMapping("/boardDetail/{id}/put")
     public String putUsedBoardComment(@PathVariable("id") int id,

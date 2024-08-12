@@ -8,13 +8,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ChatRoom {
-    private String roomId;
-    private String name;
-
-    public static ChatRoom create(String name) {
-        ChatRoom chatRoom = new ChatRoom();
-        chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
-        return chatRoom;
-    }
+    private Long roomId;    // DB에서 NUMBER로 저장됨
+    private String name;    // 채팅방 이름
+    private Long creatorId; // 채팅방 생성자 ID
+    private Long otherUserId;
 }

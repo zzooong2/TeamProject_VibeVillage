@@ -13,24 +13,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final WebSocketHandler webSocketHandler;
 
-    @Autowired
-    public WebSocketConfig(WebSocketHandler webSocketHandler) {
-        this.webSocketHandler = webSocketHandler;
-    }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub");
-        config.setApplicationDestinationPrefixes("/pub");
+        config.enableSimpleBroker("/topic");  // 메시지를 받을 주소
+        config.setApplicationDestinationPrefixes("/app"); // 메시지를 보낼 때 사용할 주소
     }
 
 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp").setAllowedOriginPatterns("http://localhost:8080")
-                .withSockJS();
+        registry.addEndpoint("/ws").withSockJS(); // 클라이언트가 접속할 주소
     }
 }

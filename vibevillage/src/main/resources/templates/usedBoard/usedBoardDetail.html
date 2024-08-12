@@ -70,7 +70,7 @@
                   <div class="col-sm-4 mb-sm-20">
                     <input class="form-control input-lg" type="number" name="" value="1" max="40" min="1" required="required"/>
                   </div>
-                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#">채팅하기</a></div>
+                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#" onclick="startChat()">채팅하기</a></div>
                 </div>
                 <div class="row mb-20">
                   <div class="col-sm-12">
@@ -180,6 +180,34 @@
           map.setCenter(coords);
         }
       });
+    </script>
+
+    <script th:inline="javascript">
+      function startChat() {
+        const boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId'; // 게시물 ID
+        const boardOwnerId = /*[[${usedBoard.userNo}]]*/ 'defaultUserId';  // 게시물 작성자 ID
+        const currentUserId = 10;
+        fetch('/chat/start', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            boardId: boardId,
+            boardOwnerId: boardOwnerId,
+            currentUserId: currentUserId
+          })
+        })
+                .then(response => response.json())
+                .then(data => {
+                  if (data.roomId) {
+                    window.location.href = `/chat/room/${data.roomId}`;
+                  } else {
+                    alert('채팅방 생성에 실패했습니다.');
+                  }
+                })
+                .catch(error => console.error('Error:', error));
+      }
     </script>
 
   </body>

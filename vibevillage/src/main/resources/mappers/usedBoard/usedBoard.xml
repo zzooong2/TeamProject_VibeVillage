@@ -3,6 +3,8 @@
 <mapper namespace="kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper">
 
     <resultMap id="usedBoardMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+<!--        유저 번호-->
+        <result column="u_no" property="userNo"/>
 <!--        게시글-->
         <result column="used_post_id" property="usedBoardId"/>
         <result column="used_post_title" property="usedBoardTitle"/>

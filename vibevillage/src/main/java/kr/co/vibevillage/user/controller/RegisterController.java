@@ -1,9 +1,11 @@
 package kr.co.vibevillage.user.controller;
 
+import jakarta.validation.Valid;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.RegisterServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,16 +20,21 @@ public class RegisterController {
     // 회원가입
     @PostMapping("/register")
     @ResponseBody
-    public String register(UserDTO userDTO){
+    public String register(@Valid UserDTO userDTO,
+                           BindingResult bindingResult){
         System.out.println("-------------Register Controller-------------");
         System.out.println(userDTO.toString());
 
-        int result = registerService.register(userDTO);
-
-        if(result == 1){
-            return "성공";
+        if(bindingResult.hasErrors()){
+            return "유효성 검사 오류";
         } else {
-            return "실패";
+            int result = registerService.register(userDTO);
+
+            if(result == 1){
+                return "성공";
+            } else {
+                return "실패";
+            }
         }
     }
 

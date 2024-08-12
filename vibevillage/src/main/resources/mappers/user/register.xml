@@ -4,7 +4,12 @@
 <mapper namespace="kr.co.vibevillage.user.model.mapper.RegisterMapper">
 
     <insert id="register" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
-        INSERT INTO USER_VIBEVILLAGE VALUES (USER_VIBEVILLAGE_SEQ.nextval,
+
+        <selectKey keyProperty="userNo" resultType="_int" order="BEFORE">
+            SELECT USER_VIBEVILLAGE_SEQ.nextval FROM dual
+        </selectKey>
+
+        INSERT INTO USER_VIBEVILLAGE VALUES (#{userNo},
                                              #{userName},
                                              #{userId},
                                              #{userPassword},
@@ -19,6 +24,10 @@
                                              default,
                                              default
                                             )
+    </insert>
+
+    <insert id="registerLevel"  parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        INSERT INTO USER_LEVEL_MANAGEMENT VALUES(#{userNo}, default, default, default, default, default)
     </insert>
 
     <select id="checkNickName">

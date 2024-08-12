@@ -28,7 +28,15 @@ public class RegisterServiceImpl implements RegisterService{
         String bcryptPassword = passwordEncoder.encode(userDTO.getUserPassword());
         userDTO.setUserPassword(bcryptPassword);
 
-        return registerMapper.register(userDTO);
+        int result = registerMapper.register(userDTO);
+
+        if (result == 1) {
+            int result2 = registerMapper.registerLevel(userDTO.getUserNo());
+            return result2;
+        } else {
+            System.out.println("회원가입 에러발생");
+            return 0;
+        }
     }
 
     // 닉네임 중복검사

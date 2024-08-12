@@ -223,17 +223,6 @@ function register() {
     const userDetailAddress = document.getElementById("detailAddress").value;
     const userExtraAddress = document.getElementById("extraAddress").value;
 
-    console.log(userName);
-    console.log(userId);
-    console.log(userPassword);
-    console.log(userNickName);
-    console.log(userBirthDate);
-    console.log(userPhone);
-    console.log(userPostCode);
-    console.log(userAddress);
-    console.log(userDetailAddress);
-    console.log(userExtraAddress);
-
     if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag){
         if(checkIdFlag && checkNickNameFlag) {
             $.ajax({
@@ -252,7 +241,9 @@ function register() {
                     userExtraAddress : userExtraAddress,
                 },
                 success: function success(res) {
-                    if(res === "성공") {
+                    if(res === "유효성 검사 오류") {
+                        swal("오류 발생", "안내문구에 맞게 회원정보를 입력해주세요." , "error");
+                    } else if(res === "성공") {
                         swal("회원가입 성공", "반갑습니다." , "success");
                         // alert창 띄운 후 1.5초 뒤 새로고침 실행
                         setTimeout(function() {

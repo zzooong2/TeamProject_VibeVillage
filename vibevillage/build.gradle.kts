@@ -33,6 +33,7 @@ dependencies {
 
 	// 외부에 노출되면 안되는 중요한 정보들을 .env 파일에 변수로 저장하여 사용하고 .gitignore파일에 .env 파일을 등록하여 Github에 업로드 되지 않도록 설정
 	implementation("io.github.cdimascio:dotenv-java:3.0.0")
+	implementation("org.springframework.boot:spring-boot-starter-validation:3.2.8") // 유효성검사 의존성 주입
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf") // Thymeleaf 의존성 주입
 	implementation("org.springframework.boot:spring-boot-devtools:3.2.8") // devtools 의존성 주입
 	implementation("org.springframework.boot:spring-boot-starter-data-redis") // redis 의존성 주입

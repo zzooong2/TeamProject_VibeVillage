@@ -30,32 +30,28 @@
             <result column="u_no" property="uNo"></result>
         </resultMap>
 
-    <!--공지사항 조회-->
+    <!--공지사항 목록 조회-->
     <select id="getnbCustomerService" resultMap="csbResultSet">
         select NB_TITLE, NB_CONTENT, NB_NO, NB_INDATE, NB_VIEWS
         from NOTICE_BOARD nb
         where NB_DELETE_YN = 'N'
     </select>
 
-    <!--Q&A 조회-->
+    <!--Q&A 목록 조회-->
     <select id="getqaCustomerService" resultMap="csbResultSet">
-        select QA_TITLE, QA_CONTENT, QA_NO
+        select QA_TITLE, QA_CONTENT, QA_NO, QA_INDATE
         from QA_BOARD qb
         where QA_DELETE_YN = 'N'
     </select>
 
-    <!--1:1 문의 고객이 질문한것-->
-    <insert id="setibCustomerService" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
-        insert into INQUIRY_BOARD (IB_NO, IB_CONTENT, IB_INDATE, U_NO, IC_NO)
-        values (INQUIRY_BOARD_SEQ.NEXTVAL, #{ibContent}, sysdate, 1, 1)
-    </insert>
-
-    <!--1:1 문의 질문 조회하기-->
+    <!--1:1 문의 질문 목록 조회하기-->
     <select id="getiaCustomerService" resultMap="csbResultSet">
-        select IB_CONTENT, IB_INDATE, IA_CONTENT, ib.IB_NO
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, ic.IC_NO, ic.IC_NAME, ib.U_NO
         from INQUIRY_BOARD ib
         full join INQUIRY_ANSWER ia
         on ia.IB_NO = ib.IB_NO
+        full join INQUIRY_CATEGORY ic
+        on ib.IC_NO = ic.IC_NO
     </select>
 
     <!--공지사항 등록하기-->
@@ -70,13 +66,6 @@
         VALUES (QA_BOARD_SEQ.NEXTVAL, #{qaTitle}, #{qaContent}, SYSDATE, NULL, NULL, 'N', 1)
     </insert>
 
-    <update id="nbAddViews" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
-        update NOTICE_BOARD
-        set NB_VIEWS = NB_VIEWS+1
-        where NB_NO = #{nbNo}
-    </update>
-
-
     <!--공지사항 디테일 조회-->
     <select id="getNoticeBoardDetail" resultMap="csbResultSet">
         select NB_NO, NB_TITLE, NB_CONTENT, NB_VIEWS, NB_INDATE, U_NO
@@ -84,6 +73,14 @@
         where NB_NO = #{nbNo}
     </select>
 
+    <!--공지사항 조회수 증가-->
+    <update id="nbAddViews" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update NOTICE_BOARD
+        set NB_VIEWS = NB_VIEWS+1
+        where NB_NO = #{nbNo}
+    </update>
+
+    <!--공지사항 삭제-->
     <update id="nbDelete" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
         update Notice_BOARD
         set NB_DELETE = default,
@@ -91,6 +88,7 @@
         where NB_NO = #{nbNo}
     </update>
 
+    <!--공지사항 수정-->
     <update id="setNoticeBoardEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
         update NOTICE_BOARD
         set NB_TITLE = #{nbTitle},
@@ -99,9 +97,43 @@
         where NB_NO = #{nbNo}
     </update>
 
-    <!--자주 묻는 질문 디테일 조회-->
-    <select id="" >
+    <!--Q&A 디테일 조회-->
+    <select id="getQuestionAnswerDetail" resultMap="csbResultSet">
+        select QA_NO, QA_TITLE, QA_CONTENT, QA_INDATE, U_NO
+        from QA_BOARD qb
+        where QA_NO = #{qaNo}
+    </select>
 
+    <!--Q&A 삭제-->
+    <update id="qaDelete" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update QA_BOARD
+        set QA_DELETE = default,
+        QA_DELETE_YN = 'Y'
+        where QA_NO = #{qaNo}
+    </update>
+
+    <!--Q&A 수정-->
+    <update id="setQuestionAnswerEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update QA_BOARD
+        set QA_TITLE = #{qaTitle},
+        QA_UPDATE = default,
+        QA_CONTENT = #{qaContent}
+        where QA_NO = #{qaNo}
+    </update>
+
+    <!--1:1 문의 고객이 질문한것-->
+    <insert id="setibCustomerService" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
+        insert into INQUIRY_BOARD (IB_NO, IB_CONTENT, IB_INDATE, U_NO, IC_NO)
+        values (INQUIRY_BOARD_SEQ.NEXTVAL, #{ibContent}, sysdate, 1, #{icNo})
+    </insert>
+
+    <!--1:1 문의 디테일 조회-->
+    <select id="getInquiryAnswerDetail" resultMap="csbResultSet">
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ib.U_NO, IA_NO, IA_CONTENT, IA_INDATE, IC_NO, IC_NAME
+        from INQUIRY_BOARD ib
+        join INQUIRY_ANSWER ia
+        on ib.IB_NO = ia.IB_NO
+        where ib.IB_NO = #{ibNo}
     </select>
 
 

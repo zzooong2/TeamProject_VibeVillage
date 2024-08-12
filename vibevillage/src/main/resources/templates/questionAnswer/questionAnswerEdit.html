@@ -32,16 +32,19 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <h4 class="font-alt mb-0">자주 묻는 질문</h4>
                         <hr class="divider-w mt-10 mb-20">
-                        <form class="form" role="form">
-<!--                            <input type="hidden" name="nbNo" th:value="${nbNo}">-->
+                        <form class="form" role="form" th:action="@{/questionAnswerEdit/{qaNo}(qaNo=${qaDetail.qaNo})}" th:object="${qaDetail}" method="post">
 
                             <div class="form-group">
-                                <p class="form-control" type="text" th:text="*{nbDetail.nbTitle}"/>
+                                <input class="form-control" type="text" th:field="*{qaTitle}"/>
+                            </div>
+                            <!--유저의 이름 또는 닉네임으로 변경-->
+                            <div class="form-group">
+                                <p class="form-control" type="text" th:text="*{uNo}"/>
                             </div>
                             <div class="form-group">
-                                <input class="form-control" type="text" placeholder="관리자" disabled="" />
+                                <p class="form-control" type="text" th:text="*{qaIndate}"/>
                             </div>
-                            <textarea class="form-control" rows="7" th:text="*{nbDetail.nbContent}"></textarea>
+                            <textarea class="form-control" rows="7" th:field="*{qaContent}"></textarea>
                             <div style="margin-top: 10px; float: right;">
                                 <button class="btn btn-g btn-circle" type="submit">수 정</button>
                             </div>

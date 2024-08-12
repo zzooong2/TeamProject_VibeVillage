@@ -43,15 +43,6 @@ public class CustomerServiceController {
         return "customerServiceBoard/customerServiceBoard";
     }
 
-    // 사용자가 작성 1:1 문의 질문
-    @PostMapping("/inquiryBoard")
-    public String setCustomerService(CustomerServiceDTO customerServiceDTO) {
-        //System.out.println(customerServiceDTO.getIbContent());
-        int result = customerServiceService.setibCustomerService(customerServiceDTO);
-
-        return "redirect:/customerService";
-    }
-
     // 공지사항 페이지 이동
     @GetMapping("/noticeBoard")
     public String noticeBoard(CustomerServiceDTO customerServiceDTO) {
@@ -71,16 +62,15 @@ public class CustomerServiceController {
 
     // 공지사항 Detail
     @GetMapping("/noticeBoardDetail/{nbNo}")
-    public String getNoticeBoardDetail(@PathVariable("nbNo") String nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
-        int nbno = Integer.parseInt(nbNo);
+    public String getNoticeBoardDetail(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
+        // 조회수 증가
         int result = customerServiceService.nbAddViews(customerServiceDTO);
-        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbno);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo);
         model.addAttribute("nbDetail", nbDetail);
 
         return "noticeBoard/noticeBoardDetail";
     }
-
 
     // 공지사항 수정/삭제폼
     @GetMapping("/noticeBoardEditForm/{nbNo}")
@@ -91,7 +81,7 @@ public class CustomerServiceController {
         return "noticeBoard/noticeBoardEdit";
     }
 
-    // 공시사항 수정
+    // 공지사항 수정
     @PostMapping("/noticeBoardEdit/{nbNo}")
     public String noticeBoardEdit(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
@@ -101,7 +91,7 @@ public class CustomerServiceController {
         return "redirect:/customerService";
     }
 
-    // 공지사항 삭제(update문)
+    // 공지사항 삭제(nb_delete_yn y->n)
     @GetMapping("/noticeBoardDelete/{nbNo}")
     public String noticeBoardDelete(@PathVariable("nbNo") int nbNo, CustomerServiceDTO customerServiceDTO) {
 
@@ -120,12 +110,66 @@ public class CustomerServiceController {
     // Q&A 작성
     @PostMapping("/questionAnswerEnroll")
     public String setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
-        System.out.println(customerServiceDTO.getQaTitle());
+
         int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO);
-        System.out.println(customerServiceDTO.getQaContent());
+
         return "redirect:/customerService";
     }
 
+    // Q&A Detail
+    @GetMapping("/questionAnswerDetail/{qaNo}")
+    public String getQuestionAnswerDetail(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
+        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo);
+        model.addAttribute("qaDetail", qaDetail);
+
+        return "questionAnswer/questionAnswerDetail";
+    }
+
+    // Q&A 수정/삭제 폼
+    @GetMapping("/questionAnswerEditForm/{qaNo}")
+    public String questionAnswerEditForm(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
+
+        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo);
+        model.addAttribute("qaDetail", qaDetail);
+        return "questionAnswer/questionAnswerEdit";
+    }
+
+    // Q&A 수정
+    @PostMapping("/questionAnswerEdit/{qaNo}")
+    public String questionAnswerEdit(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
+
+        int nbEdit = customerServiceService.setQuestionAnswerEdit(customerServiceDTO);
+        model.addAttribute("nbEdit", nbEdit);
+
+        return "redirect:/customerService";
+    }
+
+    // Q&A 삭제(Q&A_yn y->n)
+    @GetMapping("/questionAnswerDelete/{qaNo}")
+    public String questionAnswerDelete(@PathVariable("qaNo") int qaNo, CustomerServiceDTO customerServiceDTO) {
+
+        int result = customerServiceService.qaDelete(customerServiceDTO);
+
+        return "redirect:/customerService";
+    }
+
+    // 사용자가 작성 1:1 문의 질문
+    @PostMapping("/inquiryBoard")
+    public String setCustomerService(Model model, CustomerServiceDTO customerServiceDTO) {
+
+        int result = customerServiceService.setibCustomerService(customerServiceDTO);
+
+        return "redirect:/customerService";
+    }
+
+    // 1:1 질문 Detail
+    @GetMapping("/inquiryAnswer/{ibNo}")
+    public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo, Model model, CustomerServiceDTO customerServiceDTO) {
+        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
+        model.addAttribute("ibDetail", ibDetail);
+
+        return "inquiryBoard/inquiryAnswerDetail";
+    }
 }
 

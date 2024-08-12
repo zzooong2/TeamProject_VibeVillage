@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link th:href="@{css/talentGroupBoard/talentGroupBoard.css}" rel="stylesheet" />
+    <link th:href="@{/css/talentGroupBoard/talentGroupBoard.css}" rel="stylesheet" />
     <div th:replace="~{common/head :: head}"></div>
 </head>
 <body>
@@ -17,7 +17,7 @@
                 <a href="#">운동</a>
                 <a href="#">취미</a>
                 <a href="#">친목</a>
-                <a href="#">스터디</a>
+                <a href="#">독서/스터디</a>
                 <a href="#">맛집탐방</a>
                 <a href="#">반려동물</a>
             </div>
@@ -32,28 +32,28 @@
                 <a href="#">인천</a>
             </div>
         </div>
-        <button class="btn btn-g btn-circle" type="button" onclick="location.href='방만들기.html'">방만들기</button>
+<!--        <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/createGroup.html}'|">방만들기</button>-->
+        <button class="btn btn-g btn-circle" type="button" th:attr="onclick=|location.href='@{/createGroup}'|">방만들기</button>
+
     </div>
 </section>
-
-
 <div class="container">
     <div class="row multi-columns-row post-columns">
-        <div class="col-sm-6 col-md-4 col-lg-4">
+        <div class="col-sm-6 col-md-4 col-lg-4" th:each="post : ${posts}">
             <div class="post">
                 <div class="post-thumbnail"><a href="#"><img th:src="@{/img/post-1.jpg}" alt="Blog-post Thumbnail"/></a></div>
                 <div class="post-header font-alt">
-                    <h2 class="post-title"><a href="#">금일 저녁 8시 달릴사람!</a></h2>
-                    <div class="post-meta">작성자&nbsp;<a href="#">달려라 하니</a>&nbsp;| 23 November | 3 Comments
+                    <h2 class="post-title"><a href="#" th:text="${post.title}">제목</a></h2>
+                    <div class="post-meta">작성자&nbsp;<a href="#" th:text="${post.author}">작성자</a>&nbsp;| <span th:text="${#dates.format(post.indate, 'dd MMMM yyyy')}">날짜</span> | <span th:text="${post.commentCount}">댓글 수</span> Comments
                     </div>
                 </div>
                 <div class="post-entry">
-                    <p>서울 청계천 가서 달릴분 나오세요~</p>
+                    <p th:text="${post.content}">내용</p>
                 </div>
                 <div class="post-more"><a class="more-link" href="#">참석하기</a></div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-4">
+    <div class="col-sm-6 col-md-4 col-lg-4">
             <div class="post">
                 <div class="post-thumbnail"><a href="#"><img th:src="@{/img/post-2.jpg}" alt="Blog-post Thumbnail"/></a></div>
                 <div class="post-header font-alt">
@@ -124,6 +124,7 @@
             </div>
         </div>
     </div>
+</div>
     <div class="pagination font-alt"><a href="#">
         <i class="fa fa-angle-left"></i></a>
         <a class="active" href="#">1</a><a href="#">2</a>

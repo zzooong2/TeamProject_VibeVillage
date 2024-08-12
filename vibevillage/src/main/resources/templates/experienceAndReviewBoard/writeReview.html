@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{common/head :: head}"></div>
 </head>
@@ -12,33 +12,38 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <h4 class="font-alt mb-0">글쓰기</h4>
                 <hr class="divider-w mt-10 mb-20">
-                <form class="form" role="form">
+                <!-- Form action 경로를 업데이트하고, th:action으로 설정 -->
+                <form class="form" role="form" th:action="@{/experienceBoard/write}" method="post" enctype="multipart/form-data" id="postForm">
 
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="제목을 입력해주세요."/>
+                        <input class="form-control" type="text" placeholder="제목을 입력해주세요." name="rTitle" id="rTitle" />
                     </div>
 
                     <div class="form-group">
-                        <label for="category">카테고리</label>
-                        <select id="category" name="category">
-                            <option value="general">운동</option>
-                            <option value="info">취미</option>
-                            <option value="tech">친목</option>
-                            <option value="question">스터디</option>
-                            <option value="review">맛집탐방</option>
-                            <option value="review">반려동물</option>
+                        <label for="categoryId">카테고리</label>
+                        <select id="categoryId" name="categoryId">
+                            <option value="">카테고리를 선택해주세요.</option>
+                            <option value="1">운동</option>
+                            <option value="2">취미</option>
+                            <option value="3">친목</option>
+                            <option value="4">독서/스터디</option>
+                            <option value="5">맛집탐방</option>
+                            <option value="6">반려동물</option>
                         </select>
                     </div>
+
                     <div class="form-group">
                         <label for="imageUpload">이미지 업로드:</label>
-                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload" accept="image/* "multiple onchange="previewImages(event)"/>
+                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload" accept="image/*" multiple onchange="previewImages(event)" />
                         <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
                     </div>
-                    <textarea class="form-control" rows="7" placeholder="내용을 입력해주세요."></textarea>
+
+                    <textarea class="form-control" rows="7" placeholder="내용을 입력해주세요." name="rContent" id="rContent"></textarea>
 
                     <div class="form-actions">
-                        <button class="btn btn-g btn-circle" type="submit">등록</button>
-                        <button class="btn btn-g btn-circle" type="button" onclick="location.href='경험 및 공유 게시판.html'">취소</button>
+                        <button class="btn btn-g btn-circle" type="submit" onclick="return validateForm()" >등록</button>
+                        <!-- 취소 버튼의 경로를 업데이트 -->
+                        <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/experienceBoard}'|">취소</button>
                     </div>
                 </form>
             </div>
@@ -66,6 +71,29 @@
 
             reader.readAsDataURL(file);
         }
+    }
+
+    function validateForm() {
+        const rTitle = document.getElementById('rTitle').value.trim();
+        const categoryId = document.getElementById('categoryId').value.trim();
+        const rContent = document.getElementById('rContent').value.trim();
+
+        if (!rTitle) {
+            alert('제목을 입력해주세요.');
+            return false;
+        }
+
+        if (!categoryId) {
+            alert('카테고리를 선택해주세요.');
+            return false;
+        }
+
+        if (!rContent) {
+            alert('내용을 입력해주세요.');
+            return false;
+        }
+
+        return true;
     }
 </script>
 

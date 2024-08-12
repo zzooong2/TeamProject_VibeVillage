@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link th:href="@{css/experienceAndReviewBoard/experienceAndReviewBoard.css}" rel="stylesheet" />
+    <link th:href="@{/css/experienceAndReviewBoard/experienceAndReviewBoard.css}" rel="stylesheet" />
     <div th:replace="~{common/head :: head}"></div>
 </head>
 <body>
@@ -10,10 +10,10 @@
 <div class="wrapper">
     <div class="main-content">
         <div class="button-container">
-            <button class="btn btn-g btn-circle left-button" type="submit">전체글</button>
+            <button class="btn btn-g btn-circle left-button" type="submit" onclick="window.location.href='/experienceBoard'">전체글</button>
             <div class="right-buttons">
                 <button class="btn btn-g btn-circle" type="submit">추천글</button>
-                <button class="btn btn-g btn-circle" type="button" onclick="location.href='글쓰기.html'">글쓰기</button>
+                <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/new'">글쓰기</button>
             </div>
         </div>
 
@@ -28,117 +28,36 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>Dapibus ac facilisis in</td>
-                <td>John Doe</td>
-                <td>2024-07-29</td>
-                <td>120</td>
-                <td>10</td>
-            </tr>
-            <tr>
-                <td>Morbi leo risus</td>
-                <td>Jane Smith</td>
-                <td>2024-07-28</td>
-                <td>95</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>Porta ac consectetur ac</td>
-                <td>John Doe</td>
-                <td>2024-07-27</td>
-                <td>80</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>Vestibulum at eros</td>
-                <td>Jane Smith</td>
-                <td>2024-07-26</td>
-                <td>100</td>
-                <td>7</td>
-            </tr>   <tr>
-                <td>Dapibus ac facilisis in</td>
-                <td>John Doe</td>
-                <td>2024-07-29</td>
-                <td>120</td>
-                <td>10</td>
-            </tr>
-            <tr>
-                <td>Morbi leo risus</td>
-                <td>Jane Smith</td>
-                <td>2024-07-28</td>
-                <td>95</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>Porta ac consectetur ac</td>
-                <td>John Doe</td>
-                <td>2024-07-27</td>
-                <td>80</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>Vestibulum at eros</td>
-                <td>Jane Smith</td>
-                <td>2024-07-26</td>
-                <td>100</td>
-                <td>7</td>
-            </tr>                    <tr>
-                <td>Morbi leo risus</td>
-                <td>Jane Smith</td>
-                <td>2024-07-28</td>
-                <td>95</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>Porta ac consectetur ac</td>
-                <td>John Doe</td>
-                <td>2024-07-27</td>
-                <td>80</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>Vestibulum at eros</td>
-                <td>Jane Smith</td>
-                <td>2024-07-26</td>
-                <td>100</td>
-                <td>7</td>
-            </tr>                    <tr>
-                <td>Morbi leo risus</td>
-                <td>Jane Smith</td>
-                <td>2024-07-28</td>
-                <td>95</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>Porta ac consectetur ac</td>
-                <td>John Doe</td>
-                <td>2024-07-27</td>
-                <td>80</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>Vestibulum at eros</td>
-                <td>Jane Smith</td>
-                <td>2024-07-26</td>
-                <td>100</td>
-                <td>7</td>
+            <tr th:each="post : ${posts}">
+                <td><a th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a></td>
+<!--                <td><a th:href="@{'/experienceBoard/view/' + ${post.rId}}" th:text="${post.rTitle}">제목</a></td>-->
+                <td th:text="${post.uNo}">작성자</td>
+                <td th:text="${post.rCreatedAt}">작성일</td>
+                <td th:text="${post.rViewCount}">조회</td>
+                <td th:text="${post.rLikeCount}">좋아요</td>
             </tr>
             </tbody>
         </table>
 
         <div class="search-container">
-            <input type="text" placeholder="검색">
-            <button class="btn btn-g btn-circle" type="submit">검색</button>&nbsp;
+            <form th:action="@{/experienceBoard/search}" method="get">
+                <input type="text" name="keyword" placeholder="검색">
+                <button class="btn btn-g btn-circle" type="submit">검색</button>&nbsp;
+            </form>
         </div>
     </div>
 
-    <div class="pagination font-alt"><a href="#">
-        <i class="fa fa-angle-left"></i></a>
-        <a class="active" href="#">1</a><a href="#">2</a>
-        <a href="#">3</a><a href="#">4</a><a href="#">
-            <i class="fa fa-angle-right"></i></a></div>
+    <div class="pagination font-alt">
+        <a href="#"><i class="fa fa-angle-left"></i></a>
+        <a class="active" href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">3</a>
+        <a href="#">4</a>
+        <a href="#"><i class="fa fa-angle-right"></i></a>
+    </div>
 
-<div th:replace="~{common/footer :: footer}"></div>
-<div th:replace="~{common/js :: js}"></div>
+    <div th:replace="~{common/footer :: footer}"></div>
+    <div th:replace="~{common/js :: js}"></div>
+</div>
 </body>
 </html>

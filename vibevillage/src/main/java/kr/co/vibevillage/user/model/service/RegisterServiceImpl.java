@@ -5,6 +5,7 @@ import kr.co.vibevillage.user.model.mapper.RegisterMapper;
 import kr.co.vibevillage.user.model.util.CertificationUtil;
 import kr.co.vibevillage.user.redis.dao.RedisRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,11 +18,16 @@ public class RegisterServiceImpl implements RegisterService{
     private final CertificationUtil certificationUtil;
     // RedisRepository 객체 생성
     private final RedisRepository redisRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     // 회원가입
     @Override
     public int register(UserDTO userDTO) {
+
+        String bcryptPassword = passwordEncoder.encode(userDTO.getUserPassword());
+        userDTO.setUserPassword(bcryptPassword);
+
         return registerMapper.register(userDTO);
     }
 

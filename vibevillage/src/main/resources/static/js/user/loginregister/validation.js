@@ -223,7 +223,18 @@ function register() {
     const userDetailAddress = document.getElementById("detailAddress").value;
     const userExtraAddress = document.getElementById("extraAddress").value;
 
-    if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag ){
+    console.log(userName);
+    console.log(userId);
+    console.log(userPassword);
+    console.log(userNickName);
+    console.log(userBirthDate);
+    console.log(userPhone);
+    console.log(userPostCode);
+    console.log(userAddress);
+    console.log(userDetailAddress);
+    console.log(userExtraAddress);
+
+    if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag){
         if(checkIdFlag && checkNickNameFlag) {
             $.ajax({
                 type: "POST",
@@ -243,7 +254,10 @@ function register() {
                 success: function success(res) {
                     if(res === "성공") {
                         swal("회원가입 성공", "반갑습니다." , "success");
-                        document.location.reload();
+                        // alert창 띄운 후 1.5초 뒤 새로고침 실행
+                        setTimeout(function() {
+                            document.location.reload();
+                        },1500);
                     } else {
                         swal("회원가입 실패", "입력하신 정보를 확인해주세요.", "error");
                     }

@@ -24,6 +24,7 @@ function startCertification() {
     const phone = document.getElementById("phone").value; // 유저가 입력한 연락처
     const certificationInput = document.getElementById("certificationInput").value; // 유저가 입력한 인증번호
     const certificationArea = document.getElementById("certificationArea"); // 인증 영역
+    const showText = document.getElementById("showPhone"); // 인증 완료되었을 때 문구나타낼 영역
 
     // 인증 시작
     $.ajax({
@@ -38,7 +39,8 @@ function startCertification() {
                 swal("인증실패", "인증번호를 확인해주세요.", "error");
             } else if (res === "인증성공") {
                 swal("인증완료", "", "success");
-                certificationArea.style.display = "none"; // 숨겨진 인증 영역 보이게 설정
+                certificationArea.style.display = "none"; // 숨겨진 인증 영역 안보이게 설정
+                showText.innerText = "인증이 완료되었습니다.";
             }
         },
         error: function error(err) {

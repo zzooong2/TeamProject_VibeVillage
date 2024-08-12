@@ -1,6 +1,8 @@
 package kr.co.vibevillage;
 
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -9,19 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class FormController {
 
     @GetMapping("/login")
-    public String loginForm() {
-        return "member/loginRegister";
+    public String loginForm(Model model, UserDTO userDTO) {
+        model.addAttribute("userDTO", userDTO);
+        return "user/loginRegister";
     }
 
     @GetMapping("/myPage")
     public String myPageForm() {
-        return "member/myPage";
+        return "user/myPage";
     }
-
-    // 성오
-    @GetMapping("/talentGroupBoard")
-    public String talentGroupBoardForm() { return "/talentGroupBoard/talentGroupBoard"; }
-
-    @GetMapping("/exprienceAndReviewBoard")
-    public String exprienceAndReviewBoardForm() { return "/exprienceAndReviewBoard/exprienceAndReviewBoard"; }
 }

@@ -1,4 +1,4 @@
-package kr.co.vibevillage.database.service;
+package kr.co.vibevillage.dbtest.service;
 
 public interface TestService {
     public String testXML();

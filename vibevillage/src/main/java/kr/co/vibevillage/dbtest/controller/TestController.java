@@ -1,6 +1,6 @@
-package kr.co.vibevillage.database.controller;
+package kr.co.vibevillage.dbtest.controller;
 
-import kr.co.vibevillage.database.service.TestServiceImpl;
+import kr.co.vibevillage.dbtest.service.TestServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +22,6 @@ public class TestController {
 
         model.addAttribute("result", result);
 
-        return "index";
+        return "thymeleaf/index";
     }
 }

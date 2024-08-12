@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head th:replace="~{common/head :: head}">
+
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+
+    <nav th:replace="~{common/nav :: nav}"></nav>
+
+    <div class="main">
+        <section class="module">
+            <div class="container">
+                <h4 class="font-alt">회원정보</h4>
+                <hr class="divider-w mb-10">
+                <div class="row">
+                    <div class="col-sm-6" style="float: none; margin: 0 auto">
+
+                        <br>
+                        <img class="hj-profile" id="showFile" th:src="@{/img/member/profile/basicprofile.png}">
+                        <br>
+                        <br>
+
+                        <div class="form-group">
+                            <input class="form-control hj-address-number" id="fileName" type="file" name="fileName" style="display: inline-block;" onchange="profile()"/>
+                            <button class="btn btn-g btn-round" onclick="" id="fileUpload" style="position:absolute; right:15px;">업로드</button>&nbsp;
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="userName" type="text" name="userName" placeholder="이름" onkeyup="nameValidation()"/>
+                            <div class="hj-validation-name" id="showName"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="birthDate" type="text" name="birthDate" placeholder="생년월일(yyyymmdd)" onkeyup="birthDateValidation()"/>
+                            <div class="hj-validation-name" id="showBirthDate"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control hj-address-number" id="nickName" type="text" name="nickName" placeholder="닉네임" onkeyup="nickNameValidation()"/>
+                            <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">중복확인</button>&nbsp;
+                            <div class="hj-validation-name" id="showNickName"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control hj-address-number" id="phone" type="text" name="phone" placeholder="연락처" onkeyup="phoneValidation()"/>
+                            <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">인증하기</button>&nbsp;
+                            <div class="hj-validation-name" id="showPhone"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control hj-address-number" id="postCode" type="text" name="postCode" placeholder="우편번호" disabled/>
+                            <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="addressSearch()">주소찾기</button>&nbsp;
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="address" type="text" name="address" placeholder="주소" disabled/>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="detailAddress" type="text" name="detailAddress" placeholder="상세주소"/>
+                        </div>
+
+                        <div class="form-group">
+                            <input class="form-control" id="extraAddress" type="text" name="extraAddress" placeholder="참고항목"/>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-block btn-round btn-g" onclick="showTag()">비밀번호 변경</button>
+                        </div>
+
+                        <div class="form-group" style="display: none;" id="currentPasswordTag">
+                            <input class="form-control" id="currentPassword" type="password" name="currentPassword" placeholder="현재 암호" onkeyup="changePasswordValidation()"/>
+                            <div class="hj-validation-name" id="showNowPassword"></div>
+                        </div>
+
+                        <div class="form-group" style="display: none;" id="passwordTag">
+                            <input class="form-control" id="password" type="password" name="password" placeholder="변경할 암호" onkeyup="passwordValidation()"/>
+                            <div class="hj-validation-name" id="showPassword"></div>
+                        </div>
+
+                        <div class="form-group" style="display: none;" id="rePasswordTag">
+                            <input class="form-control" id="rePassword" type="password" name="rePassword" placeholder="암호확인" onkeyup="rePasswordValidation()"/>
+                            <div class="hj-validation-name" id="showRePassword"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <button class="btn btn-block btn-round btn-g">수정하기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-w">
+        <hr class="divider-d">
+        <footer th:replace="~{common/footer :: footer}"></footer>
+        <th:block th:replace="~{common/js :: js}"></th:block>
+
+    </div>
+    <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
+</main>
+
+<script src="/js/user/mypage/profile.js"></script>
+<script src="/js/user/mypage/validation.js"></script>
+<script src="/js/user/mypage/passwordChange.js"></script>
+<script src="/js/user/common/common.js"></script>
+<script src="/js/user/address/kakaoAddressAPI.js"></script>
+
+<!-- Sweet Alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<!-- 주소찾기 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+</body>
+</html>

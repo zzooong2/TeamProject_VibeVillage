@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.user.model.mapper.RegisterMapper">
+
+    <insert id="register" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+
+        <selectKey keyProperty="userNo" resultType="_int" order="BEFORE">
+            SELECT USER_VIBEVILLAGE_SEQ.nextval FROM dual
+        </selectKey>
+
+        INSERT INTO USER_VIBEVILLAGE VALUES (#{userNo},
+                                             #{userName},
+                                             #{userId},
+                                             #{userPassword},
+                                             #{userNickName},
+                                             #{userPhone},
+                                             #{userPostCode},
+                                             #{userAddress},
+                                             #{userDetailAddress},
+                                             #{userExtraAddress},
+                                             default,
+                                             #{userBirthDate},
+                                             default,
+                                             default
+                                            )
+    </insert>
+
+    <insert id="registerLevel"  parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        INSERT INTO USER_LEVEL_MANAGEMENT VALUES(#{userNo}, default, default, default, default, default)
+    </insert>
+
+    <select id="checkNickName">
+        SELECT COUNT(U_NICKNAME) FROM USER_VIBEVILLAGE WHERE U_NICKNAME = #{userNickName}
+    </select>
+
+    <select id="checkId">
+        SELECT COUNT(U_ID) FROM USER_VIBEVILLAGE WHERE U_ID = #{userId}
+    </select>
+
+</mapper>

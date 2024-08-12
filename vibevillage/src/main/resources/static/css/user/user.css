@@ -1,0 +1,22 @@
+.hj-btn-find{
+    position:absolute; right:0px;
+}
+
+.hj-address-number{
+    width: 70%;
+    display: inline-block;
+}
+
+.hj-profile {
+    border: 0.1px solid #9999;
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 300px;
+    height: 300px;
+    margin-left: 25%;
+}
+
+.hj-validation-name {
+    display: none;
+}

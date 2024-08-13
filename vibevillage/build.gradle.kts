@@ -39,6 +39,11 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-redis") // redis 의존성 주입
 	implementation("net.nurigo:sdk:4.3.0") // coolsms 의존성 주입
 
+	implementation ("io.jsonwebtoken:jjwt-api:0.12.5") //Jwt
+	implementation ("io.jsonwebtoken:jjwt-impl:0.12.5") //Jwt
+	implementation ("io.jsonwebtoken:jjwt-jackson:0.12.5") //Jwt
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5") // jwt
+
 	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")

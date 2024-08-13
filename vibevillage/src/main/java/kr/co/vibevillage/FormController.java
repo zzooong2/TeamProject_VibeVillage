@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/form")
 public class FormController {
 
+    @GetMapping("")
+    public String home() {
+        return "index";
+    }
+
     @GetMapping("/login")
     public String loginForm(Model model, UserDTO userDTO) {
         model.addAttribute("userDTO", userDTO);

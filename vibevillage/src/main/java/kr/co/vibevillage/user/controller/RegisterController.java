@@ -25,7 +25,7 @@ public class RegisterController {
         System.out.println("-------------Register Controller-------------");
         System.out.println(userDTO.toString());
 
-        if(bindingResult.hasErrors()){
+        if(!bindingResult.hasErrors()){
             return "유효성 검사 오류";
         } else {
             int result = registerService.register(userDTO);

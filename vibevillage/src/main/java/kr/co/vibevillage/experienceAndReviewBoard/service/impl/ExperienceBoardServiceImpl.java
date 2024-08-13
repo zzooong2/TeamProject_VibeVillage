@@ -103,4 +103,18 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         return experienceBoardMapper.getPostsWithCommentCount();
     }
 
+    @Override
+    public List<ExperienceBoardDTO> getPostsWithCommentCount(int page, int size) {
+        return List.of();
+    }
+
+    @Override
+    public List<ExperienceBoardDTO> getTopLikedPosts() {
+        return experienceBoardMapper.getTopLikedPosts();
+    }
+    @Override
+    public List<ExperienceBoardDTO> getPostsByCategory(Long categoryId) {
+        return experienceBoardMapper.findPostsByCategory(categoryId);
+    }
+
 }

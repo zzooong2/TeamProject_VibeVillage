@@ -13,4 +13,6 @@ public interface CommentMapper {
     void deleteComment(Long commentId); // 댓글 삭제
 
     List<Comment> getCommentsByPostId(Long rId);
+
+    int countCommentsByPostId(Long rId);
 }

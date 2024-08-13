@@ -13,7 +13,7 @@ public class ExperienceBoard {
     private String rContent;
     private LocalDateTime rCreatedAt;
     private LocalDateTime rUpdatedAt;
-    private Long rViewCount;
-    private int rLikeCount;
-    private int commentCount;
+    private int rViewCount = 0;
+    private int rLikeCount = 0;
+    private int commentCount = 0;
 }

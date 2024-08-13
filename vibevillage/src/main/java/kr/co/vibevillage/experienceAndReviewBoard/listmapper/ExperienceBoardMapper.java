@@ -11,6 +11,8 @@ import java.util.List;
 public interface ExperienceBoardMapper {
     List<ExperienceBoard> findAllWithPagination(@Param("limit") int limit, @Param("offset") int offset);
 
+
+
     void insert(ExperienceBoard experienceBoard);
 
     void update(ExperienceBoard experienceBoard);
@@ -39,4 +41,8 @@ public interface ExperienceBoardMapper {
     List<ExperienceBoardDTO> searchPosts(String keyword);
     // 댓글 수 카운트
     List<ExperienceBoard> getPostsWithCommentCount();
+
+    List<ExperienceBoardDTO> getTopLikedPosts();
+
+    List<ExperienceBoardDTO> findPostsByCategory(@Param("categoryId")Long categoryId);
 }

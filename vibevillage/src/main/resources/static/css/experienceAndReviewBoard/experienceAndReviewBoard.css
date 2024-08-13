@@ -142,3 +142,21 @@ table {
     background-color: var(--hover-bg-color);
     color: var(--text-color);
 }
+
+/* 카테고리 선택 드롭다운을 테이블 위에 정렬 */
+.category-select {
+    width: var(--content-width);
+    margin: 20px auto;
+    display: flex;
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.category-select select {
+    padding: var(--padding);
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: white;
+    width: auto;
+}

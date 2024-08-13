@@ -11,10 +11,25 @@
     <div class="main-content">
         <div class="button-container">
             <button class="btn btn-g btn-circle left-button" type="submit" onclick="window.location.href='/experienceBoard'">전체글</button>
+
             <div class="right-buttons">
-                <button class="btn btn-g btn-circle" type="submit">추천글</button>
+                <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/recommended'">추천글</button>
                 <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/new'">글쓰기</button>
             </div>
+        </div>
+
+        <!-- 카테고리 선택 드롭다운 추가 -->
+        <div class="category-select">
+            <form th:action="@{/experienceBoard/filter}" method="get">
+                <select id="categoryId" name="categoryId" th:value="${param.categoryId}" onchange="this.form.submit()">
+                    <option value="">카테고리를 선택해주세요.</option>
+                    <option th:value="1" th:selected="${param.categoryId == 1}">운동</option>
+                    <option th:value="2" th:selected="${param.categoryId == 2}">취미</option>
+                    <option th:value="3" th:selected="${param.categoryId == 3}">친목</option>
+                    <option th:value="4" th:selected="${param.categoryId == 4}">독서/스터디</option>
+                    <option th:value="5" th:selected="${param.categoryId == 5}">맛집탐방</option>
+                    <option th:value="6" th:selected="${param.categoryId == 6}">반려동물</option>
+                </select>
         </div>
 
         <table>
@@ -32,9 +47,9 @@
                 <!-- 게시글 제목과 댓글 수를 표시 -->
                 <td>
                     <a th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a>
-                    <span th:text="'(' + ${post.commentCount} + ' 댓글)'">0 댓글</span>
+                    <span th:text="'(' + ${post.commentCount} + ')'">0</span>
                 </td>
-                <td th:text="${post.uNo}">작성자</td>
+                <td th:text="${post.rId}">작성자</td>
                 <td th:text="${post.rCreatedAt}">작성일</td>
                 <td th:text="${post.rViewCount}">조회</td>
                 <td th:text="${post.rLikeCount}">좋아요</td>
@@ -44,12 +59,13 @@
 
         <div class="search-container">
             <form th:action="@{/experienceBoard/search}" method="get">
-                <input type="text" name="keyword" placeholder="검색">
+                <input type="text" name="keyword" placeholder="검색" th:value="${param.keyword}">
+                <input type="hidden" name="categoryId" th:value="${param.categoryId}">
                 <button class="btn btn-g btn-circle" type="submit">검색</button>&nbsp;
             </form>
         </div>
-    </div>
 
+    </div>
     <div class="pagination font-alt">
         <a href="#"><i class="fa fa-angle-left"></i></a>
         <a class="active" href="#">1</a>
@@ -62,5 +78,18 @@
     <div th:replace="~{common/footer :: footer}"></div>
     <div th:replace="~{common/js :: js}"></div>
 </div>
+
+<script>
+    document.getElementById('categoryId').addEventListener('change', function() {
+        const categoryId = this.value;
+        fetch(`/experienceBoard/filter?categoryId=${categoryId}`)
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector('.table-container').innerHTML = html;
+            });
+    });
+
+</script>
+
 </body>
 </html>

@@ -20,5 +20,10 @@
         FROM R_COMMENTS WHERE R_ID = #{rId}
     </select>
 
+    <select id="countCommentsByPostId" resultType="int">
+        SELECT COUNT(*)
+        FROM R_COMMENTS
+        WHERE R_ID = #{postId}
+    </select>
 
 </mapper>

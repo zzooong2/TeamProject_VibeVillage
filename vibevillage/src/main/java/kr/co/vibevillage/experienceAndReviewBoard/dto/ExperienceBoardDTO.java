@@ -13,9 +13,9 @@ public class ExperienceBoardDTO {
     private String rContent;   // 내용
     private LocalDateTime rCreatedAt; // 생성일시
     private LocalDateTime rUpdatedAt; // 수정일시
-    private int rViewCount;    // 조회수
-    private int rLikeCount;    // 좋아요 수
-    private int commentCount;
+    private int rViewCount = 0;    // 조회수
+    private int rLikeCount = 0;    // 좋아요 수
+    private int commentCount = 0;
 
 }
 

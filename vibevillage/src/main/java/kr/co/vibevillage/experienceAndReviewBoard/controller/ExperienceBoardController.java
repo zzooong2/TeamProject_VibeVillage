@@ -9,6 +9,7 @@ import kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.service.CommentService;
 import kr.co.vibevillage.experienceAndReviewBoard.service.ExperienceBoardService;
 import kr.co.vibevillage.experienceAndReviewBoard.service.LikeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/experienceBoard")
 public class ExperienceBoardController {
+    @Autowired
     private final ExperienceBoardService experienceBoardService;
     private final CommentService commentService;
     private final LikeService likeService;
@@ -35,12 +37,36 @@ public class ExperienceBoardController {
                               @RequestParam(value = "size", defaultValue = "10") int size,
                               Model model) {
         if (keyword != null && !keyword.isEmpty()) {
-            model.addAttribute("posts", experienceBoardService.searchPosts(keyword));
-        } else {
-            model.addAttribute("posts", experienceBoardService.getAllPosts(page, size));
+            // 검색어가 있을 경우 검색 결과를 가져옴
+            List<ExperienceBoardDTO> searchResults = experienceBoardService.searchPosts(keyword);
+
+            // 각 게시글에 대해 댓글 수와 좋아요 수를 가져옴
+            for (ExperienceBoardDTO post : searchResults) {
+                int commentCount = commentService.getCommentCountByPostId(post.getRId());
+                int likeCount = likeService.countLikes(post.getRId());
+                post.setCommentCount(commentCount);
+                post.setRLikeCount(likeCount);
+            }
+
+            model.addAttribute("posts", searchResults);
+        } else if (experienceBoardService.getAllPosts(page, size) != null) {
+            // 전체 게시글을 페이지네이션을 적용하여 가져옴
+            List<ExperienceBoard> posts = experienceBoardService.getAllPosts(page, size);
+
+            // 각 게시글에 대해 댓글 수와 좋아요 수를 가져옴
+            for (ExperienceBoard post : posts) {
+                int commentCount = commentService.getCommentCountByPostId(post.getRId());
+                int likeCount = likeService.countLikes(post.getRId());
+                post.setCommentCount(commentCount);
+                post.setRLikeCount(likeCount);
+            }
+
+            model.addAttribute("posts", posts);
         }
+
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
+
 
     @GetMapping("/new")
     public String showCreateForm(Model model) {
@@ -48,17 +74,29 @@ public class ExperienceBoardController {
         return "experienceAndReviewBoard/writeReview";
     }
 
-    @PostMapping("/experienceBoard/write")
+    @PostMapping("/write")
     public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO, RedirectAttributes redirectAttributes) {
         experienceBoardService.createPost(experienceBoardDTO);
         redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
         return "redirect:/experienceBoard";
     }
 
-    @PostMapping
-    public String createPost(@ModelAttribute ExperienceBoardDTO post) {
-        experienceBoardService.createPost(post);
-        return "redirect:/experienceBoard";
+//    @PostMapping
+//    public String createPost(@ModelAttribute ExperienceBoardDTO post) {
+//        experienceBoardService.createPost(post);
+//        return "redirect:/experienceBoard";
+//    }
+    // 카테고리
+
+    @GetMapping("/filter")
+    public String filterByCategory(@RequestParam("categoryId") Long categoryId, Model model, HttpSession session) {
+        // 카테고리에 따른 게시글을 조회
+        List<ExperienceBoardDTO> filteredPosts = experienceBoardService.getPostsByCategory(categoryId);
+
+        // 조회된 게시글을 모델에 추가
+        model.addAttribute("posts", filteredPosts);
+
+        return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
 
     @GetMapping("/edit/{id}")
@@ -134,14 +172,6 @@ public class ExperienceBoardController {
         return "redirect:/experienceBoard/post/" + postId;
     }
 
-    @GetMapping("/experienceBoard")
-    public String getAllPostsWithComments(Model model) {
-        List<ExperienceBoard> posts = experienceBoardService.getPostsWithCommentCount();
-        model.addAttribute("posts", posts);
-        return "experienceAndReviewBoard/experienceAndReviewBoard";
-    }
-
-
 //    @GetMapping("/like/{id}")
 //    public String likePost(@PathVariable Long id, Long uNo) {
 //        likeService.likePost(new LikeDTO(id, uNo));
@@ -189,6 +219,14 @@ public class ExperienceBoardController {
     public String searchPosts(@RequestParam("keyword") String keyword, Model model) {
         List<ExperienceBoardDTO> searchResults = experienceBoardService.searchPosts(keyword);
         model.addAttribute("posts", searchResults);
+        return "experienceAndReviewBoard/experienceAndReviewBoard";
+    }
+
+    // 추천글
+    @GetMapping("/recommended")
+    public String getRecommendedPosts(Model model) {
+        List<ExperienceBoardDTO> recommendedPosts = experienceBoardService.getTopLikedPosts();
+        model.addAttribute("posts", recommendedPosts);
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
 

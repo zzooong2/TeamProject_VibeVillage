@@ -27,10 +27,16 @@
 
     <!-- 게시글 삽입 -->
 
-    <insert id="insertPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+    <insert id="createPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         INSERT INTO REVIEWS (R_ID, U_NO, CATEGORY_ID, R_TITLE, R_CONTENT, R_CREATED_AT)
-        VALUES (#{rId}, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
+        VALUES (#{rId, jdbcType=VARCHAR}, #{uNo, jdbcType=INTEGER}, #{categoryId, jdbcType=INTEGER},
+                #{rTitle, jdbcType=VARCHAR}, #{rContent, jdbcType=VARCHAR}, CURRENT_TIMESTAMP)
     </insert>
+
+    <!--    <insert id="insert" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">-->
+<!--        INSERT INTO REVIEWS (R_ID, U_NO, CATEGORY_ID, R_TITLE, R_CONTENT, R_CREATED_AT)-->
+<!--        VALUES (#{rId}, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)-->
+<!--    </insert>-->
 
 <!--    <insert id="insertPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.domain.ExperienceBoard" useGeneratedKeys="true" keyProperty="rId">-->
 <!--        INSERT INTO REVIEWS (U_NO, CATEGORY_ID, R_TITLE, R_CONTENT, R_CREATED_AT, R_VIEW_COUNT, R_LIKE_COUNT)-->
@@ -83,13 +89,27 @@
         WHERE R_ID = #{rId}
     </update>
 
-    <select id="getPostsWithCommentCount" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+    <select id="getPostsWithCommentCount" resultType="kr.co.vibevillage.experienceAndReviewBoard.domain.ExperienceBoard">
         SELECT
             r.R_ID as rId,
             r.R_TITLE as rTitle,
             (SELECT COUNT(*) FROM R_COMMENTS c WHERE c.R_ID = r.R_ID) AS commentCount
         FROM
             REVIEWS r
+    </select>
+
+
+    <select id="getTopLikedPosts" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT * FROM REVIEWS
+        ORDER BY R_LIKE_COUNT DESC
+            FETCH FIRST 10 ROWS ONLY
+    </select>
+
+    <!-- 카테고리 ID에 따른 게시글 조회 -->
+    <select id="findPostsByCategory" parameterType="long" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT *
+        FROM REVIEWS
+        WHERE category_id = #{categoryId}
     </select>
 
 </mapper>

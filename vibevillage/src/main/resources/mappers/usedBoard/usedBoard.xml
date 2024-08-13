@@ -26,6 +26,14 @@
         FROM USED_BOARD u
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
+        <choose>
+            <when test="category > 0">
+                where c.category_id = #{category}
+            </when>
+            <otherwise>
+                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+            </otherwise>
+        </choose>
     </select>
 
 <!--    여기하던중-->
@@ -41,6 +49,7 @@
                      u.LOCATION,
                      u.USED_DELETE,
                      u.USED_UPDATE_AT,
+                     u.VIEWS,
                      p.PRODUCT_NAME,
                      p.PRODUCT_PRICE,
                      c.CATEGORY_NAME,
@@ -48,6 +57,14 @@
                  FROM USED_BOARD u
                           JOIN product p ON p.used_post_id = u.used_post_id
                           JOIN category c ON c.category_id = p.category_id
+        <choose>
+            <when test="category > 0">
+                where c.category_id = #{category}
+            </when>
+            <otherwise>
+                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+            </otherwise>
+        </choose>
              ) subquery
         WHERE subquery.rn BETWEEN #{pi.startPage} AND #{pi.endPage}*#{pi.boardLimit}
     </select>
@@ -71,6 +88,13 @@
         INSERT INTO PRODUCT (USED_POST_ID,PRODUCT_NAME,PRODUCT_PRICE,CATEGORY_ID)
         VALUES (#{usedBoard.usedBoardId},#{usedBoard.usedBoardProductName},#{usedBoard.usedBoardProductPrice},#{usedBoard.categoryId})
     </insert>
+
+    <!-- 조회수 증가 쿼리 -->
+    <update id="increaseViewCountXML" parameterType="int">
+        UPDATE used_board
+        SET views = views + 1
+        WHERE used_post_id = #{boardId}
+    </update>
 
 
 </mapper>

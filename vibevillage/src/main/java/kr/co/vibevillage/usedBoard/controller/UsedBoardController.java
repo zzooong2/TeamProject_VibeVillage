@@ -10,7 +10,6 @@ import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
 import kr.co.vibevillage.usedBoard.service.UsedBoardCommentServiceImpl;
 import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import kr.co.vibevillage.env.Env;
 
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +29,6 @@ import java.util.Map;
 public class UsedBoardController {
         private final UsedBoardCommentServiceImpl commentService;
         private final UsedPagination usedPagination;
-        private final Env env;
         private final UploadFile uploadFile;
         private final UsedBoardServiceImpl usedBoardService;
         private final String USE = "usedBoard/usedBoard";
@@ -40,28 +37,26 @@ public class UsedBoardController {
         @Autowired
         public UsedBoardController(UsedBoardServiceImpl usedBoardService,
                                    UploadFile uploadFile,
-                                   Env env,
                                    UsedPagination usedPagination,
-                                   UsedBoardCommentServiceImpl commentService, UsedBoardCommentServiceImpl usedBoardCommentServiceImpl){
+                                   UsedBoardCommentServiceImpl commentService){
             this.usedBoardService = usedBoardService;
             this.uploadFile = uploadFile;
-            this.env = env;
-            this.kakaoMap = env.test().get("KAKAOMAP");
             this.usedPagination = usedPagination;
             this.commentService = commentService;
         }
 // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")
     public String getUsedBoardList(Model model,
-                                   @RequestParam(value = "cpage", defaultValue = "1") int cpage) {
+                                   @RequestParam(value = "cpage", defaultValue = "1") int cpage,
+                                   @RequestParam(value = "category",defaultValue = "0") int category) {
      //페이지네이션
-        List<UsedBoardDto> count = usedBoardService.getUsedBoardList();
+        List<UsedBoardDto> count = usedBoardService.getUsedBoardList(category);
         int listCount = count.size();
         int pageLimit = 10;
         int boardLimit = 20;
         int row = listCount - (cpage-1) * boardLimit;
         UsedPageInfoDto pi = usedPagination.getPageInfo(listCount, cpage, pageLimit, boardLimit);
-        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi); // 메인 이미지만 전송
+        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi,category); // 메인 이미지만 전송
         model.addAttribute("usedList", usedList);
         model.addAttribute("pi", pi);
         return USE + "List";
@@ -69,7 +64,6 @@ public class UsedBoardController {
 // 게시글 작성 페이지 이동
     @GetMapping("/boardCreate")
          public String createUsedBoard(Model model,UsedBoardDto usedBoard){
-            model.addAttribute("kakaoMap",kakaoMap);
             model.addAttribute("usedBoard", usedBoard);
         return USE+"Create";
         }
@@ -104,15 +98,13 @@ public class UsedBoardController {
          public String getUsedBoardDetail(
                                           @PathVariable("id") int id,
                                           UsedBoardCommentDto comment,
-                                          HttpServletRequest request,
-                                          HttpServletResponse response,
                                           Model model){
+            int result = usedBoardService.increaseViewCount(id);
             UsedBoardDto board = usedBoardService.getUsedBoardDetail(id); // 게시글 내용 조회
 
             List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(id); // 메인 이미지와 프리뷰 이미지 조회
             List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(id);
             List<UsedBoardCommentDto> commentList = commentService.getCommentList(id); // 댓글 리스트 조회
-            int result = usedBoardService.increaseViewCount(id);
 
             model.addAttribute("usedBoard", board);
             model.addAttribute("mainImages", mainImages);

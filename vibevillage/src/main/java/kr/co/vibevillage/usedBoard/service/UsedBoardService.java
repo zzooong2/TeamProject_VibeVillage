@@ -10,8 +10,8 @@ import java.util.List;
 public interface UsedBoardService {
 
     // 중고 거래 리스트 GET
-    public List<UsedBoardDto> getUsedBoardList();
-    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi);
+    public List<UsedBoardDto> getUsedBoardList(int category);
+    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi,int category);
     // 중고 거래 게시글 정보 GET
     public UsedBoardDto getUsedBoardDetail(int id);
     // 중고 거래 게시글 메인 이미지 GET
@@ -19,9 +19,9 @@ public interface UsedBoardService {
     // 중고 거래 게시글 서브 이미지 GET
     public List<UsedBoardImageDto> getUsedBoardSubImage(int id);
     // 중고 거래 게시글 리스트 메인 이미지 GET
-    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi);
+    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi,int category);
     // 중고 거래 게시글 등록
-    int enrollUsedBoard(UsedBoardDto usedBoard);
+    public int enrollUsedBoard(UsedBoardDto usedBoard);
     // 게시글 조회수 증가
-    int increaseViewCount(int boardId);
+    public int increaseViewCount(int boardId);
 }

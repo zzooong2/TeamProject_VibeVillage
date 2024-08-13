@@ -50,27 +50,26 @@
             </select>
           </div>
           <div class="col-sm-2 mb-sm-20" >
-            <select class="form-control" >
-              <option selected="selected">카테고리</option>
-              <option>디지털기기</option>
-              <option>가구/인테리어</option>
-              <option>유아동</option>
-              <option>여성의류</option>
-              <option>여성잡화</option>
-              <option>남성패션/잡화</option>
-              <option>생활가전</option>
-              <option>생활/주방</option>
-              <option>스포츠/레저</option>
-              <option>취미/게임/음반</option>
-              <option>뷰티/미용</option>
-              <option>식물</option>
-              <option>가공식품</option>
-              <option>건강기능식품</option>
-              <option>반려동물용품</option>
-              <option>티켓/교환권</option>
-              <option>도서</option>
-              <option>유아도서</option>
-              <option>기타중고물품</option>
+            <select class="form-control" id="category" onchange="sendCategoryValue()">
+              <option value="1">디지털기기</option>
+              <option value="2">가구/인테리어</option>
+              <option value="3">유아동</option>
+              <option value="4">여성의류</option>
+              <option value="5">여성잡화</option>
+              <option value="6">남성패션/잡화</option>
+              <option value="7">생활가전</option>
+              <option value="8">생활/주방</option>
+              <option value="9">스포츠/레저</option>
+              <option value="10">취미/게임/음반</option>
+              <option value="11">뷰티/미용</option>
+              <option value="12">식물</option>
+              <option value="13">가공식품</option>
+              <option value="14">건강기능식품</option>
+              <option value="15">반려동물용품</option>
+              <option value="16">티켓/교환권</option>
+              <option value="17">도서</option>
+              <option value="18">유아도서</option>
+              <option value="19">기타중고물품</option>
             </select>
           </div>
           <div class="col-sm-2" style="float: right;">
@@ -103,7 +102,8 @@
               </h4>
               <a th:href="@{/used/boardDetail/{id}(id=${item.usedBoardId})}">
               <p style="font-weight: bold;text-align: left;" th:text="${item.usedBoardProductPrice}">원</p>
-              <p class="used_location_style" th:text="${item.usedBoardLocation}"></p>
+                <p class="used_location_style" th:text="${item.usedBoardLocation}"></p>
+                <p class="used_location_style" th:text="'조회수:'+${item.usedBoardViews}"></p>
               </a>
             </div>
           </div>
@@ -145,5 +145,14 @@ JavaScripts
 =============================================
 -->
 <div th:replace="~{common/js :: js}"></div>
+
+<script>
+  function sendCategoryValue() {
+    const selectedCategory = document.getElementById("category").value;
+    const url = `/used/boardList/1?category=${selectedCategory}`;
+    window.location.href = url;
+  }
+
+</script>
 </body>
 </html>

@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UsedBoardServiceImpl implements UsedBoardService {
@@ -30,14 +28,14 @@ public class UsedBoardServiceImpl implements UsedBoardService {
 
     // 전체 리스트 가져오기
     @Override
-    public List<UsedBoardDto> getUsedBoardList() {
-        List<UsedBoardDto> list = usedBoardMapper.usedBoardListXML();
+    public List<UsedBoardDto> getUsedBoardList(int category) {
+        List<UsedBoardDto> list = usedBoardMapper.usedBoardListXML(category);
         return list;
     }
     @Override
-    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi) {
+    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi,int category) {
 
-        List<UsedBoardDto> list = usedBoardMapper.usedBoardPaginationXML(pi);
+        List<UsedBoardDto> list = usedBoardMapper.usedBoardPaginationXML(pi,category);
         return list;
     }
 
@@ -72,9 +70,9 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     }
 
     @Override
-    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi) {
+    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi,int category) {
         // 전체 게시글 리스트를 가져옵니다.
-        List<UsedBoardDto> list = getUsedBoardList(pi);
+        List<UsedBoardDto> list = getUsedBoardList(pi,category);
         // 각 게시글에 대해 반복문을 돌립니다.
         for (UsedBoardDto board : list) {
             // 현재 게시글의 이미지 리스트를 가져옵니다.
@@ -89,7 +87,8 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     @Override
     @Transactional
     public int increaseViewCount(int boardId) {
-        usedBoardMapper.increaseViewCount(boardId);  // 조회수 증가
+        return usedBoardMapper.increaseViewCountXML(boardId);  // 조회수 증가
+
     }
 
 

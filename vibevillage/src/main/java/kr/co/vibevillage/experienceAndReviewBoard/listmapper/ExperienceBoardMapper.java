@@ -37,4 +37,6 @@ public interface ExperienceBoardMapper {
     void incrementViewCount(@Param("rId") Long rId);
 
     List<ExperienceBoardDTO> searchPosts(String keyword);
+    // 댓글 수 카운트
+    List<ExperienceBoard> getPostsWithCommentCount();
 }

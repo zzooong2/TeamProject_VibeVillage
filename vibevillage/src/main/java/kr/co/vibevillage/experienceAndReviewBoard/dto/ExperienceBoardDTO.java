@@ -15,16 +15,7 @@ public class ExperienceBoardDTO {
     private LocalDateTime rUpdatedAt; // 수정일시
     private int rViewCount;    // 조회수
     private int rLikeCount;    // 좋아요 수
+    private int commentCount;
 
 }
-
-
-    //    private Long id;
-//    private String title;
-//    private String content;
-//    private String writer;
-//    private LocalDateTime createdDate;
-//    private int views;
-//    private int likes;
-//    private String author;
 

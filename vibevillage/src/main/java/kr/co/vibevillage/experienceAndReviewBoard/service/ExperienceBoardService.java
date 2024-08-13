@@ -19,5 +19,7 @@ public interface ExperienceBoardService {
     void toggleLike(Long rId, Long uNo);
     boolean isPostLikedByUser(Long rId, Long uNo);
     int countLikes(Long rId);
+
+    List<ExperienceBoard> getPostsWithCommentCount();
 }
 

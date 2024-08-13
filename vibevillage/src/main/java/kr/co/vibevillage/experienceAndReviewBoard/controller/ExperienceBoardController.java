@@ -134,6 +134,13 @@ public class ExperienceBoardController {
         return "redirect:/experienceBoard/post/" + postId;
     }
 
+    @GetMapping("/experienceBoard")
+    public String getAllPostsWithComments(Model model) {
+        List<ExperienceBoard> posts = experienceBoardService.getPostsWithCommentCount();
+        model.addAttribute("posts", posts);
+        return "experienceAndReviewBoard/experienceAndReviewBoard";
+    }
+
 
 //    @GetMapping("/like/{id}")
 //    public String likePost(@PathVariable Long id, Long uNo) {

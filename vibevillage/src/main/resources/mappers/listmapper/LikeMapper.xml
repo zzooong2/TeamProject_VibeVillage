@@ -3,7 +3,7 @@
 <mapper namespace="kr.co.vibevillage.experienceAndReviewBoard.listmapper.LikeMapper">
 
     <!-- Like 삽입 -->
-    <insert id="insert" parameterType="kr.co.vibevillage.experienceAndReviewBoard.domain.Like">
+    <insert id="insert" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO">
         INSERT INTO R_LIKES (R_ID, U_NO, L_CREATED_AT)
         VALUES (#{rId}, #{uNo}, CURRENT_TIMESTAMP)
     </insert>
@@ -14,7 +14,7 @@
     </delete>
 
     <!-- Like 수 카운트 -->
-    <select id="countLikes" resultType="int">
+    <select id="countLikes" resultType="int" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO">
         SELECT COUNT(*) FROM R_LIKES WHERE R_ID = #{rId}
     </select>
 

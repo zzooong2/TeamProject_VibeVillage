@@ -15,4 +15,5 @@ public class ExperienceBoard {
     private LocalDateTime rUpdatedAt;
     private Long rViewCount;
     private int rLikeCount;
+    private int commentCount;
 }

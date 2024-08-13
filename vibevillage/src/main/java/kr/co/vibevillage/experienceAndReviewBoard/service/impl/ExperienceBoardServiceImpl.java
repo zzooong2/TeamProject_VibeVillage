@@ -98,4 +98,9 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         return experienceBoardMapper.countLikes(rId);
     }
 
+    @Override
+    public List<ExperienceBoard> getPostsWithCommentCount() {
+        return experienceBoardMapper.getPostsWithCommentCount();
+    }
+
 }

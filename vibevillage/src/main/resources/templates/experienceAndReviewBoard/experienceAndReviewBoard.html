@@ -29,8 +29,11 @@
             </thead>
             <tbody>
             <tr th:each="post : ${posts}">
-                <td><a th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a></td>
-<!--                <td><a th:href="@{'/experienceBoard/view/' + ${post.rId}}" th:text="${post.rTitle}">제목</a></td>-->
+                <!-- 게시글 제목과 댓글 수를 표시 -->
+                <td>
+                    <a th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a>
+                    <span th:text="'(' + ${post.commentCount} + ' 댓글)'">0 댓글</span>
+                </td>
                 <td th:text="${post.uNo}">작성자</td>
                 <td th:text="${post.rCreatedAt}">작성일</td>
                 <td th:text="${post.rViewCount}">조회</td>

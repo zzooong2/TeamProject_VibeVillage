@@ -83,4 +83,13 @@
         WHERE R_ID = #{rId}
     </update>
 
+    <select id="getPostsWithCommentCount" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID as rId,
+            r.R_TITLE as rTitle,
+            (SELECT COUNT(*) FROM R_COMMENTS c WHERE c.R_ID = r.R_ID) AS commentCount
+        FROM
+            REVIEWS r
+    </select>
+
 </mapper>

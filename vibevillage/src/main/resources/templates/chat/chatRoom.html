@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.4.0/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+<h1>채팅방: [[${chatRoom.name}]]</h1>
+<div id="chat">
+    <!-- 채팅 메시지가 표시될 영역 -->
+</div>
+<input type="text" id="message" placeholder="Type your message...">
+<button onclick="sendMessage()">Send</button>
+
+<script>
+    var stompClient = null;
+    var roomId = /*[[${roomId}]]*/ 'defaultRoomId';
+
+    function connect() {
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+
+            stompClient.subscribe('/topic/' + roomId, function (messageOutput) {
+                showMessage(JSON.parse(messageOutput.body));
+            });
+        });
+    }
+
+    function sendMessage() {
+        var messageContent = document.querySelector('#message').value.trim();
+        if (messageContent && stompClient) {
+            var chatMessage = {
+                sender: 'User',  // 현재 사용자 이름 또는 ID
+                content: messageContent,
+                type: 'CHAT'
+            };
+            stompClient.send("/app/chat.sendMessage/" + roomId, {}, JSON.stringify(chatMessage));
+        }
+    }
+
+    function showMessage(message) {
+        var messageElement = document.createElement('li');
+        messageElement.textContent = message.sender + ": " + message.content;
+        document.querySelector('#messageArea').appendChild(messageElement);
+    }
+
+    connect();
+</script>
+</body>
+</html>

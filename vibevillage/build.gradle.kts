@@ -53,6 +53,14 @@ dependencies {
 	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+	// 스프링 부트 리로드 툴
+	implementation("org.springframework.boot:spring-boot-devtools:3.2.4")
+	// 웹 소캣
+	implementation("org.springframework.boot:spring-boot-starter-websocket:3.2.1")
+	implementation("org.webjars:stomp-websocket:2.3.4")
+
+
 }
 
 tasks.withType<Test> {

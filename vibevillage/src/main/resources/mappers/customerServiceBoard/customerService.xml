@@ -26,8 +26,9 @@
             <result column="ia_content" property="iaContent"></result>
             <result column="ia_indate" property="iaIndate"></result>
             <result column="ic_no" property="icNo"></result>
-            <result column="ic_content" property="icContent"></result>
+            <result column="ic_name" property="icName"></result>
             <result column="u_no" property="uNo"></result>
+            <result column="u_nickname" property="uNickName"></result>
         </resultMap>
 
     <!--공지사항 목록 조회-->
@@ -46,12 +47,14 @@
 
     <!--1:1 문의 질문 목록 조회하기-->
     <select id="getiaCustomerService" resultMap="csbResultSet">
-        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
         from INQUIRY_BOARD ib
         full join INQUIRY_ANSWER ia
         on ia.IB_NO = ib.IB_NO
         full join INQUIRY_CATEGORY ic
         on ib.IC_NO = ic.IC_NO
+        join USER_VIBEVILLAGE uv
+        on ib.U_NO = uv.U_NO
     </select>
 
     <!--공지사항 등록하기-->
@@ -129,12 +132,14 @@
 
     <!--1:1 문의 디테일 조회-->
     <select id="getInquiryAnswerDetail" resultMap="csbResultSet">
-        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ia.U_NO, ib.U_NO
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
         from INQUIRY_BOARD ib
-        join INQUIRY_ANSWER ia
-        on ib.IB_NO = ia.IB_NO
+        full join INQUIRY_ANSWER ia
+        on ia.IB_NO = ib.IB_NO
         full join INQUIRY_CATEGORY ic
         on ib.IC_NO = ic.IC_NO
+        full join USER_VIBEVILLAGE uv
+        on ib.U_NO = uv.U_NO
         where ib.IB_NO = #{ibNo}
     </select>
 

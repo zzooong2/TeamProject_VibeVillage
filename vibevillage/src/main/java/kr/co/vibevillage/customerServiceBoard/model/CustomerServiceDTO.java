@@ -40,5 +40,5 @@ public class CustomerServiceDTO {
     private String icName;
 
     private int uNo;
-
+    private String uNickName;
 }

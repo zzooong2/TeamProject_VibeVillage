@@ -165,11 +165,29 @@ public class CustomerServiceController {
 
     // 1:1 질문 Detail
     @GetMapping("/inquiryAnswer/{ibNo}/{icNo}")
-    public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo,
+                                         @PathVariable("icNo") int icNo,
+                                         Model model, CustomerServiceDTO customerServiceDTO) {
+
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
         model.addAttribute("ibDetail", ibDetail);
 
+        System.out.println(ibDetail.getIbNo());
+        System.out.println(ibDetail.getIbContent());
+        System.out.println(ibDetail.getUNickName());
+
         return "inquiryBoard/inquiryAnswerDetail";
+    }
+
+    // 1:1 질문 수정/삭제 폼
+    @GetMapping("/inquiryAnswerEditForm/{ibNo}")
+    public String inquiryAnswerEditForm(@PathVariable("ibNo") int ibNo,
+                                        Model model, CustomerServiceDTO customerServiceDTO) {
+
+        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
+        model.addAttribute("ibDetail", ibDetail);
+
+        return "inquiryBoard/inquiryAnswerEdit";
     }
 }
 

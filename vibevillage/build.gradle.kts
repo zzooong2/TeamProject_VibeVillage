@@ -38,7 +38,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-devtools:3.2.8") // devtools 의존성 주입
 	implementation("org.springframework.boot:spring-boot-starter-data-redis") // redis 의존성 주입
 	implementation("net.nurigo:sdk:4.3.0") // coolsms 의존성 주입
-
+	
+	implementation ("io.jsonwebtoken:jjwt:0.12.5")
 	implementation ("io.jsonwebtoken:jjwt-api:0.12.5") //Jwt
 	implementation ("io.jsonwebtoken:jjwt-impl:0.12.5") //Jwt
 	implementation ("io.jsonwebtoken:jjwt-jackson:0.12.5") //Jwt

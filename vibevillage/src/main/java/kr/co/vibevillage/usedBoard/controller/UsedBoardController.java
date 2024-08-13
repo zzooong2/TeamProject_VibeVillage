@@ -1,5 +1,7 @@
 package kr.co.vibevillage.usedBoard.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.co.vibevillage.common.UploadFile;
 import kr.co.vibevillage.common.UsedPagination;
 import kr.co.vibevillage.usedBoard.model.UsedBoardCommentDto;
@@ -99,21 +101,25 @@ public class UsedBoardController {
 
 // 게시글 조회
         @GetMapping("/boardDetail/{id}")
-         public String getUsedBoardDetail(Model model,
-                                          @PathVariable("id") String id,
-                                          UsedBoardCommentDto comment){
-            int boardId = Integer.parseInt(id);
-            UsedBoardDto board = usedBoardService.getUsedBoardDetail(boardId); // 게시글 내용 조회
+         public String getUsedBoardDetail(
+                                          @PathVariable("id") int id,
+                                          UsedBoardCommentDto comment,
+                                          HttpServletRequest request,
+                                          HttpServletResponse response,
+                                          Model model){
+            UsedBoardDto board = usedBoardService.getUsedBoardDetail(id); // 게시글 내용 조회
 
-            List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(boardId); // 메인 이미지와 프리뷰 이미지 조회
-            List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(boardId);
-            List<UsedBoardCommentDto> commentList = commentService.getCommentList(boardId); // 댓글 리스트 조회
-        model.addAttribute("usedBoard", board);
-        model.addAttribute("mainImages", mainImages);
-        model.addAttribute("subImages", subImages);
-        model.addAttribute("comment",comment);
-        model.addAttribute("commentList",commentList);
-        model.addAttribute("commentSize",commentList.size()); // 댓글 수
+            List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(id); // 메인 이미지와 프리뷰 이미지 조회
+            List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(id);
+            List<UsedBoardCommentDto> commentList = commentService.getCommentList(id); // 댓글 리스트 조회
+            int result = usedBoardService.increaseViewCount(id);
+
+            model.addAttribute("usedBoard", board);
+            model.addAttribute("mainImages", mainImages);
+            model.addAttribute("subImages", subImages);
+            model.addAttribute("comment",comment);
+            model.addAttribute("commentList",commentList);
+            model.addAttribute("commentSize",commentList.size()); // 댓글 수
 
         return USE+"Detail";
         }

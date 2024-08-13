@@ -7,6 +7,7 @@ import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,6 +84,12 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         }
         // 필터링된 게시글 리스트를 반환합니다.
         return list;
+    }
+
+    @Override
+    @Transactional
+    public int increaseViewCount(int boardId) {
+        usedBoardMapper.increaseViewCount(boardId);  // 조회수 증가
     }
 
 

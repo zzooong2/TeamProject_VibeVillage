@@ -22,4 +22,6 @@ public interface UsedBoardService {
     public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi);
     // 중고 거래 게시글 등록
     int enrollUsedBoard(UsedBoardDto usedBoard);
+    // 게시글 조회수 증가
+    int increaseViewCount(int boardId);
 }

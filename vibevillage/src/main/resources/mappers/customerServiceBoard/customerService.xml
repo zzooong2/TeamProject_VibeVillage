@@ -46,7 +46,7 @@
 
     <!--1:1 문의 질문 목록 조회하기-->
     <select id="getiaCustomerService" resultMap="csbResultSet">
-        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, ic.IC_NO, ic.IC_NAME, ib.U_NO
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO
         from INQUIRY_BOARD ib
         full join INQUIRY_ANSWER ia
         on ia.IB_NO = ib.IB_NO
@@ -129,10 +129,12 @@
 
     <!--1:1 문의 디테일 조회-->
     <select id="getInquiryAnswerDetail" resultMap="csbResultSet">
-        select ib.IB_NO, IB_CONTENT, IB_INDATE, ib.U_NO, IA_NO, IA_CONTENT, IA_INDATE, IC_NO, IC_NAME
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ia.U_NO, ib.U_NO
         from INQUIRY_BOARD ib
         join INQUIRY_ANSWER ia
         on ib.IB_NO = ia.IB_NO
+        full join INQUIRY_CATEGORY ic
+        on ib.IC_NO = ic.IC_NO
         where ib.IB_NO = #{ibNo}
     </select>
 

@@ -20,63 +20,63 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         this.customerServiceMapper = customerServiceMapper;
     }
 
-    // °øÁö»çÇ× ¸ñ·Ï
+    // ê³µì§€ì‚¬í•­ ëª©ë¡
     @Override
     public List<CustomerServiceDTO> getnbCustomerService() {
-    List<CustomerServiceDTO> nbList = customerServiceMapper.getnbCustomerService();
-    return nbList;
+        List<CustomerServiceDTO> nbList = customerServiceMapper.getnbCustomerService();
+        return nbList;
     }
 
-    // Q&A ¸ñ·Ï
+    // Q&A ëª©ë¡
     @Override
     public List<CustomerServiceDTO> getqaCustomerService() {
-    List<CustomerServiceDTO> qaList = customerServiceMapper.getqaCustomerService();
-    return qaList;
+        List<CustomerServiceDTO> qaList = customerServiceMapper.getqaCustomerService();
+        return qaList;
     }
 
-    // 1:1 ¹®ÀÇ ¸ñ·Ï
+    // 1:1 ë¬¸ì˜ ëª©ë¡
     @Override
     public List<CustomerServiceDTO> getiaCustomerService() {
         List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService();
         return iaList;
     }
 
-    // °øÁö»çÇ× ÀÛ¼º
+    // ê³µì§€ì‚¬í•­ ì‘ì„±
     @Override
     public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO);
     }
 
-    // °øÁö»çÇ× Detail
+    // ê³µì§€ì‚¬í•­ Detail
     @Override
     public CustomerServiceDTO getNoticeBoardDetail(int nbNo) {
 
         return customerServiceMapper.getNoticeBoardDetail(nbNo);
     }
 
-    // Á¶È¸¼ö Áõ°¡
+    // ì¡°íšŒìˆ˜ ì¦ê°€
     @Override
     public int nbAddViews(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.nbAddViews(customerServiceDTO);
     }
 
-    // °øÁö»çÇ× »èÁ¦(nb_delete_yn y->n)
+    // ê³µì§€ì‚¬í•­ ì‚­ì œ(nb_delete_yn y->n)
     @Override
     public int nbDelete(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.nbDelete(customerServiceDTO);
     }
 
-    // °øÁö»çÇ× ¼öÁ¤
+    // ê³µì§€ì‚¬í•­ ìˆ˜ì •
     @Override
     public int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.setNoticeBoardEdit(customerServiceDTO);
     }
 
-    // Q&A ÀÛ¼º
+    // Q&A ì‘ì„±
     @Override
     public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
 
@@ -90,28 +90,28 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         return customerServiceMapper.getQuestionAnswerDetail(qaNo);
     }
 
-    // Q&A »èÁ¦(Q&A_yn y->n)
+    // Q&A ì‚­ì œ(Q&A_yn y->n)
     @Override
     public int qaDelete(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.qaDelete(customerServiceDTO);
     }
 
-    // Q&A ¼öÁ¤
+    // Q&A ìˆ˜ì •
     @Override
     public int setQuestionAnswerEdit(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.setQuestionAnswerEdit(customerServiceDTO);
     }
 
-    // »ç¿ëÀÚ°¡ ÀÛ¼º 1:1 ¹®ÀÇ Áú¹®
+    // ì‚¬ìš©ìê°€ ì‘ì„± 1:1 ë¬¸ì˜ ì§ˆë¬¸
     @Override
     public int setibCustomerService(CustomerServiceDTO customerServiceDTO) {
 
         return customerServiceMapper.setibCustomerService(customerServiceDTO);
     }
 
-    // 1:1 Áú¹® Detail
+    // 1:1 ì§ˆë¬¸ Detail
     @Override
     public CustomerServiceDTO getInquiryAnswerDetail(int ibNo) {
 

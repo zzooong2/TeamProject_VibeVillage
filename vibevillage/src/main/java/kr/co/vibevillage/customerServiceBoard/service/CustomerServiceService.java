@@ -6,45 +6,45 @@ import java.util.List;
 
 
 public interface CustomerServiceService {
-    // °øÁö»çÇ× ¸ñ·Ï
+    // ê³µì§€ì‚¬í•­ ëª©ë¡
     public List<CustomerServiceDTO> getnbCustomerService();
 
-    // Q&A ¸ñ·Ï
+    // Q&A ëª©ë¡
     public List<CustomerServiceDTO> getqaCustomerService();
 
-    // 1:1 ¹®ÀÇ ¸ñ·Ï
+    // 1:1 ë¬¸ì˜ ëª©ë¡
     public List<CustomerServiceDTO> getiaCustomerService();
 
-    // °øÁö»çÇ× ÀÛ¼º
+    // ê³µì§€ì‚¬í•­ ì‘ì„±
     public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
 
-    // Q&A ÀÛ¼º
+    // Q&A ì‘ì„±
     public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× Á¶È¸¼ö Áõ°¡
+    // ê³µì§€ì‚¬í•­ ì¡°íšŒìˆ˜ ì¦ê°€
     public int nbAddViews(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× Detail
+    // ê³µì§€ì‚¬í•­ Detail
     public CustomerServiceDTO getNoticeBoardDetail(int nbNo);
 
-    // °øÁö»çÇ× »èÁ¦
+    // ê³µì§€ì‚¬í•­ ì‚­ì œ
     public int nbDelete(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× ¼öÁ¤
+    // ê³µì§€ì‚¬í•­ ìˆ˜ì •
     public int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO);
 
     // Q&A Detail
     public CustomerServiceDTO getQuestionAnswerDetail(int qaNo);
 
-    // Q&A »èÁ¦
+    // Q&A ì‚­ì œ
     public int qaDelete(CustomerServiceDTO customerServiceDTO);
 
-    // Q&A ¼öÁ¤
+    // Q&A ìˆ˜ì •
     public int setQuestionAnswerEdit(CustomerServiceDTO customerServiceDTO);
 
-    // »ç¿ëÀÚ°¡ ÀÛ¼º 1:1 ¹®ÀÇ Áú¹®
+    // ì‚¬ìš©ìê°€ ì‘ì„± 1:1 ë¬¸ì˜ ì§ˆë¬¸
     public int setibCustomerService(CustomerServiceDTO customerServiceDTO);
 
-    // 1:1 Áú¹® Detail
+    // 1:1 ì§ˆë¬¸ Detail
     public CustomerServiceDTO getInquiryAnswerDetail(int ibNo);
 }

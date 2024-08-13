@@ -164,7 +164,7 @@ public class CustomerServiceController {
     }
 
     // 1:1 질문 Detail
-    @GetMapping("/inquiryAnswer/{ibNo}")
+    @GetMapping("/inquiryAnswer/{ibNo}/{icNo}")
     public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo, Model model, CustomerServiceDTO customerServiceDTO) {
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
         model.addAttribute("ibDetail", ibDetail);

@@ -174,7 +174,9 @@
                                                             <span th:text="${csiaList.ibIndate}"></span>
                                                         </div>
                                                         <div class="panel-collapse collapse" th:id="'inquiry_Answer' + ${iterStat.index}">
+                                                            <a th:href="@{/inquiryAnswer}/{ibNo}/{icNo}(ibNo=${csiaList.ibNo}, icNo=${csiaList.icNo)}">
                                                             <div class="panel-body" th:text="${csiaList.iaContent}"></div>
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>

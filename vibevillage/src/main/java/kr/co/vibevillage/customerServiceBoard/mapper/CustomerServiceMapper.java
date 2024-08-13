@@ -10,45 +10,45 @@ import java.util.List;
 public interface CustomerServiceMapper {
     public List<CustomerServiceDTO> customerServiceXML();
 
-    // °øÁö»çÇ× ¸ñ·Ï
+    // ê³µì§€ì‚¬í•­ ëª©ë¡
     List<CustomerServiceDTO> getnbCustomerService();
 
-    // Q&A ¸ñ·Ï
+    // Q&A ëª©ë¡
     List<CustomerServiceDTO> getqaCustomerService();
 
-    // 1:1 ¹®ÀÇ ¸ñ·Ï
+    // 1:1 ë¬¸ì˜ ëª©ë¡
     List<CustomerServiceDTO> getiaCustomerService();
 
-    // °øÁö»çÇ× ÀÛ¼º
+    // ê³µì§€ì‚¬í•­ ì‘ì„±
     int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× Detail
+    // ê³µì§€ì‚¬í•­ Detail
     CustomerServiceDTO getNoticeBoardDetail(int nbNo);
 
-    // °øÁö»çÇ× Á¶È¸¼ö Áõ°¡
+    // ê³µì§€ì‚¬í•­ ì¡°íšŒìˆ˜ ì¦ê°€
     int nbAddViews(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× »èÁ¦(nb_delete_yn y->n)
+    // ê³µì§€ì‚¬í•­ ì‚­ì œ(nb_delete_yn y->n)
     int nbDelete(CustomerServiceDTO customerServiceDTO);
 
-    // °øÁö»çÇ× ¼öÁ¤
+    // ê³µì§€ì‚¬í•­ ìˆ˜ì •
     int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO);
 
-    // Q&A ÀÛ¼º
+    // Q&A ì‘ì„±
     int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
 
     // Q&A Detail
     CustomerServiceDTO getQuestionAnswerDetail(int qaNo);
 
-    // Q&A »èÁ¦(Q&A_yn y->n)
+    // Q&A ì‚­ì œ(Q&A_yn y->n)
     int qaDelete(CustomerServiceDTO customerServiceDTO);
 
-    // Q&A ¼öÁ¤
+    // Q&A ìˆ˜ì •
     int setQuestionAnswerEdit(CustomerServiceDTO customerServiceDTO);
 
-    // »ç¿ëÀÚ°¡ ÀÛ¼º 1:1 ¹®ÀÇ Áú¹®
+    // ì‚¬ìš©ìê°€ ì‘ì„± 1:1 ë¬¸ì˜ ì§ˆë¬¸
     int setibCustomerService(CustomerServiceDTO customerServiceDTO);
 
-    // 1:1 Áú¹® Detail
+    // 1:1 ì§ˆë¬¸ Detail
     CustomerServiceDTO getInquiryAnswerDetail(int ibNo);
 }

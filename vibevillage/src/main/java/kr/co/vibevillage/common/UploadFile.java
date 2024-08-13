@@ -19,7 +19,7 @@ public class UploadFile {
 
 	
 	// UPLOAD_PATH에는 이미지를 담을 경로를 써주세요
-	private final String UPLOAD_PATH = "C:/DEV/IntelliJ/FINAL_PROJECT/TeamProject_VibeVillage/vibevillage/src/main/resources/static/uploadUsedImages/";
+	private final String UPLOAD_PATH = "C:\\dev\\File\\FinalProject\\Vibevillage\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\img\\";
 
 	// 메인이미지와 프리뷰이미지를 구분
 	public List<UsedBoardImageDto> upload(List<MultipartFile> mainImage, List<MultipartFile> previewImages) {

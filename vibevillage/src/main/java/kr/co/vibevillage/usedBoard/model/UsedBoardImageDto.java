@@ -11,6 +11,6 @@ public class UsedBoardImageDto{
     private String uploadOriginName;
     private String uploadUniqueName;
     private String uploadImagePath;
-    private String PROJECTREACTOR ="/uploadUsedImages/";
+    private String PROJECTREACTOR ="/img/";
     private String uploadImageType;
 }

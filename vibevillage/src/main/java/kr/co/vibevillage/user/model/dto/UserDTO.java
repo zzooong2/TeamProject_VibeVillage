@@ -14,9 +14,6 @@ public class UserDTO {
 
     // USER_VIBEVILLAGE TABLE
     @NotNull
-    int userNo;
-
-    @NotNull
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣]+$")
     String userName;
 
@@ -25,7 +22,7 @@ public class UserDTO {
     String userId;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z!@#$%^&*]{5,20}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{5,}$")
     String userPassword;
 
     @NotNull
@@ -39,23 +36,15 @@ public class UserDTO {
     @Pattern(regexp = "^\\d{11}$")
     String userPhone;
 
-
     @NotNull
     @Pattern(regexp = "^(19[0-9]{2}|20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$")
     String userBirthDate;
 
-    @NotNull
-    String userPostCode, userAddress, userDetailAddress, userIndate, userStatus;
-
-    String userExtraAddress, userDeleteDate, certificationCode;
-
+    int userNo;
+    String userPostCode, userAddress, userDetailAddress, userIndate, userStatus, userExtraAddress, userDeleteDate, certificationCode;
 
     // USER_LEVEL_MANAGEMENT TABLE
-    @NotNull
     String userLevel, accessTime;
-    @NotNull
     int accessCount, writeCount, commentCount;
-
-
 
 }

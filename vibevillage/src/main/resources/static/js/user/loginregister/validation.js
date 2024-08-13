@@ -75,7 +75,7 @@ function passwordValidation() {
     // 검사 결과를 나타낼 영역
     const showText = document.getElementById('showPassword');
     // 정규식
-    const passwordCheck = /^(?=.*[A-Z])(?=.*[!@#$%^&*])[A-Za-z!@#$%^&*]{5,20}$/;
+    const passwordCheck = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{5,}$/;
 
     if(!passwordCheck.test(value)) {
         failedValidation(showText, "특수문자(!@#$%^&*)와 알파벳 대문자 하나씩 포함된 5~20자리 이내 암호여야 합니다.");

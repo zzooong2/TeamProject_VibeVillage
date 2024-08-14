@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper">
+
+    <resultMap id="usedBoardMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+<!--        유저 번호-->
+        <result column="u_no" property="userNo"/>
+<!--        게시글-->
+        <result column="used_post_id" property="usedBoardId"/>
+        <result column="used_post_title" property="usedBoardTitle"/>
+        <result column="used_post_content" property="usedBoardContent"/>
+        <result column="used_post_status" property="usedBoardStatus"/>
+        <result column="used_create_at" property="usedBoardCreateAt"/>
+        <result column="location" property="usedBoardLocation"/>
+        <result column="views" property="usedBoardViews"/>
+        <result column="product_name" property="usedBoardProductName"/>
+        <result column="product_price" property="usedBoardProductPrice"/>
+<!--       카테고리-->
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+
+    </resultMap>
+
+    <select id="usedBoardListXML" resultMap="usedBoardMap">
+        SELECT *
+        FROM USED_BOARD u
+        join product p  on p.used_post_id = u.used_post_id
+        join category c on c.category_id = p.category_id
+        <choose>
+            <when test="category > 0">
+                where c.category_id = #{category}
+            </when>
+            <otherwise>
+                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+            </otherwise>
+        </choose>
+    </select>
+
+<!--    여기하던중-->
+    <select id="usedBoardPaginationXML" resultMap="usedBoardMap">
+        SELECT *
+        FROM (
+                 SELECT
+                     u.U_NO,
+                     u.USED_POST_ID,
+                     u.USED_POST_TITLE,
+                     u.USED_POST_CONTENT,
+                     u.USED_POST_STATUS,
+                     u.LOCATION,
+                     u.USED_DELETE,
+                     u.USED_UPDATE_AT,
+                     u.VIEWS,
+                     p.PRODUCT_NAME,
+                     p.PRODUCT_PRICE,
+                     c.CATEGORY_NAME,
+                     ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
+                 FROM USED_BOARD u
+                          JOIN product p ON p.used_post_id = u.used_post_id
+                          JOIN category c ON c.category_id = p.category_id
+        <choose>
+            <when test="category > 0">
+                where c.category_id = #{category}
+            </when>
+            <otherwise>
+                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+            </otherwise>
+        </choose>
+             ) subquery
+        WHERE subquery.rn BETWEEN #{pi.startPage} AND #{pi.endPage}*#{pi.boardLimit}
+    </select>
+    <select id="usedBoardDetailXML" resultMap="usedBoardMap">
+        SELECT *
+        FROM USED_BOARD u
+        join product p  on p.used_post_id = u.used_post_id
+        join category c on c.category_id = p.category_id
+        where p.used_post_id = #{id}
+    </select>
+
+        <insert id="usedBoardEnrollXML"  >
+            <selectKey keyProperty="usedBoard.usedBoardId" resultType="_int" order="BEFORE">
+                SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
+            </selectKey>
+            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
+            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0)
+        </insert>
+
+    <insert id="usedBoardProductEnrollXML" >
+        INSERT INTO PRODUCT (USED_POST_ID,PRODUCT_NAME,PRODUCT_PRICE,CATEGORY_ID)
+        VALUES (#{usedBoard.usedBoardId},#{usedBoard.usedBoardProductName},#{usedBoard.usedBoardProductPrice},#{usedBoard.categoryId})
+    </insert>
+
+    <!-- 조회수 증가 쿼리 -->
+    <update id="increaseViewCountXML" parameterType="int">
+        UPDATE used_board
+        SET views = views + 1
+        WHERE used_post_id = #{boardId}
+    </update>
+
+
+</mapper>

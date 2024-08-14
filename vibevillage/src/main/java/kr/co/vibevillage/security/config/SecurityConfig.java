@@ -20,7 +20,6 @@ public class SecurityConfig{
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -32,5 +31,4 @@ public class SecurityConfig{
 
         return http.build();
     }
-
 }

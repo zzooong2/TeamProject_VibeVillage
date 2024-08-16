@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.levelupBoard.mapper.LevelUpMapper">
+
+    <resultMap id="levelResultSet" type="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        <result column="lb_no" property="lbNo"></result>
+        <result column="lb_title" property="lbTitle"></result>
+        <result column="lb_content" property="lbContent"></result>
+        <result column="lb_indate" property="lbIndate"></result>
+        <result column="lb_update" property="lbUpdate"></result>
+        <result column="lb_delete" property="lbDelete"></result>
+        <result column="lb_delete_yn" property="lbDeleteYN"></result>
+        <result column="lr_no" property="lrNo"></result>
+        <result column="lr_content" property="lrContent"></result>
+        <result column="lr_status" property="lrStatus"></result>
+        <result column="lr_indate" property="lrIndate"></result>
+        <result column="u_no" property="uNo"></result>
+    </resultMap>
+
+    <select id="getLevelUpList" resultMap="levelResultSet">
+        select lb.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LR_STATUS, lb.U_NO
+        from LEVELUP_BOARD lb
+        full join LEVELUP_RESULT_BOARD lrb
+        on lb.LB_NO = lrb.LB_NO
+        where LB_DELETE_YN = 'N'
+    </select>
+
+    <!--등업신청서 작성-->
+    <insert id="setLevelUpBoardEnroll" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        insert into LEVELUP_BOARD (LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LB_UPDATE, LB_DELETE, LB_DELETE_YN, U_NO)
+        VALUES (LEVELUP_BOARD_SEQ.NEXTVAL, #{lbTitle}, #{lbContent}, SYSDATE, NULL, NULL, 'N', 1)
+    </insert>
+
+    <select id="getLevelUpBoardDetail" resultMap="levelResultSet">
+        select LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, U_NO
+        from LEVELUP_BOARD lr
+        where LB_NO = #{lbNo}
+    </select>
+
+    <update id="setLevelUpBoardEdit" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_BOARD
+        set LB_TITLE = #{lbTitle},
+            LB_CONTENT = #{lbContent}
+        where LB_NO = #{lbNo}
+    </update>
+
+    <update id="lbDelete" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_BOARD
+        set LB_DELETE = default,
+            LB_DELETE_YN = 'Y'
+        where LB_NO = #{lbNo}
+    </update>
+
+</mapper>

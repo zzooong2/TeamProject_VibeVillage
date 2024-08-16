@@ -49,13 +49,20 @@
     <select id="getiaCustomerService" resultMap="csbResultSet">
         select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
         from INQUIRY_BOARD ib
-        full join INQUIRY_ANSWER ia
+        full join INQUIRY_ANSWER_BOARD ia
         on ia.IB_NO = ib.IB_NO
-        full join INQUIRY_CATEGORY ic
+        full join INQUIRY_CATEGORY_BOARD ic
         on ib.IC_NO = ic.IC_NO
         join USER_VIBEVILLAGE uv
         on ib.U_NO = uv.U_NO
     </select>
+
+    <select id="getUserNickname" parameterType="int" resultType="string">
+        SELECT u_nickname
+        FROM USER_VIBEVILLAGE
+        WHERE U_NO = #{uNo}
+    </select>
+
 
     <!--공지사항 등록하기-->
     <insert id="setNoticeBoardEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
@@ -134,15 +141,19 @@
     <select id="getInquiryAnswerDetail" resultMap="csbResultSet">
         select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
         from INQUIRY_BOARD ib
-        full join INQUIRY_ANSWER ia
+        full join INQUIRY_ANSWER_BOARD ia
         on ia.IB_NO = ib.IB_NO
-        full join INQUIRY_CATEGORY ic
+        full join INQUIRY_CATEGORY_BOARD ic
         on ib.IC_NO = ic.IC_NO
         full join USER_VIBEVILLAGE uv
         on ib.U_NO = uv.U_NO
         where ib.IB_NO = #{ibNo}
     </select>
 
-
+    <!--1:1 문의 답변-->
+    <insert id="setInquiryAnswerEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
+        INSERT INTO INQUIRY_ANSWER_BOARD (IA_NO, IA_CONTENT, IA_INDATE, IB_NO, U_NO)
+        VALUES ( INQUIRY_ANSWER_BOARD_SEQ.NEXTVAL, #{iaContent}, sysdate, #{ibNo}, 1)
+    </insert>
 
 </mapper>

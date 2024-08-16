@@ -117,4 +117,11 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
         return customerServiceMapper.getInquiryAnswerDetail(ibNo);
     }
+
+    // 1:1 질문 수정
+    @Override
+    public int setInquiryAnswerEdit(CustomerServiceDTO customerServiceDTO) {
+
+        return customerServiceMapper.setInquiryAnswerEdit(customerServiceDTO);
+    }
 }

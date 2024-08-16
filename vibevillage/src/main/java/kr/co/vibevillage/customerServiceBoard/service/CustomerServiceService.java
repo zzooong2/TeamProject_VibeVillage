@@ -47,4 +47,7 @@ public interface CustomerServiceService {
 
     // 1:1 질문 Detail
     public CustomerServiceDTO getInquiryAnswerDetail(int ibNo);
+
+    // 1:1 질문 수정
+    public int setInquiryAnswerEdit(CustomerServiceDTO customerServiceDTO);
 }

@@ -51,4 +51,8 @@ public interface CustomerServiceMapper {
 
     // 1:1 질문 Detail
     CustomerServiceDTO getInquiryAnswerDetail(int ibNo);
+
+    // 1:1 질문 수정
+    int setInquiryAnswerEdit(CustomerServiceDTO customerServiceDTO);
+
 }

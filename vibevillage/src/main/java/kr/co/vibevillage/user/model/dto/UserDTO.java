@@ -2,10 +2,8 @@ package kr.co.vibevillage.user.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Getter
 @Setter
@@ -46,5 +44,17 @@ public class UserDTO {
     // USER_LEVEL_MANAGEMENT TABLE
     String userLevel, accessTime;
     int accessCount, writeCount, commentCount;
+
+    public UsernamePasswordAuthenticationToken toAuthenticationToken() {
+        return new UsernamePasswordAuthenticationToken(userId, userPassword);
+    }
+
+    @Getter @Builder
+    public static class TokenResDto {
+        private String grantType;
+        private String accessToken;
+        private String refreshToken;
+        private Long refreshTokenExpirationTime;
+    }
 
 }

@@ -40,11 +40,9 @@ dependencies {
 	implementation("net.nurigo:sdk:4.3.0") // coolsms 의존성 주입
 
 	// JWT 의존성 추가
-	implementation ("io.jsonwebtoken:jjwt:0.12.5")
-	implementation ("io.jsonwebtoken:jjwt-api:0.12.5") //Jwt
-	implementation ("io.jsonwebtoken:jjwt-impl:0.12.5") //Jwt
-	implementation ("io.jsonwebtoken:jjwt-jackson:0.12.5") //Jwt
-	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.5") // jwt
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5") // Jwt API
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5") // Jwt Implementation
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JWT JSON Parsing
 
 	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")
@@ -60,8 +58,6 @@ dependencies {
 	// 웹 소캣
 	implementation("org.springframework.boot:spring-boot-starter-websocket:3.2.1")
 	implementation("org.webjars:stomp-websocket:2.3.4")
-
-
 }
 
 tasks.withType<Test> {

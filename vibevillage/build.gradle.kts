@@ -53,6 +53,7 @@ dependencies {
 	// 웹 소캣
 	implementation("org.springframework.boot:spring-boot-starter-websocket:3.2.1")
 	implementation("org.webjars:stomp-websocket:2.3.4")
+	implementation("org.webjars:stomp-websocket:2.3.3")
 
 
 }

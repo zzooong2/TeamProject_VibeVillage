@@ -91,5 +91,10 @@ public class UsedBoardServiceImpl implements UsedBoardService {
 
     }
 
+    @Override
+    public int deleteDetail(int id){
+        return usedBoardMapper.deleteDetail(id);
+    }
+
 
 }

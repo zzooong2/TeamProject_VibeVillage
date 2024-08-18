@@ -24,4 +24,6 @@ public interface UsedBoardService {
     public int enrollUsedBoard(UsedBoardDto usedBoard);
     // 게시글 조회수 증가
     public int increaseViewCount(int boardId);
+    // 게시글 삭제
+    public int deleteDetail(int id);
 }

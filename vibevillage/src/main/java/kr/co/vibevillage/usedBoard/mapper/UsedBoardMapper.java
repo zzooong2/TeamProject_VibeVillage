@@ -15,4 +15,5 @@ public interface UsedBoardMapper {
     public int usedBoardEnrollXML(@Param("usedBoard") UsedBoardDto usedBoard);
     public int usedBoardProductEnrollXML(@Param("usedBoard")UsedBoardDto usedBoard);
     public int increaseViewCountXML(@Param("boardId")int boardId);
+    public int deleteDetail(int id);
 }

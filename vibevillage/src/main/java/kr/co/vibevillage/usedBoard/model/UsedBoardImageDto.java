@@ -11,6 +11,6 @@ public class UsedBoardImageDto{
     private String uploadOriginName;
     private String uploadUniqueName;
     private String uploadImagePath;
-    private String PROJECTREACTOR ="/uploadUsedImages/";
+    private String PROJECTREACTOR ="/uploadUsedImages/"; // statc/ 밑 경로
     private String uploadImageType;
 }

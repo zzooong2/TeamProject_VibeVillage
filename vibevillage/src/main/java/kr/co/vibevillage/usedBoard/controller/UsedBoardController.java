@@ -127,4 +127,12 @@ public class UsedBoardController {
     return "redirect:/used/boardDetail/"+id;
     }
 
+    // 게시글 삭제
+    @GetMapping("/delete_board/{id}")
+    public String deleteUsedBoard(@PathVariable("id") int id){
+        int result = usedBoardService.deleteDetail(id);
+
+        return "redirect:/used/boardList/1";
+    }
+
 }

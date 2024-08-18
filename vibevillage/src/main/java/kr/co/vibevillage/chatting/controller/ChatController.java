@@ -10,21 +10,25 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/chat")
 public class ChatController {
 
+        public final SimpMessageSendingOperations sendingOperations;
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
 
-    public ChatController(ChatRoomService chatRoomService, ChatMessageService chatMessageService) {
+    public ChatController(SimpMessageSendingOperations sendingOperations, ChatRoomService chatRoomService, ChatMessageService chatMessageService) {
+        this.sendingOperations = sendingOperations;
         this.chatRoomService = chatRoomService;
         this.chatMessageService = chatMessageService;
     }
@@ -44,30 +48,37 @@ public class ChatController {
 
     // 채팅방 입장
     @GetMapping("/room/{roomId}")
-    public String getChatRoomPage(@PathVariable Long roomId, Model model) {
+    public String getChatRoomPage(@PathVariable(value = "roomId") Long roomId, Model model) {
         ChatRoom chatRoom = chatRoomService.findRoomById(roomId);
         if (chatRoom == null) {
             return "redirect:/error"; // 채팅방이 없을 경우 에러 페이지로 리다이렉트
         }
+        List<ChatMessage> chatMessage = chatMessageService.findMessagesByRoomId(roomId);
+        System.out.println(chatRoom.getRoomId());
         model.addAttribute("roomId", roomId);
         model.addAttribute("chatRoom", chatRoom);
+        model.addAttribute("chatMessage", chatMessage);
         return "chat/chatRoom"; // 채팅방 페이지로 이동
     }
     
     // 메세지 송신
     @MessageMapping("/chat.sendMessage/{roomId}")
-    @SendTo("/topic/{roomId}")
-    public ChatMessage sendMessage(@DestinationVariable String roomId, ChatMessage chatMessage) {
+    @SendTo("/sub/{roomId}")
+    public ChatMessage sendMessage(@DestinationVariable String roomId, @Payload ChatMessage chatMessage) {
+        System.out.println(roomId);
+        System.out.println(chatMessage.getMessage());
+        chatMessageService.saveMessage(chatMessage);
         return chatMessage;
     }
     
-    // 송신자 전송
-    @MessageMapping("/chat.addUser/{roomId}")
-    @SendTo("/topic/{roomId}")
-    public ChatMessage addUser(@DestinationVariable String roomId, ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderId());
-        return chatMessage;
-    }
+//    // 송신자 전송
+//    @MessageMapping("/chat.addUser/{roomId}")
+//    @SendTo("/sub/{roomId}")
+//    public ChatMessage addUser(@DestinationVariable String roomId, ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+//        System.out.println(chatMessage);
+//        headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderId());
+//        return chatMessage;
+//    }
 }
 
 

@@ -57,6 +57,7 @@
                  FROM USED_BOARD u
                           JOIN product p ON p.used_post_id = u.used_post_id
                           JOIN category c ON c.category_id = p.category_id
+                 where u.used_delete = 'N')
         <choose>
             <when test="category > 0">
                 where c.category_id = #{category}
@@ -94,6 +95,13 @@
         UPDATE used_board
         SET views = views + 1
         WHERE used_post_id = #{boardId}
+    </update>
+
+    <!-- 디테일 삭제 -->
+    <update id="deleteDetail" parameterType="int">
+        UPDATE used_board
+        SET USED_DELETE = 'Y'
+        WHERE used_post_id = #{id}
     </update>
 
 

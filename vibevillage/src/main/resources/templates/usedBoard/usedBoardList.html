@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head>
+  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services" type="text/javascript"></script>
+
   <style>
     .product-status{
       font-size: large;
@@ -20,37 +22,34 @@
   </div>
   <div th:replace="~{common/nav :: nav}"></div>
   <div class="main">
-    <section class="module bg-dark-60 shop-page-header" data-background="assets/images/shop/product-page-bg.jpg">
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-3">
-            <h2 class="module-title font-alt">Shop Products</h2>
-            <div class="module-subtitle font-serif">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart.</div>
-          </div>
-        </div>
-      </div>
-    </section>
+      <div id="map" style="width:100%; height: 500px;"></div>
+
     <section class="module-small">
       <div class="container">
         <form class="row">
           <div class="col-sm-2 mb-sm-20">
-            <select class="form-control">
-              <option selected="selected">도</option>
-              <option>Popular</option>
-              <option>Latest</option>
-              <option>Average Price</option>
-              <option>High Price</option>
-              <option>Low Price</option>
+            <select class="form-control" id="province" name="province" onchange="updateCitySelect()">
+              <option value="">도 선택</option>
+              <option value="서울">서울특별시</option>
+              <option value="부산">부산광역시</option>
+              <option value="대구">대구광역시</option>
+              <option value="인천">인천광역시</option>
+              <option value="경기">경기도</option>
+              <!-- 필요한 도 추가 -->
             </select>
+
+
           </div>
           <div class="col-sm-2 mb-sm-20">
-            <select class="form-control">
-              <option selected="selected">시 군</option>
-              <option>Man</option>
+            <select class="form-control" id="city" name="city" onchange="sendCategoryValue()">
+              <option value="">시/군 선택</option>
+              <!-- 시/군 항목은 자바스크립트로 동적으로 추가됩니다 -->
             </select>
           </div>
           <div class="col-sm-2 mb-sm-20" >
-            <select class="form-control" id="category" onchange="sendCategoryValue()">
+            <select class="form-control" id="category" name="category" onchange="sendCategoryValue()">
+
+              <option value="0">전체</option>
               <option value="1">디지털기기</option>
               <option value="2">가구/인테리어</option>
               <option value="3">유아동</option>
@@ -101,8 +100,9 @@
                 </a>
               </h4>
               <a th:href="@{/used/boardDetail/{id}(id=${item.usedBoardId})}">
-              <p style="font-weight: bold;text-align: left;" th:text="${item.usedBoardProductPrice}">원</p>
+                <p style="font-weight: bold; text-align: left;" th:text="${item.usedBoardProductPrice + '원'}"></p>
                 <p class="used_location_style" th:text="${item.usedBoardLocation}"></p>
+                <p class="used_location_style" th:text="'카테고리:'+${item.categoryName}"></p>
                 <p class="used_location_style" th:text="'조회수:'+${item.usedBoardViews}"></p>
               </a>
             </div>
@@ -147,12 +147,91 @@ JavaScripts
 <div th:replace="~{common/js :: js}"></div>
 
 <script>
+  $(document).ready(function(){
+    $("select[name=category]").val("[[${category}]]");
+    $("select[name=province]").val("[[${province}]]");
+    $("select[name=citySelect]").val("[[${citySelect}]]");
+  });
   function sendCategoryValue() {
     const selectedCategory = document.getElementById("category").value;
-    const url = `/used/boardList/1?category=${selectedCategory}`;
+    var province = document.getElementById("province").value;
+    var citySelect = document.getElementById("city").value;
+    const url = `/used/boardList/1?category=${selectedCategory}&province=${province}&citySelect=${citySelect}`;
     window.location.href = url;
   }
+  function updateCitySelect() {
+    var province = document.getElementById("province").value;
+    var citySelect = document.getElementById("city");
 
+    // 시/군 선택 항목 초기화
+    citySelect.innerHTML = '<option value="">시/군 선택</option>';
+
+    // 시/군 데이터 객체
+    var cities = {
+      "서울": ["종로구", "중구", "용산구", "성동구", "광진구", "동대문구", "중랑구", "성북구", "강북구", "도봉구", "노원구", "은평구", "서대문구", "마포구", "양천구", "강서구", "구로구", "금천구", "영등포구", "동작구", "관악구", "서초구", "강남구", "송파구", "강동구"],
+      "부산": ["중구", "서구", "동구", "영도구", "부산진구", "동래구", "남구", "북구", "해운대구", "사하구", "금정구", "강서구", "연제구", "수영구", "사상구", "기장군"],
+      "대구": ["중구", "동구", "서구", "남구", "북구", "수성구", "달서구", "달성군"],
+      "인천": ["중구", "동구", "미추홀구", "연수구", "남동구", "부평구", "계양구", "서구", "강화군", "옹진군"],
+      "경기": ["수원시", "성남시", "고양시", "용인시", "부천시", "안산시", "안양시", "남양주시", "화성시", "평택시", "의정부시", "시흥시", "파주시", "광명시", "김포시", "군포시", "광주시", "이천시", "양주시", "오산시", "구리시", "안성시", "포천시", "의왕시", "하남시", "여주시", "양평군", "동두천시", "가평군", "연천군"]
+      // 추가적인 도와 시/군을 필요에 따라 추가하세요.
+    };
+
+    // 선택된 도에 맞는 시/군 옵션 추가
+    if (province && cities[province]) {
+      cities[province].forEach(function(city) {
+        var option = document.createElement("option");
+        option.value = city;
+        option.text = city;
+        citySelect.add(option);
+      });
+    }
+  }
+</script>
+<script th:inline="javascript">
+  function decodeUnicode(str) {
+    return decodeURIComponent(JSON.parse('"' + str.replace(/\"/g, '\\"') + '"'));
+  }
+
+  // 사용 예시
+  var province = decodeUnicode([[${province}]]);
+  var citySelect = decodeUnicode([[${citySelect}]]);
+
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+          mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+          };
+
+  // 지도를 생성합니다
+  var map = new kakao.maps.Map(mapContainer, mapOption);
+
+  // 주소-좌표 변환 객체를 생성합니다
+  var geocoder = new kakao.maps.services.Geocoder();
+
+  // 주소로 좌표를 검색합니다
+  geocoder.addressSearch(province+" "+citySelect, function(result, status) {
+
+    // 정상적으로 검색이 완료됐으면
+    if (status === kakao.maps.services.Status.OK) {
+
+      var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+      // 결과값으로 받은 위치를 마커로 표시합니다
+      var marker = new kakao.maps.Marker({
+        map: map,
+        position: coords
+      });
+
+      // 인포윈도우로 장소에 대한 설명을 표시합니다
+      var infowindow = new kakao.maps.InfoWindow({
+        content: '<div style="width:150px;text-align:center;padding:6px 0;">거래장소</div>'
+      });
+      infowindow.open(map, marker);
+
+      // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+      map.setCenter(coords);
+    }
+  });
 </script>
 </body>
 </html>

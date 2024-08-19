@@ -40,6 +40,7 @@
   background-color: rgba(25, 147, 147, 0.1);
   padding: 10px;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 .unique-chat-thread {

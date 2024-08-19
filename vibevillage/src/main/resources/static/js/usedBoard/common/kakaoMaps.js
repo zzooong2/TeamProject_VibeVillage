@@ -11,7 +11,7 @@ var map = new kakao.maps.Map(mapContainer, mapOption);
 var geocoder = new kakao.maps.services.Geocoder();
 
 // 주소로 좌표를 검색합니다
-geocoder.addressSearch(`${usedBoard.usedBoardLocation}`, function(result, status) {
+geocoder.addressSearch(`[(${usedBoard.usedBoardLocation})]`, function(result, status) {
 
     // 정상적으로 검색이 완료됐으면
     if (status === kakao.maps.services.Status.OK) {
@@ -26,7 +26,7 @@ geocoder.addressSearch(`${usedBoard.usedBoardLocation}`, function(result, status
 
         // 인포윈도우로 장소에 대한 설명을 표시합니다
         var infowindow = new kakao.maps.InfoWindow({
-            content: '<div style="width:150px;text-align:center;padding:6px 0;">우리회사</div>'
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">거래장소</div>'
         });
         infowindow.open(map, marker);
 

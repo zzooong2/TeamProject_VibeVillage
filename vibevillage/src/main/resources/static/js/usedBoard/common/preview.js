@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(data);
                 alert(data.message);  // JSON 응답의 메시지 출력
                 if (data.message === "Upload successful!") {
-                    window.location.href = "/used/boardList";  // 성공 시 리디렉션
+                    window.location.href = "/used/boardList/1";  // 성공 시 리디렉션
                 }
             })
             .catch(error => {

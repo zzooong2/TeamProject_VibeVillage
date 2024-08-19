@@ -40,35 +40,40 @@
     <select id="usedBoardPaginationXML" resultMap="usedBoardMap">
         SELECT *
         FROM (
-                 SELECT
-                     u.U_NO,
-                     u.USED_POST_ID,
-                     u.USED_POST_TITLE,
-                     u.USED_POST_CONTENT,
-                     u.USED_POST_STATUS,
-                     u.LOCATION,
-                     u.USED_DELETE,
-                     u.USED_UPDATE_AT,
-                     u.VIEWS,
-                     p.PRODUCT_NAME,
-                     p.PRODUCT_PRICE,
-                     c.CATEGORY_NAME,
-                     ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
-                 FROM USED_BOARD u
-                          JOIN product p ON p.used_post_id = u.used_post_id
-                          JOIN category c ON c.category_id = p.category_id
-                 where u.used_delete = 'N')
+        SELECT
+        u.U_NO,
+        u.USED_POST_ID,
+        u.USED_POST_TITLE,
+        u.USED_POST_CONTENT,
+        u.USED_POST_STATUS,
+        u.LOCATION,
+        u.USED_DELETE,
+        u.USED_UPDATE_AT,
+        u.VIEWS,
+        p.PRODUCT_NAME,
+        p.PRODUCT_PRICE,
+        c.CATEGORY_NAME,
+        ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
+        FROM USED_BOARD u
+        JOIN product p ON p.used_post_id = u.used_post_id
+        JOIN category c ON c.category_id = p.category_id
+        WHERE u.used_delete = 'N'
         <choose>
             <when test="category > 0">
-                where c.category_id = #{category}
+                AND c.category_id = #{category}
+            </when>
+            <when test="province != '' and citySelect != ''">
+                AND LOCATION LIKE '%' || #{province} || '%' || #{citySelect} || '%'
             </when>
             <otherwise>
-                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+                -- 기본적인 조건이 필요할 경우 여기에 추가
             </otherwise>
         </choose>
-             ) subquery
-        WHERE subquery.rn BETWEEN #{pi.startPage} AND #{pi.endPage}*#{pi.boardLimit}
+        ) subquery
+        WHERE subquery.rn BETWEEN #{pi.offset} AND #{pi.limit}
     </select>
+
+
     <select id="usedBoardDetailXML" resultMap="usedBoardMap">
         SELECT *
         FROM USED_BOARD u

@@ -28,14 +28,13 @@ public class UsedBoardServiceImpl implements UsedBoardService {
 
     // 전체 리스트 가져오기
     @Override
-    public List<UsedBoardDto> getUsedBoardList(int category) {
-        List<UsedBoardDto> list = usedBoardMapper.usedBoardListXML(category);
+    public List<UsedBoardDto> getUsedBoardList(int category,String province,String citySelect) {
+        List<UsedBoardDto> list = usedBoardMapper.usedBoardListXML(category,province,citySelect);
         return list;
     }
     @Override
-    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi,int category) {
-
-        List<UsedBoardDto> list = usedBoardMapper.usedBoardPaginationXML(pi,category);
+    public List<UsedBoardDto> getUsedBoardList(UsedPageInfoDto pi,int category,String province,String citySelect) {
+        List<UsedBoardDto> list = usedBoardMapper.usedBoardPaginationXML(pi,category,province,citySelect);
         return list;
     }
 
@@ -52,8 +51,6 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     @Override
     public UsedBoardDto getUsedBoardDetail(int id) {
         UsedBoardDto result = usedBoardMapper.usedBoardDetailXML(id);
-        List<UsedBoardImageDto> imageList = imageMapper.usedBoardGetImageListXML(id);
-        result.setImages(imageList);
         return result;
     }
     @Override
@@ -70,9 +67,9 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     }
 
     @Override
-    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi,int category) {
+    public List<UsedBoardDto> getFilteredUsedBoardList(UsedPageInfoDto pi,int category,String province,String citySelect) {
         // 전체 게시글 리스트를 가져옵니다.
-        List<UsedBoardDto> list = getUsedBoardList(pi,category);
+        List<UsedBoardDto> list = getUsedBoardList(pi,category,province,citySelect);
         // 각 게시글에 대해 반복문을 돌립니다.
         for (UsedBoardDto board : list) {
             // 현재 게시글의 이미지 리스트를 가져옵니다.
@@ -88,13 +85,11 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     @Transactional
     public int increaseViewCount(int boardId) {
         return usedBoardMapper.increaseViewCountXML(boardId);  // 조회수 증가
-
     }
 
     @Override
     public int deleteDetail(int id){
         return usedBoardMapper.deleteDetail(id);
     }
-
 
 }

@@ -47,18 +47,27 @@ public class UsedBoardController {
 // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")
     public String getUsedBoardList(Model model,
-                                   @RequestParam(value = "cpage", defaultValue = "1") int cpage,
-                                   @RequestParam(value = "category",defaultValue = "0") int category) {
+                                   @PathVariable(value = "cpage") int cpage,
+                                   @RequestParam(value = "category",defaultValue = "0") int category,
+                                   @RequestParam(value = "province",defaultValue = "") String province,
+                                   @RequestParam(value = "citySelect",defaultValue = "") String citySelect
+    ) {
+        System.out.println(cpage);
+        System.out.println(province);
+        System.out.println(citySelect);
      //페이지네이션
-        List<UsedBoardDto> count = usedBoardService.getUsedBoardList(category);
-        int listCount = count.size();
-        int pageLimit = 10;
-        int boardLimit = 20;
-        int row = listCount - (cpage-1) * boardLimit;
-        UsedPageInfoDto pi = usedPagination.getPageInfo(listCount, cpage, pageLimit, boardLimit);
-        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi,category); // 메인 이미지만 전송
+        List<UsedBoardDto> count = usedBoardService.getUsedBoardList(category,province,citySelect);
+//        int listCount = count.size();
+//        int pageLimit = 10;
+//        int boardLimit = 20;
+//        int row = listCount - (cpage-1) * boardLimit;
+        UsedPageInfoDto pi = usedPagination.getPageInfo(count.size(), cpage, 10, 8);
+        List<UsedBoardDto> usedList = usedBoardService.getFilteredUsedBoardList(pi,category,province,citySelect); // 메인 이미지만 전송
         model.addAttribute("usedList", usedList);
         model.addAttribute("pi", pi);
+        model.addAttribute("category",category);
+        model.addAttribute("province",province);
+        model.addAttribute("citySelect",citySelect);
         return USE + "List";
     }
 // 게시글 작성 페이지 이동
@@ -120,8 +129,6 @@ public class UsedBoardController {
     @PostMapping("/boardDetail/{id}/put")
     public String putUsedBoardComment(@PathVariable("id") int id,
                                       @ModelAttribute("comment")UsedBoardCommentDto comment){
-        System.out.println(id+"보드 아이디");
-        System.out.println(comment.getUsedCommentContent());
         comment.setUsedBoardId(id);
         commentService.putComment(comment);
     return "redirect:/used/boardDetail/"+id;

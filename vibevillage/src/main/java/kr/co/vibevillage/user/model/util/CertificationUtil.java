@@ -33,6 +33,7 @@ public class CertificationUtil {
 
     // 단일 메시지 발송
     public void sendSMS(String userPhone, String certificationCode){
+        System.out.println("------------------------certificationUtil------------------------");
         // 새 메시지 객체 생성
         Message message = new Message();
         // 발신자 번호 설정

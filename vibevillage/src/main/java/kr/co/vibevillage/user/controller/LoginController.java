@@ -90,18 +90,6 @@ public class LoginController {
 
             String loginUserId = authentication.getName();
 
-            // 인증 객체를 SecurityContextHolder에 설정
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-            // 사용자가 존재하는지(로그인 상태) 확인   anonymousUser: 로그인 하지 않은 경우
-            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
-                model.addAttribute("userid", auth.getName());
-                model.addAttribute("isAuthenticated", true);
-            } else {
-                model.addAttribute("isAuthenticated", false);
-            }
-
             return "redirect:/form";
         } else {
             return "redirect:/error";

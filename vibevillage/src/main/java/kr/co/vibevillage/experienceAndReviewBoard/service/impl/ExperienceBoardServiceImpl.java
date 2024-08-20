@@ -4,6 +4,7 @@ import kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.listmapper.ExperienceBoardMapper;
 import kr.co.vibevillage.experienceAndReviewBoard.service.ExperienceBoardService;
+import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +12,14 @@ import java.util.List;
 
 @Service
 public class ExperienceBoardServiceImpl implements ExperienceBoardService {
+
     private final ExperienceBoardMapper experienceBoardMapper;
+    private final LoginServiceImpl loginServiceImpl;
 
     @Autowired
-    public ExperienceBoardServiceImpl(ExperienceBoardMapper experienceBoardMapper) {
+    public ExperienceBoardServiceImpl(ExperienceBoardMapper experienceBoardMapper, LoginServiceImpl loginServiceImpl) {
         this.experienceBoardMapper = experienceBoardMapper;
+        this.loginServiceImpl = loginServiceImpl;
     }
 
     @Override
@@ -25,21 +29,26 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     }
 
     @Override
-    public void createPost(ExperienceBoardDTO experienceBoardDto) {
+    public void createPost(ExperienceBoardDTO experienceBoardDto, int userNo) {
         System.out.println("================================ExperienceboardService==================================");
+
+        experienceBoardDto.setUNo((long) userNo);  // 사용자 번호 설정
+        experienceBoardMapper.createPost(experienceBoardDto);
+
+
         ExperienceBoardDTO experienceBoard = new ExperienceBoardDTO();
         experienceBoard.setUNo(experienceBoardDto.getUNo());
         experienceBoard.setCategoryId(experienceBoardDto.getCategoryId());
         experienceBoard.setRTitle(experienceBoardDto.getRTitle());
         experienceBoard.setRContent(experienceBoardDto.getRContent());
 
-        System.out.println("No: " + experienceBoardDto.getUNo());
+        System.out.println("No: " + userNo);
         System.out.println("CategoryId: " + experienceBoardDto.getCategoryId());
         System.out.println("Title: " + experienceBoardDto.getRTitle());
         System.out.println("Content: " + experienceBoardDto.getRContent());
 
 
-        experienceBoardMapper.insert(experienceBoard); // Mapper 호출 추가
+        experienceBoardMapper.insert(experienceBoard, userNo); // Mapper 호출 추가
     }
 
     @Override

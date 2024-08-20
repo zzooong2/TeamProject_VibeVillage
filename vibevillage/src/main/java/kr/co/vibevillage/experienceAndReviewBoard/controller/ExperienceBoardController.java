@@ -8,6 +8,8 @@ import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.service.impl.CommentServiceImpl;
 import kr.co.vibevillage.experienceAndReviewBoard.service.impl.ExperienceBoardServiceImpl;
 import kr.co.vibevillage.experienceAndReviewBoard.service.impl.LikeServiceImpl;
+import kr.co.vibevillage.user.model.dto.UserDTO;
+import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,11 +29,13 @@ public class ExperienceBoardController {
     private final ExperienceBoardServiceImpl experienceBoardService;
     private final CommentServiceImpl commentService;
     private final LikeServiceImpl likeServiceImpl;
+    private final LoginServiceImpl loginServiceImpl;
 
-    public ExperienceBoardController(ExperienceBoardServiceImpl experienceBoardService, CommentServiceImpl commentService, LikeServiceImpl likeServiceImpl) {
+    public ExperienceBoardController(ExperienceBoardServiceImpl experienceBoardService, CommentServiceImpl commentService, LikeServiceImpl likeServiceImpl, LoginServiceImpl loginServiceImpl) {
         this.experienceBoardService = experienceBoardService;
         this.commentService = commentService;
         this.likeServiceImpl = likeServiceImpl;
+        this.loginServiceImpl = loginServiceImpl;
     }
 
     @GetMapping
@@ -92,25 +96,22 @@ public class ExperienceBoardController {
     }
 
 
-    // 게시글 작성
     @PostMapping("/write")
     public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO,
                              @RequestParam(value = "file", required = false) MultipartFile file,
                              RedirectAttributes redirectAttributes,
                              HttpSession session) {
-        try {
-            // 로그인된 사용자 정보 가져오기
-            User user = (User) session.getAttribute("user");
-            if (user == null) {
-                throw new IllegalStateException("로그인이 필요합니다.");
-            }
-            experienceBoardDTO.setUNo(user.getUNo());
 
+        UserDTO loginUserInfo = loginServiceImpl.getLoginUserInfo();
+        int userNo = loginUserInfo.getUserNo();
+        experienceBoardDTO.setUNo((long) userNo);  // 사용자 번호 설정
+
+        try {
             // 파일 업로드 및 게시글 작성 처리
             if (file != null && !file.isEmpty()) {
                 handleFileUpload(file, experienceBoardDTO);
             }
-            experienceBoardService.createPost(experienceBoardDTO);
+            experienceBoardService.createPost(experienceBoardDTO, userNo);
             redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
             return "redirect:/experienceBoard";
         } catch (IOException e) {
@@ -146,6 +147,7 @@ public class ExperienceBoardController {
             experienceBoardDTO.setUploadDTO(uploadDTO);
         }
     }
+
 
 
     // 카테고리

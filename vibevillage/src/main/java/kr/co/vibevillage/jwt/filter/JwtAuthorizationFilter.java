@@ -21,12 +21,13 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends GenericFilterBean {
+public class JwtAuthorizationFilter extends GenericFilterBean { // 요청이 들어올 때마다 JWT 토큰을 확인하고, 유효한 토큰이 있다면 인증 정보를 설정하여 사용자 권한을 관리하는 역할
 
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String BEARER_TYPE = "Bearer";
+    private static final String AUTHORIZATION_HEADER = "Authorization"; // 요청 헤더에서 JWT 토큰을 찾기 위한 헤더 이름
+    private static final String BEARER_TYPE = "Bearer"; // JWT 토큰이 Bearer 타입임을 나타내는 접두사
     private static final String JWT_COOKIE_NAME = "JWT";  // 쿠키에서 JWT 토큰이 저장된 이름
 
+    // JwtTokenProvider JWT 토큰 생성, 토큰 복호화 및 추출, 토큰 유효성 검증 기능을 하는 클래스
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
@@ -42,7 +43,7 @@ public class JwtAuthorizationFilter extends GenericFilterBean {
 
             // 3. SecurityContextHolder에 Authentication 객체를 설정
             SecurityContextHolder.getContext().setAuthentication(authentication);
-//            log.info("SecurityContextHolder contains authentication: " + SecurityContextHolder.getContext().getAuthentication());
+
         } else {
             log.info("Token is null or invalid");
         }

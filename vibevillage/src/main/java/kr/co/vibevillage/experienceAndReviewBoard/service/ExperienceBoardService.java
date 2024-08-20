@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ExperienceBoardService {
     List<ExperienceBoardDTO> getAllPosts(int page, int size);
-    void createPost(ExperienceBoardDTO experienceBoardDto);
+    void createPost(ExperienceBoardDTO experienceBoardDto, int userNo);
     void updatePost(Long rId, ExperienceBoardDTO experienceBoardDto);
     void deletePost(Long rId);
     ExperienceBoardDTO getPostById(Long rId);

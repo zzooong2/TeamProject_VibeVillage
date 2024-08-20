@@ -13,7 +13,7 @@ public interface ExperienceBoardMapper {
 
     void insertUpload(UploadDTO uploadDTO);
 
-    void insert(ExperienceBoardDTO experienceBoard);
+    void insert(ExperienceBoardDTO experienceBoard, int userNo);
 
     void update(ExperienceBoardDTO experienceBoard);
 

@@ -46,8 +46,8 @@ public class UserDTO {
     String userPostCode, userAddress, userDetailAddress, userIndate, userStatus, userExtraAddress, userDeleteDate, certificationCode;
 
     // USER_LEVEL_MANAGEMENT TABLE
-    String userLevel, accessTime;
-    int accessCount, writeCount, commentCount;
+    String userLevel, userAccessTime;
+    int userAccessCount, userWriteCount, userCommentCount;
 
 
     // UsernamePasswordAuthenticationToken 클래스 구현

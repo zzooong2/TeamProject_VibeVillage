@@ -3,12 +3,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.vibevillage.user.model.mapper.LoginMapper">
 
-    <!--    <resultMap id="" type="">-->
-    <!--        <result column="" property=""></result>-->
-    <!--    </resultMap>-->
+    <resultMap id="login" type="kr.co.vibevillage.user.model.dto.UserDTO">
+        <result column="U_PASSWORD" property="userPassword"></result>
+    </resultMap>
 
-<!--    <select id="testXML" resultType="String">-->
-<!--        select "U_NICKNAME" from ONAIR.USER_VIBEVILLAGE-->
-<!--    </select>-->
+    <select id="login" resultType="string">
+        select U_PASSWORD from ONAIR.USER_VIBEVILLAGE where U_ID = #{userId}
+    </select>
 
 </mapper>

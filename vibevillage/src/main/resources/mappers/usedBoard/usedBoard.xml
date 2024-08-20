@@ -90,7 +90,7 @@
                 SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
             </selectKey>
             INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views,province,city)
-            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
+            VALUES (#{usedBoard.usedBoardId}, #{usedBoard.userNo}, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
         </insert>
 
     <insert id="usedBoardProductEnrollXML" >

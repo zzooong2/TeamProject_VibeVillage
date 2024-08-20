@@ -3,6 +3,7 @@ package kr.co.vibevillage.usedBoard.service;
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.ui.Model;
 
 import java.util.List;
@@ -26,4 +27,5 @@ public interface UsedBoardService {
     public int increaseViewCount(int boardId);
     // 게시글 삭제
     public int deleteDetail(int id);
+
 }

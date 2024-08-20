@@ -5,6 +5,7 @@ import kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper;
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,5 +92,7 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     public int deleteDetail(int id){
         return usedBoardMapper.deleteDetail(id);
     }
+
+
 
 }

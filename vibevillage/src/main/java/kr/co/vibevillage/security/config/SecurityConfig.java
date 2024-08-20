@@ -42,8 +42,12 @@ public class SecurityConfig {
                                 "/experienceBoard/**",
                                 "/used/**",
                                 "/chat/**",
+                                
+                                //----------- 해원 ------------------------
                                 "/customerService/**",
-                                "/levelUp/**"
+                                "/levelUp/**",
+                                "/levelUp/"
+                                //------------ 해원 끝 ----------------------------
                         ).authenticated() // 지정된 URL 패턴에 대한 접근은 인증이 필요함
                         .anyRequest().authenticated() // 모든 다른 요청은 인증이 필요함
                 )

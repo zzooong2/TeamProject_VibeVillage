@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
 
 <th:block th:fragment="nav">
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
@@ -25,7 +27,7 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="dropdown-toggle" href="#" data-toggle="dropdown">게시판</a>
+                        <a class="dropdown-toggle" href="" data-toggle="dropdown">게시판</a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="">중고거래</a>
@@ -46,10 +48,15 @@
                     </li>
 
                     <li>
-                        <a href="/form/login">로그인 및 회원가입</a>
-                    </li>
-                    <li>
                         <a href="/form/myPage">마이페이지</a>
+                    </li>
+
+                    <!-- 로그인 상태에 따라 조건부 렌더링 -->
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout">로그아웃</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()">
+                        <a href="/form/login">로그인 및 회원가입</a>
                     </li>
                 </ul>
             </div>

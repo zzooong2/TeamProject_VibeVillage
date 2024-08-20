@@ -38,6 +38,11 @@ public class SecurityConfig {
                         .requestMatchers("/form/login").permitAll() // 로그인 페이지 접근 허용
                         .requestMatchers("/login").permitAll() // 로그인 처리 URL 접근 허용
                         .requestMatchers("/form").permitAll() // 메인 페이지 접근 허용
+                        .requestMatchers("/sendCertificationNumber").permitAll() // coolSMS
+                        .requestMatchers("/certification").permitAll() // coolSMS
+                        .requestMatchers("/checkId").permitAll() // 닉네임 중복검사
+                        .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
+                        .requestMatchers("/register").permitAll() // 회원가입
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",

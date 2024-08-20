@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
@@ -20,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class LoginController {
     private final JWTConfig jwt;
     // AccessToken, RefreshToken 생성을 위한 객체 생성
     private final JwtTokenProvider jwtTokenProvider;
+    // 로그인 유저 정보 가져오기
+    private final LoginServiceImpl loginServiceImpl;
 
     @Value("${jwt.secret}")
     private String secretKey;
@@ -88,7 +91,18 @@ public class LoginController {
             accessTokenCookie.setPath("/");
             response.addCookie(accessTokenCookie);
 
-            String loginUserId = authentication.getName();
+            // 로그인한 사용자의 프로필 정보를 가져오기 위해 getLoggedInUsername 메서드 호출
+            String loginUserId = loginServiceImpl.getLoginUserId();
+            model.addAttribute("loginUserId", loginUserId);
+            log.info("loginUserId: " + loginUserId);
+
+            UserDTO loginUser = loginServiceImpl.getLoginUserInfo();
+            log.info("유저번호: " + loginUser.getUserNo());
+            log.info("닉네임: " + loginUser.getUserNickName());
+            log.info("계정: " + loginUser.getUserId());
+            log.info("암호: " + loginUser.getUserPassword());
+            log.info("등급: " + loginUser.getUserLevel());
+
 
             return "redirect:/form";
         } else {

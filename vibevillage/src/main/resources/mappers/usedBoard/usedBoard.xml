@@ -49,6 +49,8 @@
         u.LOCATION,
         u.USED_DELETE,
         u.USED_UPDATE_AT,
+        u.province,
+        u.city,
         u.VIEWS,
         p.PRODUCT_NAME,
         p.PRODUCT_PRICE,
@@ -63,7 +65,8 @@
                 AND c.category_id = #{category}
             </when>
             <when test="province != '' and citySelect != ''">
-                AND LOCATION LIKE '%' || #{province} || '%' || #{citySelect} || '%'
+                AND province LIKE '%' || #{province} || '%'
+                and city Like '%' || #{citySelect} || '%'
             </when>
             <otherwise>
                 -- 기본적인 조건이 필요할 경우 여기에 추가
@@ -86,8 +89,8 @@
             <selectKey keyProperty="usedBoard.usedBoardId" resultType="_int" order="BEFORE">
                 SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
             </selectKey>
-            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
-            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0)
+            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views,province,city)
+            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
         </insert>
 
     <insert id="usedBoardProductEnrollXML" >

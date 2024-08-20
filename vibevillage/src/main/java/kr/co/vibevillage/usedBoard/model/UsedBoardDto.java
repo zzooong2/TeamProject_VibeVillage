@@ -27,6 +27,9 @@ public class UsedBoardDto {
  private String usedBoardContent;
  private String usedBoardLocation;
 
+ private String province;
+ private String city;
+
  private String usedBoardComment;
 
  // 업로드 관련;

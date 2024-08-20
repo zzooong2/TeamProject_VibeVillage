@@ -85,7 +85,8 @@ document.addEventListener('DOMContentLoaded', function() {
         previewImages.forEach(image => {
             formData.append('previewFiles', image);
         });
-
+        formData.append('province',document.getElementById('province').value);
+        formData.append('city',document.getElementById('city').value);
         formData.append('usedBoardTitle', document.getElementById('usedBoardTitle').value);
         formData.append('usedBoardProductName', document.getElementById('usedBoardProductName').value);
         formData.append('usedBoardProductPrice', document.getElementById('usedBoardProductPrice').value);

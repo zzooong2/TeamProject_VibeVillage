@@ -32,8 +32,7 @@
     <!-- 게시글 삽입 -->
     <insert id="createPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         INSERT INTO REVIEWS (R_ID, U_NO, C_ID, R_TITLE, R_CONTENT, R_CREATED_AT)
-        VALUES (#{rId, jdbcType=VARCHAR}, #{uNo, jdbcType=INTEGER}, #{categoryId, jdbcType=INTEGER},
-                #{rTitle, jdbcType=VARCHAR}, #{rContent, jdbcType=VARCHAR}, CURRENT_TIMESTAMP)
+        VALUES (#{rId}, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
     </insert>
 
     <!-- 게시글 수정 -->

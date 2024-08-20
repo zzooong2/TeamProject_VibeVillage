@@ -56,4 +56,7 @@ public interface ExperienceBoardMapper {
 
     // 추천글의 총 개수를 세는 메서드
     int countTotalRecommendedPosts();
+
+    void createPost(ExperienceBoardDTO experienceBoardDTO);
+    void updatePost(ExperienceBoardDTO experienceBoardDTO);
 }

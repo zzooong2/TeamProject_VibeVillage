@@ -223,6 +223,17 @@ function register() {
     const userDetailAddress = document.getElementById("detailAddress").value;
     const userExtraAddress = document.getElementById("extraAddress").value;
 
+    console.log("userName: " + userName);
+    console.log("userBirthDate: " + userBirthDate);
+    console.log("userId: " + userId);
+    console.log("userPassword: " + userPassword);
+    console.log("userNickName: " + userNickName);
+    console.log("userPhone: " + userPhone);
+    console.log("userPostCode: " + userPostCode);
+    console.log("userAddress: " + userAddress);
+    console.log("userDetailAddress: " + userDetailAddress);
+    console.log("userExtraAddress: " + userExtraAddress);
+
     if(nameFlag && birthDateFlag && idFlag && passwordFlag && rePasswordFlag && nickNameFlag && phoneFlag && postCodeFlag && detailAddressFlag){
         if(checkIdFlag && checkNickNameFlag) {
             $.ajax({

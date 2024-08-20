@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/experienceBoard")
@@ -95,37 +96,44 @@ public class ExperienceBoardController {
     @PostMapping("/write")
     public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO,
                              @RequestParam(value = "file", required = false) MultipartFile file,
-                             RedirectAttributes redirectAttributes) {
+                             RedirectAttributes redirectAttributes,
+                             HttpSession session) {
         try {
-            // 파일 업로드 처리
+            // 로그인된 사용자 정보 가져오기
+            User user = (User) session.getAttribute("user");
+            if (user == null) {
+                throw new IllegalStateException("로그인이 필요합니다.");
+            }
+            experienceBoardDTO.setUNo(user.getUNo());
+
+            // 파일 업로드 및 게시글 작성 처리
             if (file != null && !file.isEmpty()) {
                 handleFileUpload(file, experienceBoardDTO);
             }
-
-            // 게시글 작성
             experienceBoardService.createPost(experienceBoardDTO);
             redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
             return "redirect:/experienceBoard";
-
         } catch (IOException e) {
-            // 파일 업로드 실패 시 처리
             redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드 중 오류가 발생했습니다.");
             return "redirect:/experienceBoard/new";
-
         } catch (Exception e) {
-            // 게시글 작성 실패 시 처리
             redirectAttributes.addFlashAttribute("errorMessage", "게시글 작성 중 오류가 발생했습니다.");
             return "redirect:/experienceBoard/new";
         }
     }
 
-
-    // 파일 업로드 처리 로직을 분리하여 가독성을 높임
+    // 파일 업로드 처리 로직
     private void handleFileUpload(MultipartFile file, ExperienceBoardDTO experienceBoardDTO) throws IOException {
         if (!file.isEmpty()) {
             // 파일 업로드 경로 설정
             String uploadDirectory = "static/uploadReviewFile";
-            String fileName = file.getOriginalFilename();
+            File directory = new File(uploadDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs(); // 디렉터리 생성
+            }
+
+            // 파일 이름 충돌 방지
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
             File destinationFile = new File(uploadDirectory + "/" + fileName);
 
             // 파일 전송
@@ -138,6 +146,7 @@ public class ExperienceBoardController {
             experienceBoardDTO.setUploadDTO(uploadDTO);
         }
     }
+
 
     // 카테고리
 

@@ -4,7 +4,11 @@ import jakarta.servlet.http.HttpSession;
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceService;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceServiceImpl;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +29,8 @@ public class CustomerServiceController {
     }
 
     @GetMapping("/csList")
-    public String getCustomerService(Model model, CustomerServiceDTO customerServiceDTO) {
+    public String getCustomerService(Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
+
         // 공지사항 목록
         List<CustomerServiceDTO> csnbList = customerServiceService.getnbCustomerService();
         model.addAttribute("csnbList", csnbList);
@@ -33,7 +38,7 @@ public class CustomerServiceController {
         List<CustomerServiceDTO> csqaList = customerServiceService.getqaCustomerService();
         model.addAttribute("csqaList", csqaList);
         // 1:1 문의 목록
-        List<CustomerServiceDTO> csiaList = customerServiceService.getiaCustomerService();
+        List<CustomerServiceDTO>csiaList = customerServiceService.getiaCustomerService(userDTO);
         model.addAttribute("csiaList", csiaList);
 
 //        for(CustomerServiceDTO item : csiaList){
@@ -53,21 +58,26 @@ public class CustomerServiceController {
 
     // 공지사항 작성
     @PostMapping("/noticeBoardEnroll")
-    public String setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
+    public String setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO, Model model) {
 
         int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO);
 
-//        System.out.println(customerServiceDTO.getNbContent());
+//        // 로그인한 사용자의 프로필 정보를 가져오기 위해 getLoggedInUsername 메서드 호출
+//        String loginUserId = getLoggedInUsername();
+//
+//        model.addAttribute("loginUserId", loginUserId);
+//        System.out.println("loginUserId: " + loginUserId);
+
         return "redirect:/customerService/csList";
     }
 
     // 공지사항 Detail
     @GetMapping("/noticeBoardDetail/{nbNo}")
-    public String getNoticeBoardDetail(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String getNoticeBoardDetail(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
         // 조회수 증가
         int result = customerServiceService.nbAddViews(customerServiceDTO);
-        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo, userDTO);
         model.addAttribute("nbDetail", nbDetail);
 
         return "noticeBoard/noticeBoardDetail";
@@ -75,9 +85,9 @@ public class CustomerServiceController {
 
     // 공지사항 수정/삭제폼
     @GetMapping("/noticeBoardEditForm/{nbNo}")
-    public String noticeBoardEditForm(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String noticeBoardEditForm(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
-        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo);
+        CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo, userDTO);
         model.addAttribute("nbDetail", nbDetail);
         return "noticeBoard/noticeBoardEdit";
     }
@@ -182,11 +192,9 @@ public class CustomerServiceController {
     public String inquiryAnswerEditForm(@PathVariable("ibNo") int ibNo,
                                         Model model, CustomerServiceDTO customerServiceDTO) {
 
-        System.out.println(customerServiceDTO.getUNickName());
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
         model.addAttribute("ibDetail", ibDetail);
 
-        System.out.println(ibDetail.getUNickName());
         return "inquiryBoard/inquiryAnswer";
     }
 
@@ -199,5 +207,8 @@ public class CustomerServiceController {
 
         return "redirect:/customerService/csList";
     }
+
+
+
 }
 

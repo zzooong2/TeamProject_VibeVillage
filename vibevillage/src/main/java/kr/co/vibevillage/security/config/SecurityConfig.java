@@ -43,6 +43,39 @@ public class SecurityConfig {
                         .requestMatchers("/checkId").permitAll() // 닉네임 중복검사
                         .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
                         .requestMatchers("/register").permitAll() // 회원가입
+
+                        //----------- 해원 ------------------------
+                        .requestMatchers("/customerService").permitAll() // 고객센터
+                        .requestMatchers("/customerService/csList").permitAll() // 고객센터 게시판목록
+                        .requestMatchers("/csList").permitAll() //
+                        .requestMatchers("/noticeBoardEnroll").permitAll() //
+                        .requestMatchers("/noticeBoardDetail").permitAll() //
+                        .requestMatchers("/noticeBoardEditForm").permitAll() //
+                        .requestMatchers("/noticeBoardEdit").permitAll() //
+                        .requestMatchers("/noticeBoardDelete").permitAll() //
+
+                        .requestMatchers("/questionAnswer").permitAll() //
+                        .requestMatchers("/questionAnswerEnroll").permitAll() //
+                        .requestMatchers("/questionAnswerDetail").permitAll() //
+                        .requestMatchers("/questionAnswerEditForm").permitAll() //
+                        .requestMatchers("/questionAnswerEdit").permitAll() //
+                        .requestMatchers("/questionAnswerDelete").permitAll() //
+
+                        .requestMatchers("/inquiryBoard").permitAll() //
+                        .requestMatchers("/inquiryAnswer").permitAll() //
+                        .requestMatchers("/inquiryAnswerForm").permitAll() //
+                        .requestMatchers("/inquiryAnswerPage").permitAll() //
+
+                        .requestMatchers("/levelUpBoard").permitAll() //
+                        .requestMatchers("/levelUpEnroll").permitAll() //
+                        .requestMatchers("/levelUpBoardEnroll").permitAll() //
+                        .requestMatchers("/levelUpBoardDetail").permitAll() //
+                        .requestMatchers("/levelUpBoardEditForm").permitAll() //
+                        .requestMatchers("/levelUpBoardEdit").permitAll() //
+                        .requestMatchers("/levelUpBoardDelete").permitAll() //
+                        .requestMatchers("/levelUpApprove").permitAll() //
+                        //------------ 해원 끝 ----------------------------
+
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",
@@ -50,9 +83,9 @@ public class SecurityConfig {
                                 
                                 //----------- 해원 ------------------------
                                 "/customerService/**",
-                                "/levelUp/**",
-                                "/levelUp/"
+                                "/levelUp/**"
                                 //------------ 해원 끝 ----------------------------
+
                         ).authenticated() // 지정된 URL 패턴에 대한 접근은 인증이 필요함
                         .anyRequest().authenticated() // 모든 다른 요청은 인증이 필요함
                 )

@@ -34,7 +34,7 @@
 
     <insert id="levelResultBoard">
         insert into LEVELUP_RESULT_BOARD (LR_NO, LR_CONTENT, LR_STATUS, LR_INDATE, LB_NO, U_NO)
-        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, {lrContent}, DEFAULT, SYSDATE, #{lbNo}, #{uNo})
+        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, #{lrContent}, DEFAULT, SYSDATE, #{lbNo}, #{uNo})
     </insert>
 
     <select id="getLevelUpBoardDetail" resultMap="levelResultSet">

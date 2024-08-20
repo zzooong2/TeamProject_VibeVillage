@@ -1,6 +1,7 @@
 package kr.co.vibevillage.customerServiceBoard.service;
 
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface CustomerServiceService {
     public List<CustomerServiceDTO> getqaCustomerService();
 
     // 1:1 문의 목록
-    public List<CustomerServiceDTO> getiaCustomerService();
+    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO);
 
     // 공지사항 작성
     public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
@@ -25,7 +26,7 @@ public interface CustomerServiceService {
     public int nbAddViews(CustomerServiceDTO customerServiceDTO);
 
     // 공지사항 Detail
-    public CustomerServiceDTO getNoticeBoardDetail(int nbNo);
+    public CustomerServiceDTO getNoticeBoardDetail(int nbNo, UserDTO userDTO);
 
     // 공지사항 삭제
     public int nbDelete(CustomerServiceDTO customerServiceDTO);

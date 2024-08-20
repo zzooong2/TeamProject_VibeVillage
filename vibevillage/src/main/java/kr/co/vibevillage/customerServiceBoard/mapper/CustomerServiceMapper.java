@@ -1,6 +1,7 @@
 package kr.co.vibevillage.customerServiceBoard.mapper;
 
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,13 +18,13 @@ public interface CustomerServiceMapper {
     List<CustomerServiceDTO> getqaCustomerService();
 
     // 1:1 문의 목록
-    List<CustomerServiceDTO> getiaCustomerService();
+    List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO);
 
     // 공지사항 작성
     int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
 
     // 공지사항 Detail
-    CustomerServiceDTO getNoticeBoardDetail(int nbNo);
+    CustomerServiceDTO getNoticeBoardDetail(int nbNo, UserDTO userDTO);
 
     // 공지사항 조회수 증가
     int nbAddViews(CustomerServiceDTO customerServiceDTO);

@@ -3,6 +3,7 @@ package kr.co.vibevillage.customerServiceBoard.service;
 import kr.co.vibevillage.customerServiceBoard.mapper.CustomerServiceMapper;
 import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import kr.co.vibevillage.env.Env;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +37,8 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 1:1 문의 목록
     @Override
-    public List<CustomerServiceDTO> getiaCustomerService() {
-        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService();
+    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO) {
+        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService(userDTO);
         return iaList;
     }
 
@@ -50,9 +51,9 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 공지사항 Detail
     @Override
-    public CustomerServiceDTO getNoticeBoardDetail(int nbNo) {
+    public CustomerServiceDTO getNoticeBoardDetail(int nbNo, UserDTO userDTO) {
 
-        return customerServiceMapper.getNoticeBoardDetail(nbNo);
+        return customerServiceMapper.getNoticeBoardDetail(nbNo, userDTO);
     }
 
     // 조회수 증가

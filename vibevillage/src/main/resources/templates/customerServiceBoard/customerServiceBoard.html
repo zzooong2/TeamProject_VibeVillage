@@ -168,7 +168,7 @@
                                                 <div class="panel panel-default" th:each="csiaList, iterStat : ${csiaList}" data-category="${csiaList.icNo}">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title font-alt">
-                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.uNickName}"></a>
+                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.uNo}"></a>
                                                         </h4>
                                                         <span th:text="${csiaList.icName}"></span><br/>
                                                         <span th:text="${csiaList.ibIndate}"></span>

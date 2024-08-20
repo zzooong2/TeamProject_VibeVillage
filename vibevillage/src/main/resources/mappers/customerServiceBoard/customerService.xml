@@ -28,7 +28,6 @@
             <result column="ic_no" property="icNo"></result>
             <result column="ic_name" property="icName"></result>
             <result column="u_no" property="uNo"></result>
-            <result column="u_nickname" property="uNickName"></result>
         </resultMap>
 
     <!--공지사항 목록 조회-->
@@ -55,14 +54,14 @@
         on ib.IC_NO = ic.IC_NO
         join USER_VIBEVILLAGE uv
         on ib.U_NO = uv.U_NO
-        <choose>
-            <when test="icNo > 0">
-                where ic.IC_NO = #{icNo}
-            </when>
-            <otherwise>
+<!--        <choose>-->
+<!--            <when test="icNo > 0">-->
+<!--                where ic.IC_NO = #{icNo}-->
+<!--            </when>-->
+<!--            <otherwise>-->
 
-            </otherwise>
-        </choose>
+<!--            </otherwise>-->
+<!--        </choose>-->
     </select>
 
     <select id="getUserNickname" parameterType="int" resultType="string">
@@ -86,8 +85,10 @@
 
     <!--공지사항 디테일 조회-->
     <select id="getNoticeBoardDetail" resultMap="csbResultSet">
-        select NB_NO, NB_TITLE, NB_CONTENT, NB_VIEWS, NB_INDATE, U_NO
+        select NB_NO, NB_TITLE, NB_CONTENT, NB_VIEWS, NB_INDATE, nb.U_NO, uv.u_nickname
         from NOTICE_BOARD nb
+        join USER_VIBEVILLAGE uv
+        nb ib.U_NO = uv.U_NO
         where NB_NO = #{nbNo}
     </select>
 

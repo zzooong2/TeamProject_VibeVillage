@@ -81,6 +81,8 @@
             <div class="board-map">
               <div class="board-map text">
                    거래 장소
+                <p th:text="${usedBoard.province}+' '+${usedBoard.city}+' '+${usedBoard.usedBoardLocation}"></p>
+
               </div>
               <div id="map" style="width:50%;height:350px;"></div>
             </div>
@@ -98,8 +100,6 @@
                           <div class="comment-author font-alt"><a href="#"th:text="${comment.uNo}"></a></div>
                           <div class="comment-body">
                             <p th:text="${comment.usedCommentContent}"></p>
-                          </div>
-                          <div class="comment-meta font-alt">Today, 14:55 -<span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star-off"></i></span>
                           </div>
                         </div>
                       </div>

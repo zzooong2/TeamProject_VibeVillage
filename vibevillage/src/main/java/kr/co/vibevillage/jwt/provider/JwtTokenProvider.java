@@ -72,18 +72,26 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new IllegalArgumentException("Invalid token: missing authorities key");
+        // 사용자 이름이 null이거나 비어있는지 확인
+        String username = claims.getSubject();
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+
+        // 권한 정보가 null이거나 비어있는지 확인
+        String authorityClaim = claims.get(AUTHORITIES_KEY, String.class);
+        if (authorityClaim == null || authorityClaim.trim().isEmpty()) {
+            throw new IllegalArgumentException("Authorities cannot be null or empty");
         }
 
         // 클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(authorityClaim.split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
+        UserDetails principal = new User(username, "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

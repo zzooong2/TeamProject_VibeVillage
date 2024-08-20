@@ -12,12 +12,20 @@ import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Slf4j
 @Controller
 @RequiredArgsConstructor // 초기화 되지 않은 final 필드나 @NonNull이 붙은 필드에 대한 생성자를 만들어줌
 public class LoginController {
@@ -26,7 +34,7 @@ public class LoginController {
     private final LoginServiceImpl loginService;
     // 비밀번호 비교를 위한 passwordEncoder 객체 생성
     private final PasswordEncoder passwordEncoder;
-    // Jason Web Token 생성을 위한 객체 생성
+    // JWT 생성을 위한 객체 생성
     private final JWTConfig jwt;
     // AccessToken, RefreshToken 생성을 위한 객체 생성
     private final JwtTokenProvider jwtTokenProvider;
@@ -37,41 +45,66 @@ public class LoginController {
     private Long expiredMs;
 
     @GetMapping("/login")
-    public String login(@RequestParam("userId") String userId, @RequestParam("userPassword") String userPassword, HttpServletResponse response) {
-        System.out.println("--------------------------logincontroller-------------------------");
+    public String login(@RequestParam("userId") String userId, @RequestParam("userPassword") String userPassword,
+                        HttpServletResponse response, Model model) {
+        log.info("--------------------------logincontroller-------------------------");
 
-        // dto 객체 생성
+        // DTO 객체 생성 및 사용자 ID 설정
         UserDTO userDTO = new UserDTO();
-        // 값 초기화
         userDTO.setUserId(userId);
 
-        // 계정을 이용하여 데이터베이스에 있는 암호화된 비밀번호를 가져온다.
+        // 데이터베이스에서 암호화된 비밀번호 가져오기
         String getPassword = loginService.login(userId, userPassword);
-        // matches 메소드를 이용하여 평문 비밀번호와 암호화된 비밀번호를 비교한다.
-        if(passwordEncoder.matches(userPassword, getPassword)){
+
+        // 기본 권한 설정
+        List<String> authorities = new ArrayList<>();
+        userDTO.setAuthorities(authorities);
+        authorities.add("ROLE_USER"); // 기본적으로 "ROLE_USER" 권한을 추가
+
+        // 평문 비밀번호와 암호화된 비밀번호 비교
+        if (passwordEncoder.matches(userPassword, getPassword)) {
             // JWT 생성
             String token = jwt.createJwt(userDTO, secretKey, expiredMs);
-            System.out.println("JWT 생성: " + token);
+            log.info("JWT: " + token);
 
-            // JWT로부터 Authentication 객체를 생성
+            // JWT로부터 Authentication 객체 생성
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            // TokenResDto 객체를 받아온다
+
+            // Authentication 객체를 SecurityContextHolder에 설정
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            // TokenResDto 객체 받아오기
             UserDTO.TokenResDto tokenResDto = jwtTokenProvider.generateToken(authentication);
-            // Access Token을 token2에 저장한다
-            String token2 = tokenResDto.getAccessToken();
-            System.out.println("tokenResDto: " + tokenResDto);
-            System.out.println("token2: " + token2);
 
-            // JWT 담아서 쿠키 생성
-            Cookie cookie = new Cookie("JWT", token2);
-            cookie.setHttpOnly(true);
-            cookie.setPath("/");
-            response.addCookie(cookie);
+            // JWT 쿠키에 저장
+            Cookie jwtCookie = new Cookie("JWT", token);
+            jwtCookie.setHttpOnly(true);
+            jwtCookie.setPath("/");
+            response.addCookie(jwtCookie);
 
-            return "redirect:form";
+            // AccessToken 쿠키에 저장
+            Cookie accessTokenCookie = new Cookie("AccessToken", tokenResDto.getAccessToken());
+            accessTokenCookie.setHttpOnly(true);
+            accessTokenCookie.setPath("/");
+            response.addCookie(accessTokenCookie);
+
+            String loginUserId = authentication.getName();
+
+            // 인증 객체를 SecurityContextHolder에 설정
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+            // 사용자가 존재하는지(로그인 상태) 확인   anonymousUser: 로그인 하지 않은 경우
+            if (auth != null && auth.isAuthenticated() && !"anonymousUser".equals(auth.getPrincipal())) {
+                model.addAttribute("userid", auth.getName());
+                model.addAttribute("isAuthenticated", true);
+            } else {
+                model.addAttribute("isAuthenticated", false);
+            }
+
+            return "redirect:/form";
         } else {
-            System.out.println("로그인 실패");
-            return null;
+            return "redirect:/error";
         }
     }
 }

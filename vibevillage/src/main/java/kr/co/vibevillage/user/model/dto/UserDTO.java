@@ -4,6 +4,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +49,8 @@ public class UserDTO {
     String userLevel, accessTime;
     int accessCount, writeCount, commentCount;
 
+
+    // UsernamePasswordAuthenticationToken 클래스 구현
     public UsernamePasswordAuthenticationToken toAuthenticationToken() {
         return new UsernamePasswordAuthenticationToken(userId, userPassword);
     }
@@ -57,4 +63,18 @@ public class UserDTO {
         private Long refreshTokenExpirationTime;
     }
 
+    // 권한 정보를 담는 필드 추가
+    private List<String> authorities;
+
+    // Getters and Setters
+    public List<String> getAuthorities() {
+        if (authorities == null) {
+            authorities = new ArrayList<>(); // authorities가 null일 경우 빈 리스트로 초기화
+        }
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
+    }
 }

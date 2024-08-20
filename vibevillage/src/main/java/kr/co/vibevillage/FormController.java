@@ -25,6 +25,4 @@ public class FormController {
     public String myPageForm() {
         return "user/myPage";
     }
-
-
 }

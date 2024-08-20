@@ -4,16 +4,20 @@ import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceServiceImpl;
 import kr.co.vibevillage.levelupBoard.model.LevelUpDTO;
 import kr.co.vibevillage.levelupBoard.service.LevelUpServiceImpl;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/levelUp")
 public class LevelUpController {
 
     private final LevelUpServiceImpl levelUpService;
@@ -23,7 +27,7 @@ public class LevelUpController {
         this.levelUpService = levelUpService;
     }
 
-    @GetMapping("/levelUp")
+    @GetMapping("/levelUpBoard")
     public String getLevelUp(Model model, LevelUpDTO levelUpDTO) {
 
         // 등업신청 목록
@@ -50,7 +54,7 @@ public class LevelUpController {
     public String setLevelUpBoardEnroll(LevelUpDTO levelUpDTO) {
         int result = levelUpService.setLevelUpBoardEnroll(levelUpDTO);
 
-        return "redirect:/levelUp";
+        return "redirect:/levelUp/levelUpBoard";
     }
 
     // 등업신청 Detail
@@ -63,7 +67,7 @@ public class LevelUpController {
         return "levelUpBoard/levelUpBoardDetail";
     }
     
-    // 등업신청 수정/삭제 폼
+    // 등업신청서 수정/삭제 폼
     @GetMapping("/levelUpBoardEditForm/{lbNo}")
     public String levelUpBoardEditForm(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
@@ -80,7 +84,7 @@ public class LevelUpController {
         int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO);
         model.addAttribute("lbEdit", lbEdit);
 
-        return "redirect:/levelUp";
+        return "redirect:/levelUp/levelUpBoard";
     }
 
     // 등업신청 삭제
@@ -89,6 +93,17 @@ public class LevelUpController {
 
         int result = levelUpService.lbDelete(levelUpDTO);
 
-        return "redirect:/levelUp";
+        return "redirect:/levelUp/levelUpBoard";
+    }
+
+    // 등업 승인
+    @GetMapping("/levelUpApprove/{lbNo}/{uNo}")
+    public String levelUpApprove(@PathVariable("lbNo") int lbNo,
+                                 @PathVariable("uNo") int uNo,
+                                 LevelUpDTO levelUpDTO, UserDTO userDTO) {
+
+         int result = levelUpService.levelUpApprove(uNo, lbNo, levelUpDTO, userDTO);
+
+         return "redirect:/levelUp/levelUpBoard";
     }
 }

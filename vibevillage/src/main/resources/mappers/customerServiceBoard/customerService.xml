@@ -55,6 +55,14 @@
         on ib.IC_NO = ic.IC_NO
         join USER_VIBEVILLAGE uv
         on ib.U_NO = uv.U_NO
+        <choose>
+            <when test="icNo > 0">
+                where ic.IC_NO = #{icNo}
+            </when>
+            <otherwise>
+
+            </otherwise>
+        </choose>
     </select>
 
     <select id="getUserNickname" parameterType="int" resultType="string">

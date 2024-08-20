@@ -49,10 +49,10 @@
                             <textarea class="form-control" rows="7" th:text="*{nbDetail.nbContent}" readonly=""></textarea>
                             <!--관리자만 볼수있음-->
                             <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/noticeBoardDelete/{nbNo}(nbNo=${nbDetail.nbNo})}">
+                                <a th:href="@{/customerService/noticeBoardDelete/{nbNo}(nbNo=${nbDetail.nbNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>
-                                <a th:href="@{/noticeBoardEditForm/{nbNo}(nbNo=${nbDetail.nbNo})}">
+                                <a th:href="@{/customerService/noticeBoardEditForm/{nbNo}(nbNo=${nbDetail.nbNo})}">
                              <button class="btn btn-g btn-circle" type="button">수 정</button>
                                 </a>
                             </div>

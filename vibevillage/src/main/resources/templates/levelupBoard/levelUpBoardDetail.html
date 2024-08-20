@@ -42,12 +42,20 @@
                             <div class="form-group">
                                 <input class="form-control" type="text" th:value="*{lbDetail.lbIndate}" readonly="" />
                             </div>
-                            <textarea class="form-control" rows="7" th:text="*{lbDetail.lbContent}" readonly=""></textarea>
+                            <div class="form-group">
+                                <textarea class="form-control" rows="7" th:text="*{lbDetail.lbContent}" readonly=""></textarea>
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" placeholder="등" rows="7" th:text="*{lbDetail.lrContent}" readonly=""></textarea>
+                            </div>
                             <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                                <a th:href="@{/levelUp/levelUpApprove/{lbNo}/{uNo}(lbNo=${lbDetail.lbNo}, uNo=${lbDetail.uNo})}">
+                                    <button class="btn btn-g btn-circle" type="button">등 업</button>
+                                </a>
+                                <a th:href="@{/levelUp/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>
-                                <a th:href="@{/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                                <a th:href="@{/levelUp/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
                              <button class="btn btn-g btn-circle" type="button">수 정</button>
                                 </a>
                             </div>

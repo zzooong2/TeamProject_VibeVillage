@@ -30,7 +30,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <h4 class="font-alt mb-0">1:1 문의</h4>
                         <hr class="divider-w mt-10 mb-20">
-                        <form class="form" role="form" th:action="@{/inquiryAnswerEdit/{ibNo}(ibNo=${ibDetail.ibNo})}" th:object="${ibDetail}" method="post">
+                        <form class="form" role="form" th:action="@{/customerService/inquiryAnswerPage/{ibNo}(ibNo=${ibDetail.ibNo})}" th:object="${ibDetail}" method="post">
 
                             <textarea class="form-control" rows="2" th:field="*{ibContent}" readonly="" />
                             <div class="form-group" style="margin-top: 14px;">

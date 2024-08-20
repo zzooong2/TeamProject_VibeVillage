@@ -14,6 +14,7 @@ import java.nio.file.FileStore;
 import java.util.List;
 
 @Controller
+@RequestMapping("/customerService")
 public class CustomerServiceController {
 
     private final CustomerServiceServiceImpl customerServiceService;
@@ -23,7 +24,7 @@ public class CustomerServiceController {
         this.customerServiceService = customerServiceService;
     }
 
-    @GetMapping("/customerService")
+    @GetMapping("/csList")
     public String getCustomerService(Model model, CustomerServiceDTO customerServiceDTO) {
         // 공지사항 목록
         List<CustomerServiceDTO> csnbList = customerServiceService.getnbCustomerService();
@@ -57,7 +58,7 @@ public class CustomerServiceController {
         int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO);
 
 //        System.out.println(customerServiceDTO.getNbContent());
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // 공지사항 Detail
@@ -88,7 +89,7 @@ public class CustomerServiceController {
         int nbEdit = customerServiceService.setNoticeBoardEdit(customerServiceDTO);
         model.addAttribute("nbEdit", nbEdit);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // 공지사항 삭제(nb_delete_yn y->n)
@@ -97,10 +98,10 @@ public class CustomerServiceController {
 
         int result = customerServiceService.nbDelete(customerServiceDTO);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
-    // Q&A 등록 페이지 이동
+    // Q&A 작성 페이지 이동
     @GetMapping("/questionAnswer")
     public String questionAnswer(CustomerServiceDTO customerServiceDTO) {
 
@@ -113,7 +114,7 @@ public class CustomerServiceController {
 
         int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // Q&A Detail
@@ -142,7 +143,7 @@ public class CustomerServiceController {
         int nbEdit = customerServiceService.setQuestionAnswerEdit(customerServiceDTO);
         model.addAttribute("nbEdit", nbEdit);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // Q&A 삭제(Q&A_yn y->n)
@@ -151,7 +152,7 @@ public class CustomerServiceController {
 
         int result = customerServiceService.qaDelete(customerServiceDTO);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // 사용자가 작성 1:1 문의 질문
@@ -159,14 +160,15 @@ public class CustomerServiceController {
     public String setCustomerService(Model model, CustomerServiceDTO customerServiceDTO) {
 
         int result = customerServiceService.setibCustomerService(customerServiceDTO);
+        System.out.println(customerServiceDTO.getIcNo());
+        System.out.println(customerServiceDTO.getIcName());
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 
     // 1:1 질문 Detail
-    @GetMapping("/inquiryAnswer/{ibNo}/{icNo}")
+    @GetMapping("/inquiryAnswer/{ibNo}")
     public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo,
-                                         @PathVariable("icNo") int icNo,
                                          Model model, CustomerServiceDTO customerServiceDTO) {
 
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
@@ -175,8 +177,8 @@ public class CustomerServiceController {
         return "inquiryBoard/inquiryAnswerDetail";
     }
 
-    // 1:1 질문 수정 폼
-    @GetMapping("/inquiryAnswerEditForm/{ibNo}")
+    // 1:1 문의 답변 폼
+    @GetMapping("/inquiryAnswerForm/{ibNo}")
     public String inquiryAnswerEditForm(@PathVariable("ibNo") int ibNo,
                                         Model model, CustomerServiceDTO customerServiceDTO) {
 
@@ -185,17 +187,17 @@ public class CustomerServiceController {
         model.addAttribute("ibDetail", ibDetail);
 
         System.out.println(ibDetail.getUNickName());
-        return "inquiryBoard/inquiryAnswerEdit";
+        return "inquiryBoard/inquiryAnswer";
     }
 
-    // 1:1 질문 수정
-    @PostMapping("/inquiryAnswerEdit/{ibNo}")
+    // 1:1 문의 답변
+    @PostMapping("/inquiryAnswerPage/{ibNo}")
     public String inquiryAnswerEdit(@PathVariable("ibNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
         int ibEdit = customerServiceService.setInquiryAnswerEdit(customerServiceDTO);
         model.addAttribute("ibEdit", ibEdit);
 
-        return "redirect:/customerService";
+        return "redirect:/customerService/csList";
     }
 }
 

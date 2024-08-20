@@ -46,10 +46,10 @@
                             </div>
                             <textarea class="form-control" rows="7" th:text="*{qaDetail.qaContent}" readonly=""></textarea>
                             <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/questionAnswerDelete/{qaNo}(qaNo=${qaDetail.qaNo})}">
+                                <a th:href="@{/customerService/questionAnswerDelete/{qaNo}(qaNo=${qaDetail.qaNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>
-                                <a th:href="@{/questionAnswerEditForm/{qaNo}(qaNo=${qaDetail.qaNo})}">
+                                <a th:href="@{/customerService/questionAnswerEditForm/{qaNo}(qaNo=${qaDetail.qaNo})}">
                                     <button class="btn btn-g btn-circle" type="button">수 정</button>
                                 </a>
                             </div>

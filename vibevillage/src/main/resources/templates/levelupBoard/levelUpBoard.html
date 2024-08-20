@@ -41,9 +41,10 @@
             <div class="menu" th:each="lbList : ${lbList}">
               <div class="row">
                 <div class="col-sm-8" >
-                  <a th:href="@{/levelUpBoardDetail/{lbNo}(lbNo=${lbList.lbNo})}" style="font-size: 16px;" class="menu-title font-alt" th:text="${lbList.lbTitle}">등업신청 합니다</a>
+                  <a th:href="@{/levelUp/levelUpBoardDetail/{lbNo}(lbNo=${lbList.lbNo})}" style="font-size: 16px;" class="menu-title font-alt" th:text="${lbList.lbTitle}">등업신청 합니다</a>
                   <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.lbIndate}">닉네임 / 신청날짜 / </div>
                   <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.uNo}">닉네임 / 신청날짜 / </div>
+                  <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.lrStatus}">닉네임 / 신청날짜 / </div>
                   <!-- 등업 신청한 사람만 볼수있게 완료/반려/진행중 -->
                   <span style="font-size: 13px;" th:text="${lbList.lrStatus}">진행중</span>
                   <span style="font-size: 13px;">반려시 사유</span>

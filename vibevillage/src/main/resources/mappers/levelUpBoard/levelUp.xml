@@ -32,10 +32,17 @@
         VALUES (LEVELUP_BOARD_SEQ.NEXTVAL, #{lbTitle}, #{lbContent}, SYSDATE, NULL, NULL, 'N', 1)
     </insert>
 
+    <insert id="levelResultBoard">
+        insert into LEVELUP_RESULT_BOARD (LR_NO, LR_CONTENT, LR_STATUS, LR_INDATE, LB_NO, U_NO)
+        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, {lrContent}, DEFAULT, SYSDATE, #{lbNo}, #{uNo})
+    </insert>
+
     <select id="getLevelUpBoardDetail" resultMap="levelResultSet">
-        select LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, U_NO
+        select lr.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, lr.U_NO, LR_CONTENT
         from LEVELUP_BOARD lr
-        where LB_NO = #{lbNo}
+        full join LEVELUP_RESULT_BOARD lrb
+        on lr.LB_NO = lrb.LB_NO
+        where lr.LB_NO = #{lbNo}
     </select>
 
     <update id="setLevelUpBoardEdit" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
@@ -49,6 +56,20 @@
         update LEVELUP_BOARD
         set LB_DELETE = default,
             LB_DELETE_YN = 'Y'
+        where LB_NO = #{lbNo}
+    </update>
+
+    <update id="levelUpXML" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        update USER_LEVEL_MANAGEMENT ulm
+        set  ULM_LEVEL = '여름'
+        where U_NO = #{uNo}
+    </update>
+
+    <update id="levelUpApprove" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_RESULT_BOARD lrb
+        set LR_STATUS = '완료',
+            LR_INDATE = SYSDATE,
+            LR_CONTENT = #{lrContent}
         where LB_NO = #{lbNo}
     </update>
 

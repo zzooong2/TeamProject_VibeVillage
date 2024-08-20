@@ -1,6 +1,7 @@
 package kr.co.vibevillage.levelupBoard.service;
 
 import kr.co.vibevillage.levelupBoard.model.LevelUpDTO;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 
 import java.util.List;
 
@@ -19,6 +20,9 @@ public interface LevelUpService {
 
     //등업신청 삭제
     public int lbDelete(LevelUpDTO levelUpDTO);
+
+    // 등언 신청 승인
+    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO, UserDTO userDTO);
 }
 
 

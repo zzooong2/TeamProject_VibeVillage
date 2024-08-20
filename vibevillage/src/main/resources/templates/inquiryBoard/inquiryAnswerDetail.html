@@ -49,7 +49,7 @@
                             </div>
                             <textarea class="form-control" rows="7" placeholder="답변" th:text="*{ibDetail.iaContent}" readonly=""></textarea>
                             <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/inquiryAnswerEditForm/{ibNo}(ibNo=${ibDetail.ibNo})}">
+                                <a th:href="@{/customerService/inquiryAnswerForm/{ibNo}(ibNo=${ibDetail.ibNo})}">
                                 <button class="btn btn-g btn-circle" type="button">답 변</button>
                                 </a>
                             </div>

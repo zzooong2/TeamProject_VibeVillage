@@ -1,34 +1,36 @@
 package kr.co.vibevillage.experienceAndReviewBoard.controller;
 
 import jakarta.servlet.http.HttpSession;
-import kr.co.vibevillage.experienceAndReviewBoard.domain.Comment;
-import kr.co.vibevillage.experienceAndReviewBoard.domain.ExperienceBoard;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.CommentDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO;
-import kr.co.vibevillage.experienceAndReviewBoard.service.CommentService;
-import kr.co.vibevillage.experienceAndReviewBoard.service.ExperienceBoardService;
-import kr.co.vibevillage.experienceAndReviewBoard.service.LikeService;
+import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
+import kr.co.vibevillage.experienceAndReviewBoard.service.impl.CommentServiceImpl;
+import kr.co.vibevillage.experienceAndReviewBoard.service.impl.ExperienceBoardServiceImpl;
+import kr.co.vibevillage.experienceAndReviewBoard.service.impl.LikeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
 @RequestMapping("/experienceBoard")
 public class ExperienceBoardController {
     @Autowired
-    private final ExperienceBoardService experienceBoardService;
-    private final CommentService commentService;
-    private final LikeService likeService;
+    private final ExperienceBoardServiceImpl experienceBoardService;
+    private final CommentServiceImpl commentService;
+    private final LikeServiceImpl likeServiceImpl;
 
-    public ExperienceBoardController(ExperienceBoardService experienceBoardService, LikeService likeService, CommentService commentService) {
+    public ExperienceBoardController(ExperienceBoardServiceImpl experienceBoardService, CommentServiceImpl commentService, LikeServiceImpl likeServiceImpl) {
         this.experienceBoardService = experienceBoardService;
         this.commentService = commentService;
-        this.likeService = likeService;
+        this.likeServiceImpl = likeServiceImpl;
     }
 
     @GetMapping
@@ -36,36 +38,50 @@ public class ExperienceBoardController {
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "size", defaultValue = "10") int size,
                               Model model) {
+        int totalPosts = experienceBoardService.getTotalPostCount();
+        int totalPages = (int) Math.ceil((double) totalPosts / size);
+
+        List<ExperienceBoardDTO> posts;
+
         if (keyword != null && !keyword.isEmpty()) {
-            // 검색어가 있을 경우 검색 결과를 가져옴
             List<ExperienceBoardDTO> searchResults = experienceBoardService.searchPosts(keyword);
 
-            // 각 게시글에 대해 댓글 수와 좋아요 수를 가져옴
             for (ExperienceBoardDTO post : searchResults) {
                 int commentCount = commentService.getCommentCountByPostId(post.getRId());
-                int likeCount = likeService.countLikes(post.getRId());
+                int likeCount = likeServiceImpl.countLikes(post.getRId());
+                String categoryName = experienceBoardService.getCategoryNameById(post.getCategoryId());
+
                 post.setCommentCount(commentCount);
                 post.setRLikeCount(likeCount);
+                post.setCategoryName(categoryName);
             }
 
             model.addAttribute("posts", searchResults);
-        } else if (experienceBoardService.getAllPosts(page, size) != null) {
-            // 전체 게시글을 페이지네이션을 적용하여 가져옴
-            List<ExperienceBoard> posts = experienceBoardService.getAllPosts(page, size);
+        } else {
+            posts = experienceBoardService.getAllPosts(page, size);
 
-            // 각 게시글에 대해 댓글 수와 좋아요 수를 가져옴
-            for (ExperienceBoard post : posts) {
+            for (ExperienceBoardDTO post : posts) {
                 int commentCount = commentService.getCommentCountByPostId(post.getRId());
-                int likeCount = likeService.countLikes(post.getRId());
+                int likeCount = likeServiceImpl.countLikes(post.getRId());
+                String categoryName = experienceBoardService.getCategoryNameById(post.getCategoryId());
+
                 post.setCommentCount(commentCount);
                 post.setRLikeCount(likeCount);
+                post.setCategoryName(categoryName);
             }
 
             model.addAttribute("posts", posts);
         }
 
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
+        model.addAttribute("totalPages", totalPages);
+
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
+
+
+
 
 
     @GetMapping("/new")
@@ -74,30 +90,81 @@ public class ExperienceBoardController {
         return "experienceAndReviewBoard/writeReview";
     }
 
+
+    // 게시글 작성
     @PostMapping("/write")
-    public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO, RedirectAttributes redirectAttributes) {
-        experienceBoardService.createPost(experienceBoardDTO);
-        redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
-        return "redirect:/experienceBoard";
+    public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO,
+                             @RequestParam(value = "file", required = false) MultipartFile file,
+                             RedirectAttributes redirectAttributes) {
+        try {
+            // 파일 업로드 처리
+            if (file != null && !file.isEmpty()) {
+                handleFileUpload(file, experienceBoardDTO);
+            }
+
+            // 게시글 작성
+            experienceBoardService.createPost(experienceBoardDTO);
+            redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
+            return "redirect:/experienceBoard";
+
+        } catch (IOException e) {
+            // 파일 업로드 실패 시 처리
+            redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드 중 오류가 발생했습니다.");
+            return "redirect:/experienceBoard/new";
+
+        } catch (Exception e) {
+            // 게시글 작성 실패 시 처리
+            redirectAttributes.addFlashAttribute("errorMessage", "게시글 작성 중 오류가 발생했습니다.");
+            return "redirect:/experienceBoard/new";
+        }
     }
 
-//    @PostMapping
-//    public String createPost(@ModelAttribute ExperienceBoardDTO post) {
-//        experienceBoardService.createPost(post);
-//        return "redirect:/experienceBoard";
-//    }
+
+    // 파일 업로드 처리 로직을 분리하여 가독성을 높임
+    private void handleFileUpload(MultipartFile file, ExperienceBoardDTO experienceBoardDTO) throws IOException {
+        if (!file.isEmpty()) {
+            // 파일 업로드 경로 설정
+            String uploadDirectory = "static/uploadReviewFile";
+            String fileName = file.getOriginalFilename();
+            File destinationFile = new File(uploadDirectory + "/" + fileName);
+
+            // 파일 전송
+            file.transferTo(destinationFile);
+
+            // 파일 정보 설정
+            UploadDTO uploadDTO = new UploadDTO();
+            uploadDTO.setRuName(fileName);
+            uploadDTO.setFilePath(destinationFile.getAbsolutePath());
+            experienceBoardDTO.setUploadDTO(uploadDTO);
+        }
+    }
+
     // 카테고리
 
     @GetMapping("/filter")
-    public String filterByCategory(@RequestParam("categoryId") Long categoryId, Model model, HttpSession session) {
-        // 카테고리에 따른 게시글을 조회
-        List<ExperienceBoardDTO> filteredPosts = experienceBoardService.getPostsByCategory(categoryId);
+    public String filterByCategory(@RequestParam("categoryName") String categoryName, Model model, HttpSession session) {
+        List<ExperienceBoardDTO> filteredPosts;
 
+        try {
+            if (categoryName == null || categoryName.isEmpty()) {
+                // categoryName이 빈 문자열이거나 null인 경우 전체 게시글을 조회
+                filteredPosts = experienceBoardService.getAllPosts();
+            } else {
+                // 카테고리에 따른 게시글을 조회
+                Long categoryId = Long.parseLong(categoryName);
+                filteredPosts = experienceBoardService.getPostsByCategory(categoryId);
+            }
+        } catch (NumberFormatException e) {
+            // categoryName이 유효한 숫자가 아닌 경우 전체 게시글을 조회
+            filteredPosts = experienceBoardService.getAllPosts();
+        }
         // 조회된 게시글을 모델에 추가
         model.addAttribute("posts", filteredPosts);
 
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
+
+
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
@@ -109,7 +176,7 @@ public class ExperienceBoardController {
                     dto.setRTitle(p.getRTitle());
                     dto.setRContent(p.getRContent());
                     dto.setUNo(p.getUNo());
-                    dto.setCategoryId(p.getCategoryId());
+                    dto.setCategoryName(p.getCategoryName());
                     return dto;
                 })
                 .findFirst().orElse(null);
@@ -144,17 +211,16 @@ public class ExperienceBoardController {
             LikeDTO likeDto = new LikeDTO();
             likeDto.setRId(id);
             likeDto.setUNo(uNo);
-            hasLiked = likeService.hasLiked(likeDto);
+            hasLiked = likeServiceImpl.hasLiked(likeDto);
         }
 
-        //List<ExperienceBoardDTO> otherPosts = experienceBoardService.getOtherPosts(id);
-        List<ExperienceBoard> otherPosts = experienceBoardService.getAllPosts(1, 10);
-        List<Comment> comments = commentService.getCommentsByPostId(id);
+        List<ExperienceBoardDTO> otherPosts = experienceBoardService.getAllPosts(1, 10);
+        List<CommentDTO> comments = commentService.getCommentsByPostId(id);
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         model.addAttribute("otherPosts", otherPosts);
         model.addAttribute("hasLiked", hasLiked);
-        model.addAttribute("likeCount", likeService.countLikes(id));
+        model.addAttribute("likeCount", likeServiceImpl.countLikes(id));
         return "experienceAndReviewBoard/postDetail";
     }
 
@@ -172,43 +238,23 @@ public class ExperienceBoardController {
         return "redirect:/experienceBoard/post/" + postId;
     }
 
-//    @GetMapping("/like/{id}")
-//    public String likePost(@PathVariable Long id, Long uNo) {
-//        likeService.likePost(new LikeDTO(id, uNo));
-//        return "redirect:/experienceBoard";
-//    }
 
-    // 좋아요 토글
-//    @PostMapping("/like/{id}")
-//    public String toggleLike(@PathVariable Long id, HttpSession session) {
-//        Long uNo = (Long) session.getAttribute("uNo");
-//        if (uNo == null) {
-//            return "redirect:/login"; // 로그인하지 않은 사용자는 로그인 페이지로 리다이렉트
-//        }
-//
-//        LikeDTO likeDto = new LikeDTO();
-//        likeDto.setRId(id);
-//        likeDto.setUNo(uNo);
-//        likeService.toggleLike(likeDto);
-//
-//        return "redirect:/experienceBoard/post/" + id;
-//    }
 
     @PostMapping("/like/{id}")
     public String likePost(@PathVariable Long id, @SessionAttribute("loggedInUser") Long uNo, Model model) {
         // 사용자가 이미 좋아요를 눌렀는지 확인
-        boolean isLiked = likeService.hasLiked(id, uNo);
+        boolean isLiked = likeServiceImpl.hasLiked(id, uNo);
 
         if (isLiked) {
             // 이미 좋아요를 눌렀다면 좋아요 취소
-            likeService.deleteLike(id, uNo);
+            likeServiceImpl.deleteLike(id, uNo);
         } else {
             // 좋아요를 누르지 않았다면 좋아요 추가
-            likeService.addLike(id, uNo);
+            likeServiceImpl.addLike(id, uNo);
         }
 
         // 좋아요 카운트 업데이트
-        likeService.updateLikeCount(id);
+        likeServiceImpl.updateLikeCount(id);
 
         // 게시글 상세 페이지로 리다이렉트
         return "redirect:/experienceBoard/post/" + id;
@@ -216,18 +262,54 @@ public class ExperienceBoardController {
 
     // 검색
     @GetMapping("/search")
-    public String searchPosts(@RequestParam("keyword") String keyword, Model model) {
+    public String searchPosts(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+        // 검색어 유효성 검사
+        if (keyword == null || keyword.trim().isEmpty()) {
+            model.addAttribute("error", "검색어를 입력해 주세요.");
+            return "experienceAndReviewBoard/experienceAndReviewBoard";
+        }
+
+        // SQL 인젝션 방지: MyBatis의 파라미터 바인딩을 통해 처리
         List<ExperienceBoardDTO> searchResults = experienceBoardService.searchPosts(keyword);
+
+        // 검색 결과 없는 경우 처리
+        if (searchResults.isEmpty()) {
+            model.addAttribute("message", "검색 결과가 없습니다.");
+        }
+
+        // 검색 결과와 검색어를 모델에 추가
         model.addAttribute("posts", searchResults);
+        model.addAttribute("keyword", keyword);
+
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
 
     // 추천글
+// 기존의 getRecommendedPosts 메서드를 수정
     @GetMapping("/recommended")
-    public String getRecommendedPosts(Model model) {
-        List<ExperienceBoardDTO> recommendedPosts = experienceBoardService.getTopLikedPosts();
+    public String getTopLikedPosts(@RequestParam(value = "page", required = false) Integer page,
+                                   @RequestParam(value = "size", defaultValue = "10") int size,
+                                   Model model) {
+        if (page == null) {
+            page = 1; // 기본값 설정
+        }
+        int offset = (page - 1) * size;
+
+        List<ExperienceBoardDTO> recommendedPosts = experienceBoardService.getTopLikedPosts(offset, size);
+
+        int totalPostsCount = experienceBoardService.countTotalRecommendedPosts();
+        int totalPages = (int) Math.ceil((double) totalPostsCount / size);
+
         model.addAttribute("posts", recommendedPosts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+
         return "experienceAndReviewBoard/experienceAndReviewBoard";
     }
+
+
+
+
+
 
 }

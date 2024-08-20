@@ -1,6 +1,5 @@
 package kr.co.vibevillage.experienceAndReviewBoard.service.impl;
 
-import kr.co.vibevillage.experienceAndReviewBoard.domain.Like;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.listmapper.LikeMapper;
 import kr.co.vibevillage.experienceAndReviewBoard.service.LikeService;
@@ -17,7 +16,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public void toggleLike(LikeDTO likeDto) {
-        Like like = new Like();
+        LikeDTO like = new LikeDTO();
         like.setRId(likeDto.getRId());
         like.setUNo(likeDto.getUNo());
 
@@ -29,40 +28,53 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    public boolean hasLiked(Long rId, Long uNo) {
+        LikeDTO like = new LikeDTO();
+        like.setRId(rId);
+        like.setUNo(uNo);
+        return likeMapper.hasLiked(like) > 0;
+    }
+
+
+    @Override
     public int countLikes(Long rId) {
         return likeMapper.countLikes(rId);
     }
 
     @Override
-    public boolean hasLiked(Long rId, Long uNo) {
-        return false;
-    }
-
-    @Override
-    public void updateLikeCount(Long rId) {
-
-    }
-
-    @Override
-    public void addLike(Long id, Long uNo) {
-
-    }
-
-    @Override
     public boolean hasLiked(LikeDTO likeDto) {
-        Like like = new Like();
+        LikeDTO like = new LikeDTO();
         like.setRId(likeDto.getRId());
         like.setUNo(likeDto.getUNo());
         return likeMapper.hasLiked(like) > 0;
     }
 
     @Override
-    public void likePost(LikeDTO likeDTO) {
+    public void updateLikeCount(Long rId) {
+        Integer likeCount = likeMapper.countLikes(rId);
+        int safeLikeCount = (likeCount != null) ? likeCount : 0;
 
+        likeMapper.updateLikeCount(rId, safeLikeCount);
+    }
+
+    @Override
+    public void addLike(Long rId, Long uNo) {
+        LikeDTO like = new LikeDTO();
+        like.setRId(rId);
+        like.setUNo(uNo);
+        likeMapper.insert(like);
     }
 
     @Override
     public void deleteLike(Long rId, Long uNo) {
-
+        LikeDTO like = new LikeDTO();
+        like.setRId(rId);
+        like.setUNo(uNo);
+        likeMapper.delete(like);
     }
+    @Override
+    public void likePost(LikeDTO likeDTO) {
+        addLike(likeDTO.getRId(), likeDTO.getUNo());
+    }
+
 }

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public class ExperienceBoardDTO {
     private Long rId;          // 게시글 ID
     private Long uNo;          // 작성자 번호
+    private String uNickname;
     private Long categoryId;   // 카테고리 ID
     private String rTitle;     // 제목
     private String rContent;   // 내용
@@ -16,6 +17,8 @@ public class ExperienceBoardDTO {
     private int rViewCount = 0;    // 조회수
     private int rLikeCount = 0;    // 좋아요 수
     private int commentCount = 0;
+    private UploadDTO uploadDTO;
+    private String categoryName;
 
 }
 

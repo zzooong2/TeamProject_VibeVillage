@@ -1,16 +1,18 @@
 package kr.co.vibevillage.experienceAndReviewBoard.listmapper;
 
-import kr.co.vibevillage.experienceAndReviewBoard.domain.Like;
+import kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO;
 import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface LikeMapper {
 
-    void insert(Like like);
+    void insert(LikeDTO likeDTO);
 
-    void delete(Like like);
+    void delete(LikeDTO likeDTO);
 
     int countLikes(Long rId);
 
-    int hasLiked(Like like);
+    int hasLiked(LikeDTO likeDTO);
+
+    void updateLikeCount(Long rId, int safeLikeCount);
 }

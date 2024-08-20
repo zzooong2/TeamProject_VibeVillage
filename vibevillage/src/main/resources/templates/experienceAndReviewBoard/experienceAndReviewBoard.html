@@ -13,7 +13,7 @@
             <button class="btn btn-g btn-circle left-button" type="submit" onclick="window.location.href='/experienceBoard'">전체글</button>
 
             <div class="right-buttons">
-                <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/recommended'">추천글</button>
+                <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/recommended?page=1'">추천글</button>
                 <button class="btn btn-g btn-circle" type="button" onclick="location.href='/experienceBoard/new'">글쓰기</button>
             </div>
         </div>
@@ -21,20 +21,22 @@
         <!-- 카테고리 선택 드롭다운 추가 -->
         <div class="category-select">
             <form th:action="@{/experienceBoard/filter}" method="get">
-                <select id="categoryId" name="categoryId" th:value="${param.categoryId}" onchange="this.form.submit()">
+                <select id="categoryName" name="categoryName" th:value="${param.categoryName != null ? param.categoryName : ''}" onchange="this.form.submit()">
                     <option value="">카테고리를 선택해주세요.</option>
-                    <option th:value="1" th:selected="${param.categoryId == 1}">운동</option>
-                    <option th:value="2" th:selected="${param.categoryId == 2}">취미</option>
-                    <option th:value="3" th:selected="${param.categoryId == 3}">친목</option>
-                    <option th:value="4" th:selected="${param.categoryId == 4}">독서/스터디</option>
-                    <option th:value="5" th:selected="${param.categoryId == 5}">맛집탐방</option>
-                    <option th:value="6" th:selected="${param.categoryId == 6}">반려동물</option>
+                    <option th:value="1" th:selected="${param.categoryName != null and param.categoryName == 1}">운동</option>
+                    <option th:value="2" th:selected="${param.categoryName != null and param.categoryName == 2}">취미</option>
+                    <option th:value="3" th:selected="${param.categoryName != null and param.categoryName == 3}">친목</option>
+                    <option th:value="4" th:selected="${param.categoryName != null and param.categoryName == 4}">독서/스터디</option>
+                    <option th:value="5" th:selected="${param.categoryName != null and param.categoryName == 5}">맛집탐방</option>
+                    <option th:value="6" th:selected="${param.categoryName != null and param.categoryName == 6}">반려동물</option>
                 </select>
+            </form>
         </div>
 
         <table>
             <thead>
             <tr>
+                <th>카테고리</th> <!-- 카테고리 제목 -->
                 <th>제목</th>
                 <th>작성자</th>
                 <th>작성일</th>
@@ -44,15 +46,16 @@
             </thead>
             <tbody>
             <tr th:each="post : ${posts}">
-                <!-- 게시글 제목과 댓글 수를 표시 -->
+                <!-- 카테고리와 게시글 제목, 댓글 수를 표시 -->
+                <td th:text="${post != null and post.categoryName != null ? post.categoryName : '카테고리 없음'}">카테고리</td> <!-- 카테고리 이름 -->
                 <td>
-                    <a th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a>
-                    <span th:text="'(' + ${post.commentCount} + ')'">0</span>
+                    <a th:if="${post != null}" th:href="@{/experienceBoard/post/{id}(id=${post.rId})}" th:text="${post.rTitle}">제목</a>
+                    <span th:if="${post != null}" th:text="'(' + ${post.commentCount} + ')'"></span>
                 </td>
-                <td th:text="${post.rId}">작성자</td>
-                <td th:text="${post.rCreatedAt}">작성일</td>
-                <td th:text="${post.rViewCount}">조회</td>
-                <td th:text="${post.rLikeCount}">좋아요</td>
+                <td th:text="${post != null ? post.uNickname : '작성자 없음'}">작성자</td>
+                <td th:text="${post != null ? #temporals.format(post.rCreatedAt, 'yyyy-MM-dd') : '날짜 없음'}">작성일</td>
+                <td th:text="${post != null ? post.rViewCount : '조회 없음'}">조회</td>
+                <td th:text="${post != null ? post.rLikeCount : '좋아요 없음'}">좋아요</td>
             </tr>
             </tbody>
         </table>
@@ -60,36 +63,40 @@
         <div class="search-container">
             <form th:action="@{/experienceBoard/search}" method="get">
                 <input type="text" name="keyword" placeholder="검색" th:value="${param.keyword}">
-                <input type="hidden" name="categoryId" th:value="${param.categoryId}">
+                <input type="hidden" name="categoryName" th:value="${param.categoryName}">
                 <button class="btn btn-g btn-circle" type="submit">검색</button>&nbsp;
             </form>
         </div>
-
     </div>
-    <div class="pagination font-alt">
-        <a href="#"><i class="fa fa-angle-left"></i></a>
-        <a class="active" href="#">1</a>
-        <a href="#">2</a>
-        <a href="#">3</a>
-        <a href="#">4</a>
-        <a href="#"><i class="fa fa-angle-right"></i></a>
-    </div>
-
-    <div th:replace="~{common/footer :: footer}"></div>
-    <div th:replace="~{common/js :: js}"></div>
 </div>
 
+
+
+<div class="pagination-container">
+    <th:block th:if="${totalPages != null and totalPages > 0}">
+        <div class="pagination font-alt">
+            <a th:href="@{/experienceBoard(page=${currentPage - 1})}" th:classappend="${currentPage == 1} ? 'disabled' : ''"><i class="fa fa-angle-left"></i></a>
+            <a th:each="i : ${#numbers.sequence(1, totalPages)}" th:href="@{/experienceBoard(page=${i})}" th:text="${i}" th:classappend="${currentPage == i} ? 'active' : ''"></a>
+            <a th:href="@{/experienceBoard(page=${currentPage + 1})}" th:classappend="${currentPage == totalPages} ? 'disabled' : ''"><i class="fa fa-angle-right"></i></a>
+        </div>
+    </th:block>
+</div>
+
+
+
+
 <script>
-    document.getElementById('categoryId').addEventListener('change', function() {
-        const categoryId = this.value;
-        fetch(`/experienceBoard/filter?categoryId=${categoryId}`)
+    document.getElementById('categoryName').addEventListener('change', function() {
+        const categoryName = this.value;
+        fetch(`/experienceBoard/filter?categoryName=${encodeURIComponent(categoryName)}`)
             .then(response => response.text())
             .then(html => {
                 document.querySelector('.table-container').innerHTML = html;
             });
     });
-
 </script>
 
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
 </body>
 </html>

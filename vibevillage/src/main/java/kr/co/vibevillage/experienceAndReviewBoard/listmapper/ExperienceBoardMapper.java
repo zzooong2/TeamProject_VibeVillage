@@ -1,7 +1,7 @@
 package kr.co.vibevillage.experienceAndReviewBoard.listmapper;
 
-import kr.co.vibevillage.experienceAndReviewBoard.domain.ExperienceBoard;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO;
+import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,19 +9,19 @@ import java.util.List;
 
 @Mapper
 public interface ExperienceBoardMapper {
-    List<ExperienceBoard> findAllWithPagination(@Param("limit") int limit, @Param("offset") int offset);
+    List<ExperienceBoardDTO> findAllWithPagination(@Param("limit") int limit, @Param("offset") int offset);
 
+    void insertUpload(UploadDTO uploadDTO);
 
+    void insert(ExperienceBoardDTO experienceBoard);
 
-    void insert(ExperienceBoard experienceBoard);
-
-    void update(ExperienceBoard experienceBoard);
+    void update(ExperienceBoardDTO experienceBoard);
 
     void delete(@Param("rId") Long rId);
 
-    List<ExperienceBoard> search(@Param("keyword") String keyword);
+    List<ExperienceBoardDTO> search(@Param("keyword") String keyword);
 
-    ExperienceBoard findById(Long rId);
+    ExperienceBoardDTO findById(Long rId);
 
     List<ExperienceBoardDTO> findOtherPosts(Long excludeId);
     // 좋아요 추가
@@ -40,9 +40,20 @@ public interface ExperienceBoardMapper {
 
     List<ExperienceBoardDTO> searchPosts(String keyword);
     // 댓글 수 카운트
-    List<ExperienceBoard> getPostsWithCommentCount();
+    List<ExperienceBoardDTO> getPostsWithCommentCount();
 
     List<ExperienceBoardDTO> getTopLikedPosts();
 
     List<ExperienceBoardDTO> findPostsByCategory(@Param("categoryId")Long categoryId);
+
+    String getCategoryNameById(@Param("categoryId")Long categoryId);
+    List<ExperienceBoardDTO> findAllPosts();
+
+    int countTotalPosts();
+
+    // 추천글을 가져오는 메서드 (페이징 처리)
+    List<ExperienceBoardDTO> findTopLikedPosts(@Param("offset") int offset, @Param("size") int size);
+
+    // 추천글의 총 개수를 세는 메서드
+    int countTotalRecommendedPosts();
 }

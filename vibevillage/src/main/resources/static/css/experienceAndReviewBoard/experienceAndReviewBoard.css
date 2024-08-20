@@ -15,12 +15,12 @@ body, html {
     font-family: var(--font-family);
     margin: 0;
     padding: 0;
-    height: 100%; /* 페이지 높이를 100%로 설정 */
+    min-height: 100%; /* 페이지 높이를 100%로 설정 */
     background-color: #f8f8f8;
 }
 
 .wrapper {
-    min-height: 100%; /* 콘텐츠가 푸터를 밀어내도록 설정 */
+    height: 100vh;
     display: flex;
     flex-direction: column;
 }

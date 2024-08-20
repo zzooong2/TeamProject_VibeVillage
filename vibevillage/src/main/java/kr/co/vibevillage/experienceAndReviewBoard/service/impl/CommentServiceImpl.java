@@ -1,6 +1,5 @@
 package kr.co.vibevillage.experienceAndReviewBoard.service.impl;
 
-import kr.co.vibevillage.experienceAndReviewBoard.domain.Comment;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.CommentDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.listmapper.CommentMapper;
 import kr.co.vibevillage.experienceAndReviewBoard.service.CommentService;
@@ -19,7 +18,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void addComment(CommentDTO commentDTO) {
-        Comment comment = new Comment();
+        CommentDTO comment = new CommentDTO();
         comment.setRId(commentDTO.getRId());
         comment.setUNo(commentDTO.getUNo());
         comment.setCContent(commentDTO.getCContent());
@@ -27,7 +26,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getCommentsByPostId(Long rId) {
+    public List<CommentDTO> getCommentsByPostId(Long rId) {
         return commentMapper.getCommentsByPostId(rId);
     }
 
@@ -45,4 +44,6 @@ public class CommentServiceImpl implements CommentService {
     public int getCommentCountByPostId(Long rId) {
         return commentMapper.countCommentsByPostId(rId);
     }
+
+
 }

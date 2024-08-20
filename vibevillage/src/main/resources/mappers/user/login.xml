@@ -3,12 +3,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.vibevillage.user.model.mapper.LoginMapper">
 
-    <resultMap id="login" type="kr.co.vibevillage.user.model.dto.UserDTO">
+    <resultMap id="loginUserInfo" type="kr.co.vibevillage.user.model.dto.UserDTO">
+        <result column="U_NO" property="userNo"></result>
+        <result column="U_NAME" property="userName"></result>
+        <result column="U_ID" property="userId"></result>
         <result column="U_PASSWORD" property="userPassword"></result>
+        <result column="U_NICKNAME" property="userNickName"></result>
+        <result column="U_PHONE" property="userPhone"></result>
+        <result column="U_POSTCODE" property="userPostCode"></result>
+        <result column="U_ADDRESS" property="userAddress"></result>
+        <result column="U_DETAIL_ADDRESS" property="userDetailAddress"></result>
+        <result column="U_EXTRA_ADDRESS" property="userExtraAddress"></result>
+        <result column="U_INDATE" property="userIndate"></result>
+
+        <result column="ULM_LEVEL" property="userLevel"></result>
+        <result column="ULM_ACCESS_COUNT" property="userAccessCount"></result>
+        <result column="ULM_WRITE_COUNT" property="userWriteCount"></result>
+        <result column="ULM_COMMENT_COUNT" property="userCommentCount"></result>
+        <result column="ULM_ACCESS_TIME" property="userAccessTime"></result>
     </resultMap>
 
     <select id="login" resultType="string">
         select U_PASSWORD from ONAIR.USER_VIBEVILLAGE where U_ID = #{userId}
+    </select>
+
+    <select id="getLoginUserInfo" resultMap="loginUserInfo">
+        SELECT * FROM ONAIR.USER_VIBEVILLAGE uv JOIN USER_LEVEL_MANAGEMENT ulm ON uv.U_NO = ulm.U_NO WHERE uv.U_ID = #{loginUserId}
     </select>
 
 </mapper>

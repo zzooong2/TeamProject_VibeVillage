@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity // 스프링시큐리티 필터가 스프링 필터체인에 등록된다
 public class SecurityConfig {
 
+    // application.properties에 작성해둔 암호화된 secretKey
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -43,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers("/checkId").permitAll() // 닉네임 중복검사
                         .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
                         .requestMatchers("/register").permitAll() // 회원가입
+                        .requestMatchers("/profile").permitAll() // 회원정보 가져오기
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",

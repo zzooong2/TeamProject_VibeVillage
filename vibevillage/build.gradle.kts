@@ -35,9 +35,15 @@ dependencies {
 	implementation("io.github.cdimascio:dotenv-java:3.0.0")
 	implementation("org.springframework.boot:spring-boot-starter-validation:3.2.8") // 유효성검사 의존성 주입
 	implementation ("org.springframework.boot:spring-boot-starter-thymeleaf") // Thymeleaf 의존성 주입
+	implementation ("org.thymeleaf.extras:thymeleaf-extras-springsecurity6") // Thymeleaf-Spring Security 의존성 주입
 	implementation("org.springframework.boot:spring-boot-devtools:3.2.8") // devtools 의존성 주입
 	implementation("org.springframework.boot:spring-boot-starter-data-redis") // redis 의존성 주입
 	implementation("net.nurigo:sdk:4.3.0") // coolsms 의존성 주입
+
+	// JWT 의존성 추가
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5") // Jwt API
+	implementation("io.jsonwebtoken:jjwt-impl:0.11.5") // Jwt Implementation
+	implementation("io.jsonwebtoken:jjwt-jackson:0.11.5") // JWT JSON Parsing
 
 	runtimeOnly("com.oracle.database.jdbc:ojdbc11")
 	compileOnly("org.projectlombok:lombok")

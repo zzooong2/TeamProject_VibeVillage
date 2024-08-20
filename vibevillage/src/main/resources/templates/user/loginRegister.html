@@ -13,39 +13,31 @@
     <nav th:replace="~{common/nav :: nav}"></nav>
 
     <div class="main">
-        <!-- <section class="module bg-dark-30" data-background="assets/images/section-4.jpg">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-sm-offset-3">
-                <h1 class="module-title font-alt mb-0">Login-Register</h1>
-              </div>
-            </div>
-          </div>
-        </section> -->
         <section class="module">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-5 col-sm-offset-1 mb-sm-40">
-
                         <h4 class="font-alt">로그인</h4>
                         <hr class="divider-w mb-10">
 
-                        <form class="form">
-
+                        <form class="form" method="GET" th:action="@{/login}" th:object="${userDTO}">
                             <div class="form-group">
-                                <input class="form-control" id="loginEmail" type="text" name="loginEmail" placeholder="계정" />
+                                <input class="form-control" id="loginId" onkeyup="" placeholder="계정" th:field="*{userId}" type="text"/>
+                                <div id="showLoginId"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="loginPassword" type="password" name="loginPassword" placeholder="암호" onkeyup=""/>
+                                <input class="form-control" id="loginPassword" onkeyup="" placeholder="암호" th:field="*{userPassword}" type="password"/>
+                                <div id="showLoginPassword"></div>
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-round btn-g">로그인</button>
+                                <button class="btn btn-round btn-g" type="submit">로그인</button>
                             </div>
+                        </form>
 
                             <div class="form-group"><a href="">비밀번호 찾기</a></div>
-                        </form>
+
                     </div>
                     <div class="col-sm-5">
                         <h4 class="font-alt">회원가입</h4>
@@ -128,7 +120,7 @@
     <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
 </main>
 
-<script src="/js/user/loginregister/validation.js"></script>
+<script src="/js/user/loginregister/registerValidation.js"></script>
 <script src="/js/user/common/common.js"></script>
 <script src="/js/user/address/kakaoAddressAPI.js"></script>
 <script src="/js/user/coolsms/coolsms.js"></script>

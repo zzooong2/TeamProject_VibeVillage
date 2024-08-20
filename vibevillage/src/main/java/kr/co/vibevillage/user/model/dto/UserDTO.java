@@ -2,10 +2,12 @@ package kr.co.vibevillage.user.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -47,4 +49,32 @@ public class UserDTO {
     String userLevel, accessTime;
     int accessCount, writeCount, commentCount;
 
+
+    // 권한 정보를 담는 필드 추가
+    private List<String> authorities;
+
+    // UsernamePasswordAuthenticationToken 클래스 구현
+    public UsernamePasswordAuthenticationToken toAuthenticationToken() {
+        return new UsernamePasswordAuthenticationToken(userId, userPassword);
+    }
+
+    // Getters and Setters
+    public List<String> getAuthorities() {
+        if (authorities == null) {
+            authorities = new ArrayList<>(); // authorities가 null일 경우 빈 리스트로 초기화
+        }
+        return authorities;
+    }
+
+    public void setAuthorities(List<String> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Getter @Builder
+    public static class TokenResDto {
+        private String grantType;
+        private String accessToken;
+        private String refreshToken;
+        private Long refreshTokenExpirationTime;
+    }
 }

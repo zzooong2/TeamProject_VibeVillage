@@ -16,8 +16,9 @@ public class RegisterServiceImpl implements RegisterService{
     private final RegisterMapper registerMapper;
     // 문자인증을 위한 객체 생성
     private final CertificationUtil certificationUtil;
-    // RedisRepository 객체 생성
+    // 문자인증번호 관리를 위한 RedisRepository 객체 생성
     private final RedisRepository redisRepository;
+    // 비밀번호 암호화를 위한 passwordEncoder 객체 생성
     private final PasswordEncoder passwordEncoder;
 
 
@@ -25,12 +26,16 @@ public class RegisterServiceImpl implements RegisterService{
     @Override
     public int register(UserDTO userDTO) {
 
+        // 유저가 입력한 비밀번호를 passwordEncoder객체를 이용하여 암호화를 진행한다.
         String bcryptPassword = passwordEncoder.encode(userDTO.getUserPassword());
+        // 암호화된 비밀번호를 userDTO갹채에 초기화한다.
         userDTO.setUserPassword(bcryptPassword);
 
+        // 회원가입 진행
         int result = registerMapper.register(userDTO);
 
         if (result == 1) {
+            // 회원가입이 오류없이 진행되면 회원 등급을 생성
             int result2 = registerMapper.registerLevel(userDTO.getUserNo());
             return result2;
         } else {

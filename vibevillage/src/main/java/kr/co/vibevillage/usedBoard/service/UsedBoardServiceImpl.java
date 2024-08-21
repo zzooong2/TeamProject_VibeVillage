@@ -10,6 +10,7 @@ import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -96,6 +97,36 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         return usedBoardMapper.deleteDetail(id);
     }
 
+
+    @Override
+    public List<UsedBoardDto> getMyBoards(int id){
+
+
+        List<UsedBoardDto> list =  usedBoardMapper.getMyBoards(id);;
+        // 각 게시글에 대해 반복문을 돌립니다.
+        for (UsedBoardDto board : list) {
+            // 현재 게시글의 이미지 리스트를 가져옵니다.
+            List<UsedBoardImageDto> mainImages = imageMapper.usedBoardGetImageListOnceXML(board.getUsedBoardId());
+            // MAIN 타입의 이미지들로 현재 게시글의 이미지 리스트를 설정합니다.
+            board.setImages(mainImages);
+        }
+        return list;
+    }
+    @Override
+    public void updateUsedBoard(UsedBoardDto usedBoard) {
+        // 게시물 정보 업데이트
+        usedBoardMapper.updateUsedBoard(usedBoard);
+        usedBoardMapper.updateProduct(usedBoard);
+        int deleteResult = usedBoardImageMapper.deleteImages(usedBoard.getUsedBoardId());
+        // 메인 이미지 업데이트
+        if( deleteResult > 0) {
+        for (UsedBoardImageDto image : usedBoard.getImages()) {
+            image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
+            imageMapper.usedBoardEnrollImageXML(image);
+        }
+
+        }
+    }
 
 
 }

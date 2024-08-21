@@ -127,6 +127,54 @@ public class UsedBoardController {
         int result = usedBoardService.deleteDetail(id);
         return "redirect:/used/boardList/1";
     }
+    @GetMapping("/my_boards")
+    public String getMyBoards(Model model) {
+        UserDTO user = loginService.getLoginUserInfo();
+        List<UsedBoardDto> usedBoard =  usedBoardService.getMyBoards(user.getUserNo());
+        model.addAttribute("usedList",usedBoard);
+        return "usedBoard/myUsedBoardList";
+
+
+    }
+
+    @GetMapping("/update_board/{id}")
+    public String updateUsedBoard(@PathVariable("id") int id,Model model){
+        UsedBoardDto board = usedBoardService.getUsedBoardDetail(id);
+        UserDTO user = loginService.getLoginUserInfo();
+        List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(id);
+        List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(id);
+        model.addAttribute("usedBoard", board);
+        model.addAttribute("mainImages", mainImages);
+        model.addAttribute("subImages", subImages);
+        model.addAttribute("userNickname",user.getUserNickName());
+        return USE + "Update";
+    }
+
+    @PostMapping("/update")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> updateBoard(@ModelAttribute UsedBoardDto usedBoard,
+                                                           @RequestParam("mainFile") MultipartFile mainFile,
+                                                           @RequestParam("previewFiles") List<MultipartFile> previewFiles) {
+        try {
+            // 서비스 호출하여 게시물 및 이미지 업데이트
+            System.out.println(usedBoard.getUsedBoardId());
+            System.out.println(usedBoard.getUsedBoardContent());
+            List<MultipartFile> mainImages = List.of(mainFile);
+            List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles);
+            usedBoard.setImages(images);
+            usedBoardService.updateUsedBoard(usedBoard);
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Update successful!");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 예외 처리: 예외 메시지를 로그에 기록하고 클라이언트에 응답
+            e.printStackTrace();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Update failed");
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 
 
 }

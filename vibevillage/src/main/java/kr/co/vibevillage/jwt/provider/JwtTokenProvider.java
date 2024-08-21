@@ -25,16 +25,23 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 @Slf4j
 public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추출, 토큰 유효성 검증 기능
+    // JWT 토큰의 클레임(Claims)에서 권한 정보를 저장할 때 사용하는 키. 이 키를 사용하여 권한 정보를 JWT 토큰에 저장하거나, 토큰에서 권한 정보를 추출할 때 활용
     private static final String AUTHORITIES_KEY = "auth";
+    // HTTP Authorization 헤더에서 사용되는 인증 타입인 Bearer 타입을 나타내는 상수. JWT 토큰은 일반적으로 "Bearer {토큰}" 형식으로 사용되며, 이 상수는 그 타입을 명시한다.
     private static final String BEARER_TYPE = "Bearer";
-    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;              // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+    // Access Token의 유효 시간을 정의하는 상수. 이 시간이 지나면 토큰이 만료된다. (30분)
+    private static final long ACCESS_TOKEN_EXPIRE_TIME = 30 * 60 * 1000L;
+    // Refresh Token의 유효 시간을 정의하는 상수. Access Token이 만료되었을 때, 새로운 Access Token을 발급받기 위해 사용. (7일)
+    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;
 
-    private final Key key; // security의 Key 클래스를 이용한 객체 생성
+    // security의 Key 클래스를 이용한 객체 생성
+    private final Key key;
 
     public JwtTokenProvider(@Value("${jwt.secret}") String secretKey) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey); // BASE64를 이용한 디코딩
-        this.key = Keys.hmacShaKeyFor(keyBytes); // 주어진 비밀 키(secretKey)사용, HMAC-SHA 알고리즘을 위한 Key 객체를 생성
+        // BASE64를 이용한 디코딩
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        // 주어진 비밀 키(secretKey)사용, HMAC-SHA 알고리즘을 위한 Key 객체를 생성
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
@@ -45,14 +52,6 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
                 .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        // Access Token 생성
-        Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
-        String accessToken = Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .setExpiration(accessTokenExpiresIn)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
 
         // refresh Token 생성
         String refreshToken = Jwts.builder()
@@ -62,7 +61,6 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
 
         return UserDTO.TokenResDto.builder()
                 .grantType(BEARER_TYPE)
-                .accessToken(accessToken)
                 .refreshTokenExpirationTime(REFRESH_TOKEN_EXPIRE_TIME)
                 .build();
     }
@@ -72,10 +70,10 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
         // 토큰 복호화
         Claims claims = parseClaims(accessToken);
 
-        // 사용자 이름이 null이거나 비어있는지 확인
-        String username = claims.getSubject();
-        if (username == null || username.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be null or empty");
+        // 사용자 계정이 null이거나 비어있는지 확인
+        String userId = claims.getSubject();
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new IllegalArgumentException("userId cannot be null or empty");
         }
 
         // 권한 정보가 null이거나 비어있는지 확인
@@ -91,7 +89,7 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
                         .collect(Collectors.toList());
 
         // UserDetails 객체를 만들어서 Authentication 리턴
-        UserDetails principal = new User(username, "", authorities);
+        UserDetails principal = new User(userId, "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
@@ -112,19 +110,26 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
         return false;
     }
 
+    // 주어진 JWT 액세스 토큰을 복호화하여 토큰에 포함된 클레임(Claims) 정보를 추출하는 메서드
     private Claims parseClaims(String accessToken) {
         try {
+            // JWT 토큰을 복호화하고, 그 결과로 클레임(Claims) 객체를 반환
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
         } catch (ExpiredJwtException e) {
+            // JWT 토큰이 만료된 경우 ExpiredJwtException이 발생하므로, 이 예외가 발생하면 만료된 클레임을 반환
             return e.getClaims();
         }
     }
 
+    // 주어진 JWT 액세스 토큰의 남은 유효시간을 계산하는 메서드.
     public Long getExpiration(String accessToken) {
-        // accessToken 남은 유효시간
+        // accessToken 남은 유효시간 추출
         Date expiration = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody().getExpiration();
+
         // 현재 시간
         Long now = new Date().getTime();
+
+        // 만료 시간에서 현재 시간을 뺀 값을 반환, 즉 남은 유효시간을 계산하여 반환
         return (expiration.getTime() - now);
     }
 }

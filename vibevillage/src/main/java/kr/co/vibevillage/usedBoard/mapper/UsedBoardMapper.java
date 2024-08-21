@@ -2,7 +2,6 @@ package kr.co.vibevillage.usedBoard.mapper;
 
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
-import kr.co.vibevillage.user.model.dto.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,5 +16,7 @@ public interface UsedBoardMapper {
     public int usedBoardProductEnrollXML(@Param("usedBoard")UsedBoardDto usedBoard);
     public int increaseViewCountXML(@Param("boardId")int boardId);
     public int deleteDetail(int id);
-    public String getUserNickName(@Param("no")int no);
+    public List<UsedBoardDto> getMyBoards(@Param("id")int id);
+    void updateUsedBoard(UsedBoardDto usedBoard);
+    void updateProduct(UsedBoardDto usedBoard);
 }

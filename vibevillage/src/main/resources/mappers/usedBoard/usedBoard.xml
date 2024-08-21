@@ -116,4 +116,44 @@
     </update>
 
 
+    <select id="getMyBoards" resultMap="usedBoardMap">
+        SELECT
+            u.U_NO,
+                u.USED_POST_ID,
+               u.USED_POST_TITLE,
+               u.USED_POST_CONTENT,
+               u.USED_POST_STATUS,
+               u.LOCATION,
+               u.USED_DELETE,
+               u.USED_UPDATE_AT,
+               u.province,
+               u.city,
+               u.VIEWS,
+               p.PRODUCT_NAME,
+               p.PRODUCT_PRICE,
+               c.CATEGORY_NAME
+        FROM USED_BOARD u
+        JOIN product p ON p.used_post_id = u.used_post_id
+        JOIN category c ON c.category_id = p.category_id
+        WHERE u.used_delete = 'N' and u.u_no = #{id}
+    </select>
+
+    <update id="updateUsedBoard" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+        UPDATE USED_BOARD
+        SET used_post_title = #{usedBoardTitle},
+            used_post_content = #{usedBoardContent},
+            location = #{usedBoardLocation},
+            used_update_at = sysdate
+        WHERE used_post_id = #{usedBoardId}
+    </update>
+
+    <update id="updateProduct" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+        UPDATE PRODUCT
+        SET product_name = #{usedBoardProductName},
+            product_price = #{usedBoardProductPrice},
+            category_id = #{categoryId}
+        WHERE used_post_id = #{usedBoardId}
+    </update>
+
+
 </mapper>

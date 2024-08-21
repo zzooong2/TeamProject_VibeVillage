@@ -32,7 +32,7 @@ public class LoginServiceImpl implements LoginService{
             User user = (User) authentication.getPrincipal();
             return user.getUsername(); // 사용자 이름 반환
         } else {
-            log.info("로그인 완료되었는지 확인해주세요.");
+            log.info("로그인 상태를 확인해주세요.");
             return null;
         }
     }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,11 +22,13 @@ public class SecurityConfig {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    // JwtTokenProvider: JWT 토큰 생성, 토큰 복호화 및 추출, 토큰 유효성 검증 기능을 하는 클래스
     @Bean
     public JwtTokenProvider jwtTokenProvider() {
         return new JwtTokenProvider(secretKey);
     }
 
+    // 비밀번호 암호화
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -33,8 +36,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // HttpSecurity 객체를 사용해 웹 보안 설정을 구성
-        http.authorizeHttpRequests(authorize -> authorize
+        http
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/lib/**", "/scss/**").permitAll() // 정적 리소스에 대한 접근을 허용
                         .requestMatchers("/form/login").permitAll() // 로그인 페이지 접근 허용
                         .requestMatchers("/login").permitAll() // 로그인 처리 URL 접근 허용
@@ -68,7 +71,10 @@ public class SecurityConfig {
                         .clearAuthentication(true) // 로그아웃 시 인증 정보 제거
                         .permitAll()) // 로그아웃 관련 모든 요청 허용
                 .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new LoginPageFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new LoginPageFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 무상태 세션 설정
+                );
 
         return http.build();
     }

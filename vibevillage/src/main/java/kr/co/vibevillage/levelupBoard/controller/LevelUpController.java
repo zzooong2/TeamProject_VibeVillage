@@ -5,6 +5,7 @@ import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceServiceImpl
 import kr.co.vibevillage.levelupBoard.model.LevelUpDTO;
 import kr.co.vibevillage.levelupBoard.service.LevelUpServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
+import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -21,18 +22,25 @@ import java.util.List;
 public class LevelUpController {
 
     private final LevelUpServiceImpl levelUpService;
+    private final LoginServiceImpl loginServiceImpl;
 
     @Autowired
-    public LevelUpController(LevelUpServiceImpl levelUpService) {
+    public LevelUpController(LevelUpServiceImpl levelUpService, LoginServiceImpl loginServiceImpl) {
         this.levelUpService = levelUpService;
+        this.loginServiceImpl = loginServiceImpl;
     }
 
     @GetMapping("/levelUpBoard")
-    public String getLevelUp(Model model, LevelUpDTO levelUpDTO) {
+    public String getLevelUp(Model model, LevelUpDTO levelUpDTO, UserDTO userDTO) {
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
 
         // 등업신청 목록
-        List<LevelUpDTO> lbList = levelUpService.getLevelUpList();
+        List<LevelUpDTO> lbList = levelUpService.getLevelUpList(userNickName);
         model.addAttribute("lbList", lbList);
+//        model.addAttribute("userNickName", userNickName);
+
 
 //        for(LevelUpDTO item : lbList) {
 //            System.out.println(item.getLbTitle());
@@ -61,8 +69,12 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardDetail/{lbNo}")
     public String getLevelUpBoardDetail(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
-        LevelUpDTO lbDetail = levelUpService.getLevelUpBoardDetail(lbNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        LevelUpDTO lbDetail = levelUpService.getLevelUpBoardDetail(lbNo, userNickName);
         model.addAttribute("lbDetail", lbDetail);
+//        model.addAttribute("userNickName", userNickName);
 
         return "levelUpBoard/levelUpBoardDetail";
     }
@@ -71,8 +83,12 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardEditForm/{lbNo}")
     public String levelUpBoardEditForm(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
-        LevelUpDTO lbDetail = levelUpService.getLevelUpBoardDetail(lbNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        LevelUpDTO lbDetail = levelUpService.getLevelUpBoardDetail(lbNo, userNickName);
         model.addAttribute("lbDetail", lbDetail);
+//        model.addAttribute("userNickName", userNickName);
 
         return "levelUpBoard/levelUpBoardEdit";
     }
@@ -81,8 +97,12 @@ public class LevelUpController {
     @PostMapping("/levelUpBoardEdit/{lbNo}")
     public String levelUpBoardEdit(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
-        int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO, userNickName);
         model.addAttribute("lbEdit", lbEdit);
+//        model.addAttribute("userNickName", userNickName);
 
         return "redirect:/levelUp/levelUpBoard";
     }

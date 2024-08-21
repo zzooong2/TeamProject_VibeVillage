@@ -5,9 +5,11 @@ import kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceService;
 import kr.co.vibevillage.customerServiceBoard.service.CustomerServiceServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
+import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +24,12 @@ import java.util.List;
 public class CustomerServiceController {
 
     private final CustomerServiceServiceImpl customerServiceService;
+    private final LoginServiceImpl loginServiceImpl;
 
     @Autowired
-    public CustomerServiceController(CustomerServiceServiceImpl customerServiceService) {
+    public CustomerServiceController(CustomerServiceServiceImpl customerServiceService, LoginServiceImpl loginServiceImpl) {
         this.customerServiceService = customerServiceService;
+        this.loginServiceImpl = loginServiceImpl;
     }
 
     @GetMapping("/csList")
@@ -37,9 +41,14 @@ public class CustomerServiceController {
         // Q&A 목록
         List<CustomerServiceDTO> csqaList = customerServiceService.getqaCustomerService();
         model.addAttribute("csqaList", csqaList);
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
         // 1:1 문의 목록
-        List<CustomerServiceDTO>csiaList = customerServiceService.getiaCustomerService(userDTO);
+        List<CustomerServiceDTO>csiaList = customerServiceService.getiaCustomerService(userDTO, userNickName);
         model.addAttribute("csiaList", csiaList);
+//        model.addAttribute("userNickName", userNickName);
 
 //        for(CustomerServiceDTO item : csiaList){
 //            System.out.println(item.getIbContent());
@@ -51,22 +60,24 @@ public class CustomerServiceController {
 
     // 공지사항 작성 페이지 이동
     @GetMapping("/noticeBoard")
-    public String noticeBoard(CustomerServiceDTO customerServiceDTO) {
+    public String noticeBoard(CustomerServiceDTO customerServiceDTO, Model model) {
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        model.addAttribute("userNickName", userNickName);
 
         return "noticeBoard/noticeBoardEnroll";
     }
 
     // 공지사항 작성
     @PostMapping("/noticeBoardEnroll")
-    public String setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO, Model model) {
+    public String setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
 
-        int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
 
-//        // 로그인한 사용자의 프로필 정보를 가져오기 위해 getLoggedInUsername 메서드 호출
-//        String loginUserId = getLoggedInUsername();
-//
-//        model.addAttribute("loginUserId", loginUserId);
-//        System.out.println("loginUserId: " + loginUserId);
+        int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO, uNo);
 
         return "redirect:/customerService/csList";
     }
@@ -75,8 +86,13 @@ public class CustomerServiceController {
     @GetMapping("/noticeBoardDetail/{nbNo}")
     public String getNoticeBoardDetail(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+        String userLevel = loginInfo.getUserLevel();
+
         // 조회수 증가
         int result = customerServiceService.nbAddViews(customerServiceDTO);
+
         CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo, userDTO);
         model.addAttribute("nbDetail", nbDetail);
 
@@ -87,8 +103,12 @@ public class CustomerServiceController {
     @GetMapping("/noticeBoardEditForm/{nbNo}")
     public String noticeBoardEditForm(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
         CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo, userDTO);
         model.addAttribute("nbDetail", nbDetail);
+
         return "noticeBoard/noticeBoardEdit";
     }
 
@@ -98,6 +118,7 @@ public class CustomerServiceController {
 
         int nbEdit = customerServiceService.setNoticeBoardEdit(customerServiceDTO);
         model.addAttribute("nbEdit", nbEdit);
+        System.out.println(customerServiceDTO.getNbNo());
 
         return "redirect:/customerService/csList";
     }
@@ -113,7 +134,12 @@ public class CustomerServiceController {
 
     // Q&A 작성 페이지 이동
     @GetMapping("/questionAnswer")
-    public String questionAnswer(CustomerServiceDTO customerServiceDTO) {
+    public String questionAnswer(CustomerServiceDTO customerServiceDTO, Model model) {
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        model.addAttribute("userNickName", userNickName);
 
         return "questionAnswer/questionAnswerEnroll";
     }
@@ -122,27 +148,39 @@ public class CustomerServiceController {
     @PostMapping("/questionAnswerEnroll")
     public String setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
 
-        int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
+
+        int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO, uNo);
 
         return "redirect:/customerService/csList";
     }
 
     // Q&A Detail
     @GetMapping("/questionAnswerDetail/{qaNo}")
-    public String getQuestionAnswerDetail(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String getQuestionAnswerDetail(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
-        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo, userNickName);
         model.addAttribute("qaDetail", qaDetail);
+//        model.addAttribute("userNickName", userNickName);
 
         return "questionAnswer/questionAnswerDetail";
     }
 
     // Q&A 수정/삭제 폼
     @GetMapping("/questionAnswerEditForm/{qaNo}")
-    public String questionAnswerEditForm(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String questionAnswerEditForm(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
-        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo, userNickName);
         model.addAttribute("qaDetail", qaDetail);
+//        model.addAttribute("userNickName", userNickName);
+
         return "questionAnswer/questionAnswerEdit";
     }
 
@@ -177,23 +215,33 @@ public class CustomerServiceController {
     }
 
     // 1:1 질문 Detail
-    @GetMapping("/inquiryAnswer/{ibNo}")
+    @GetMapping("/inquiryAnswer/{ibNo}/{icNo}")
     public String getInquiryAnswerDetail(@PathVariable("ibNo") int ibNo,
-                                         Model model, CustomerServiceDTO customerServiceDTO) {
+                                         @PathVariable("icNo") int icNo,
+                                         Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
-        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo, icNo, userNickName);
         model.addAttribute("ibDetail", ibDetail);
+//        model.addAttribute("userNickName", userNickName);
 
         return "inquiryBoard/inquiryAnswerDetail";
     }
 
     // 1:1 문의 답변 폼
-    @GetMapping("/inquiryAnswerForm/{ibNo}")
+    @GetMapping("/inquiryAnswerForm/{ibNo}/{icNo}")
     public String inquiryAnswerEditForm(@PathVariable("ibNo") int ibNo,
-                                        Model model, CustomerServiceDTO customerServiceDTO) {
+                                        @PathVariable("icNo") int icNo,
+                                        Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
-        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo);
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo, icNo, userNickName);
         model.addAttribute("ibDetail", ibDetail);
+//        model.addAttribute("userNickName", userNickName);
 
         return "inquiryBoard/inquiryAnswer";
     }

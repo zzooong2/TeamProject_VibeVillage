@@ -7,16 +7,16 @@ import java.util.List;
 
 public interface LevelUpService {
     // 등업신청 목록
-    public List<LevelUpDTO> getLevelUpList();
+    public List<LevelUpDTO> getLevelUpList(String userNickName);
 
     // 등업신청 작성
     public int setLevelUpBoardEnroll(LevelUpDTO levelUpDTO);
 
     // 등업신청 Detail
-    public LevelUpDTO getLevelUpBoardDetail(int lbNo);
+    public LevelUpDTO getLevelUpBoardDetail(int lbNo, String userNickName);
 
     // 등업신청 수정
-    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO);
+    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO, String userNickName);
 
     //등업신청 삭제
     public int lbDelete(LevelUpDTO levelUpDTO);

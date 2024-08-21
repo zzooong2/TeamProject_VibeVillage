@@ -46,7 +46,7 @@
                                 <!-- 관리자만 보이기 -->
                                 <li><a href="#inquiry_list" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li>
                                 <li><a th:href="@{noticeBoard}"><span></span>공지사항 쓰기</a></li>
-                                <li><a th:href="@{questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
+                                <li><a th:href="@{/customerService/questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="notice_board">
@@ -168,15 +168,14 @@
                                                 <div class="panel panel-default" th:each="csiaList, iterStat : ${csiaList}" data-category="${csiaList.icNo}">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title font-alt">
-                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.uNo}"></a>
+                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.userNickName}"></a>
                                                         </h4>
                                                         <span th:text="${csiaList.icName}"></span><br/>
                                                         <span th:text="${csiaList.ibIndate}"></span>
                                                     </div>
                                                     <div class="panel-collapse collapse" th:id="'inquiry_Answer' + ${iterStat.index}">
-                                                        <a th:href="@{/customerService/inquiryAnswer/{ibNo}(ibNo=${csiaList.ibNo})}">
-                                                            <div class="panel-body" th:text="${csiaList.ibContent}"></div>
-                                                        </a>
+                                                            <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiaList.ibNo}, icNo=${csiaList.icNo})}">
+                                                                <div class="panel-body" th:text="${csiaList.ibContent}"></div></a>
                                                     </div>
                                                 </div>
                                             </div>

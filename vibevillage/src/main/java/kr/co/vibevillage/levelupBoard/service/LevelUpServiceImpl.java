@@ -23,8 +23,8 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 목록
     @Override
-    public List<LevelUpDTO> getLevelUpList() {
-        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList();
+    public List<LevelUpDTO> getLevelUpList(String userNickName) {
+        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList(userNickName);
         return lbList;
     }
 
@@ -39,16 +39,16 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 Detail
     @Override
-    public LevelUpDTO getLevelUpBoardDetail(int lbNo) {
+    public LevelUpDTO getLevelUpBoardDetail(int lbNo, String userNickName) {
 
-        return levelUpMapper.getLevelUpBoardDetail(lbNo);
+        return levelUpMapper.getLevelUpBoardDetail(lbNo, userNickName);
     }
 
     // 등업신청 수정
     @Override
-    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO) {
+    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO, String userNickName) {
 
-        return levelUpMapper.setLevelUpBoardEdit(levelUpDTO);
+        return levelUpMapper.setLevelUpBoardEdit(levelUpDTO, userNickName);
     }
 
     // 등업신청 삭제

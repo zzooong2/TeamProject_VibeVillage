@@ -18,13 +18,13 @@ public interface CustomerServiceMapper {
     List<CustomerServiceDTO> getqaCustomerService();
 
     // 1:1 문의 목록
-    List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO);
+    List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO, @Param("userNickName") String userNickName);
 
     // 공지사항 작성
-    int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO);
+    int setNoticeBoardEnroll(@Param("customerServiceDTO") CustomerServiceDTO customerServiceDTO, @Param("uNo") int uNo);
 
     // 공지사항 Detail
-    CustomerServiceDTO getNoticeBoardDetail(int nbNo, UserDTO userDTO);
+    CustomerServiceDTO getNoticeBoardDetail(@Param("nbNo") int nbNo, UserDTO userDTO);
 
     // 공지사항 조회수 증가
     int nbAddViews(CustomerServiceDTO customerServiceDTO);
@@ -36,10 +36,10 @@ public interface CustomerServiceMapper {
     int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO);
 
     // Q&A 작성
-    int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO);
+    int setQuestionAnswerEnroll(@Param("customerServiceDTO") CustomerServiceDTO customerServiceDTO, @Param("uNo") int uNo);
 
     // Q&A Detail
-    CustomerServiceDTO getQuestionAnswerDetail(int qaNo);
+    CustomerServiceDTO getQuestionAnswerDetail(@Param("qaNo") int qaNo, String userNickName);
 
     // Q&A 삭제(Q&A_yn y->n)
     int qaDelete(CustomerServiceDTO customerServiceDTO);
@@ -51,7 +51,7 @@ public interface CustomerServiceMapper {
     int setibCustomerService(CustomerServiceDTO customerServiceDTO);
 
     // 1:1 질문 Detail
-    CustomerServiceDTO getInquiryAnswerDetail(int ibNo);
+    CustomerServiceDTO getInquiryAnswerDetail(int ibNo, int icNo, String userNickName);
 
     // 1:1 질문 수정
     int setInquiryAnswerEdit(CustomerServiceDTO customerServiceDTO);

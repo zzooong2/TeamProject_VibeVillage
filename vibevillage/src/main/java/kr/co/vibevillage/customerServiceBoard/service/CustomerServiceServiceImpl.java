@@ -37,16 +37,16 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 1:1 문의 목록
     @Override
-    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO) {
-        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService(userDTO);
+    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO, String userNickName) {
+        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService(userDTO, userNickName);
         return iaList;
     }
 
     // 공지사항 작성
     @Override
-    public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
+    public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO, int uNo) {
 
-        return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO);
+        return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO, uNo);
     }
 
     // 공지사항 Detail
@@ -79,16 +79,16 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // Q&A 작성
     @Override
-    public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
+    public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO, int uNo) {
 
-        return customerServiceMapper.setQuestionAnswerEnroll(customerServiceDTO);
+        return customerServiceMapper.setQuestionAnswerEnroll(customerServiceDTO, uNo);
     }
 
     // Q&A Detail
     @Override
-    public CustomerServiceDTO getQuestionAnswerDetail(int qaNo) {
+    public CustomerServiceDTO getQuestionAnswerDetail(int qaNo, String userNickName) {
 
-        return customerServiceMapper.getQuestionAnswerDetail(qaNo);
+        return customerServiceMapper.getQuestionAnswerDetail(qaNo, userNickName);
     }
 
     // Q&A 삭제(Q&A_yn y->n)
@@ -114,9 +114,9 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 1:1 질문 Detail
     @Override
-    public CustomerServiceDTO getInquiryAnswerDetail(int ibNo) {
+    public CustomerServiceDTO getInquiryAnswerDetail(int ibNo, int icNo, String userNickName) {
 
-        return customerServiceMapper.getInquiryAnswerDetail(ibNo);
+        return customerServiceMapper.getInquiryAnswerDetail(ibNo, icNo, userNickName);
     }
 
     // 1:1 질문 수정

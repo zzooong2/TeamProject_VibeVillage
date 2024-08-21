@@ -22,4 +22,5 @@ public class LevelUpDTO {
     private String lrIndate;
 
     private int uNo;
+    private String userNickName;
 }

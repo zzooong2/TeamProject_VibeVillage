@@ -6,13 +6,13 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface LikeMapper {
 
-    void insert(LikeDTO likeDTO);
-
-    void delete(LikeDTO likeDTO);
+    void deleteLike(LikeDTO likeDTO);
 
     int countLikes(Long rId);
 
     int hasLiked(LikeDTO likeDTO);
 
     void updateLikeCount(Long rId, int safeLikeCount);
+
+    void insertLike(LikeDTO likeDto);
 }

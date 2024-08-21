@@ -8,13 +8,15 @@ import java.util.Date;
 @Data
 public class CommentDTO {
     private Long commentId;
-    private String uNickname;
     private Long rId;
     private Long uNo;
-    private String cContent;
+
     private LocalDateTime cCreatedAt;
     private LocalDateTime cUpdatedAt;
     private LocalDateTime cDeletedAt;
+
+    private String userNickname;
+    private String content;
 }
 
 

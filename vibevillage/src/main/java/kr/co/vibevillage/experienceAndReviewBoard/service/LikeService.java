@@ -20,4 +20,9 @@ public interface LikeService {
     void updateLikeCount(Long rId);
     // 좋아요 추가
     void addLike(Long id, Long uNo);
+
+    // 추가된 메서드
+    void insertLike(LikeDTO likeDto);
+
+    // 추가된 메서드
 }

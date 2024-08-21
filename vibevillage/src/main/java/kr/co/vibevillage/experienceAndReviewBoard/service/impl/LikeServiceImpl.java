@@ -21,9 +21,9 @@ public class LikeServiceImpl implements LikeService {
         like.setUNo(likeDto.getUNo());
 
         if (likeMapper.hasLiked(like) > 0) {
-            likeMapper.delete(like);
+            likeMapper.deleteLike(like);
         } else {
-            likeMapper.insert(like);
+            likeMapper.insertLike(like);
         }
     }
 
@@ -62,7 +62,7 @@ public class LikeServiceImpl implements LikeService {
         LikeDTO like = new LikeDTO();
         like.setRId(rId);
         like.setUNo(uNo);
-        likeMapper.insert(like);
+        likeMapper.insertLike(like);
     }
 
     @Override
@@ -70,11 +70,16 @@ public class LikeServiceImpl implements LikeService {
         LikeDTO like = new LikeDTO();
         like.setRId(rId);
         like.setUNo(uNo);
-        likeMapper.delete(like);
+        likeMapper.deleteLike(like);
     }
     @Override
     public void likePost(LikeDTO likeDTO) {
         addLike(likeDTO.getRId(), likeDTO.getUNo());
+    }
+    // 추가된 메서드
+    @Override
+    public void insertLike(LikeDTO likeDto) {
+        likeMapper.insertLike(likeDto);
     }
 
 }

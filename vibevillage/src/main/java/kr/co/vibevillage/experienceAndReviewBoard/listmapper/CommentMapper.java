@@ -14,4 +14,6 @@ public interface CommentMapper {
     List<CommentDTO> getCommentsByPostId(Long rId);
 
     int countCommentsByPostId(Long rId);
+
+    CommentDTO getCommentById(Long commentId);
 }

@@ -30,25 +30,21 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
 
     @Override
     public void createPost(ExperienceBoardDTO experienceBoardDto, int userNo) {
-        System.out.println("================================ExperienceboardService==================================");
 
         experienceBoardDto.setUNo((long) userNo);  // 사용자 번호 설정
-        experienceBoardMapper.createPost(experienceBoardDto);
 
-
-        ExperienceBoardDTO experienceBoard = new ExperienceBoardDTO();
-        experienceBoard.setUNo(experienceBoardDto.getUNo());
-        experienceBoard.setCategoryId(experienceBoardDto.getCategoryId());
-        experienceBoard.setRTitle(experienceBoardDto.getRTitle());
-        experienceBoard.setRContent(experienceBoardDto.getRContent());
+//        ExperienceBoardDTO experienceBoard = new ExperienceBoardDTO();
+//        experienceBoard.setUNo(experienceBoardDto.getUNo());
+//        experienceBoard.setCategoryId(experienceBoardDto.getCategoryId());
+//        experienceBoard.setRTitle(experienceBoardDto.getRTitle());
+//        experienceBoard.setRContent(experienceBoardDto.getRContent());
 
         System.out.println("No: " + userNo);
         System.out.println("CategoryId: " + experienceBoardDto.getCategoryId());
         System.out.println("Title: " + experienceBoardDto.getRTitle());
         System.out.println("Content: " + experienceBoardDto.getRContent());
 
-
-        experienceBoardMapper.insert(experienceBoard, userNo); // Mapper 호출 추가
+        experienceBoardMapper.createPost(experienceBoardDto);
     }
 
     @Override

@@ -25,6 +25,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/experienceBoard")
 public class ExperienceBoardController {
+
     @Autowired
     private final ExperienceBoardServiceImpl experienceBoardService;
     private final CommentServiceImpl commentService;
@@ -99,14 +100,16 @@ public class ExperienceBoardController {
     @PostMapping("/write")
     public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO,
                              @RequestParam(value = "file", required = false) MultipartFile file,
-                             RedirectAttributes redirectAttributes,
-                             HttpSession session) {
+                             RedirectAttributes redirectAttributes) {
+
 
         UserDTO loginUserInfo = loginServiceImpl.getLoginUserInfo();
         int userNo = loginUserInfo.getUserNo();
         experienceBoardDTO.setUNo((long) userNo);  // 사용자 번호 설정
 
+
         try {
+
             // 파일 업로드 및 게시글 작성 처리
             if (file != null && !file.isEmpty()) {
                 handleFileUpload(file, experienceBoardDTO);
@@ -127,7 +130,7 @@ public class ExperienceBoardController {
     private void handleFileUpload(MultipartFile file, ExperienceBoardDTO experienceBoardDTO) throws IOException {
         if (!file.isEmpty()) {
             // 파일 업로드 경로 설정
-            String uploadDirectory = "static/uploadReviewFile";
+            String uploadDirectory = "C:\\dev\\final\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
             File directory = new File(uploadDirectory);
             if (!directory.exists()) {
                 directory.mkdirs(); // 디렉터리 생성
@@ -194,7 +197,8 @@ public class ExperienceBoardController {
         model.addAttribute("post", post);
         return "experienceBoard/form";
     }
-
+    
+    //조회, 수정, 삭제
     @PostMapping("/edit/{id}")
     public String updatePost(@PathVariable Long id, @ModelAttribute ExperienceBoardDTO post) {
         experienceBoardService.updatePost(id, post);
@@ -236,39 +240,85 @@ public class ExperienceBoardController {
     }
 
     // 댓글
-    @PostMapping("/post/{id}/comment")
-    public String addComment(@PathVariable Long id, @ModelAttribute CommentDTO commentDTO) {
-        commentDTO.setRId(id);
+    @PostMapping("/post/{No}/comment")
+    public String addComment(@PathVariable("No") Long rId,
+                             @ModelAttribute CommentDTO commentDTO, Model model) {
+
+        // 로그인한 유저의 정보를 가져와서 user 객체에 초기화 시킨다
+        UserDTO user = loginServiceImpl.getLoginUserInfo();
+        // user 객체에 있는 nickname 정보를 userNickname 변수에 초기화 시킨다
+        String userNickname = user.getUserNickName();
+
+        // CommentDTO에 선언되어있는 변수에 값을 초기화 시킨다
+        commentDTO.setUserNickname(userNickname);
+        commentDTO.setRId(rId);
+
+        // 서비스 객체를 이용해서 addComment 메서드를 호출한다.
         commentService.addComment(commentDTO);
-        return "redirect:/experienceBoard/post/" + id;
+
+        // 댓글 리스트를 다시 불러와서 모델에 추가한다.
+        List<CommentDTO> comments = commentService.getCommentsByPostId(rId);
+        model.addAttribute("comments", comments);
+
+        return "redirect:/experienceBoard/post/" + rId;
     }
 
     @PostMapping("/comment/delete/{commentId}")
-    public String deleteComment(@PathVariable Long commentId, @RequestParam Long postId) {
+    public String deleteComment(@PathVariable("commentId") Long commentId, @RequestParam("postId") Long postId) {
+
+        // 현재 로그인한 사용자 정보 가져오기
+        UserDTO currentUser = loginServiceImpl.getLoginUserInfo();
+        String currentUserNickname = currentUser.getUserNickName();
+
+        // 삭제하려는 댓글 정보 가져오기
+        CommentDTO comment = commentService.getCommentById(commentId);
+        List<CommentDTO> comments = commentService.getCommentsByPostId(postId);
+
+        // 댓글 작성자와 로그인한 사용자가 같은지 확인
+        if (!comment.getUserNickname().equals(currentUserNickname)) {
+            // 만약 다르면, 접근 금지 또는 예외 처리
+            return "redirect:/experienceBoard/post/" + postId + "?error=not-authorized";
+        }
+
+        // 댓글 삭제 처리
         commentService.deleteComment(commentId);
         return "redirect:/experienceBoard/post/" + postId;
     }
 
 
 
-    @PostMapping("/like/{id}")
-    public String likePost(@PathVariable Long id, @SessionAttribute("loggedInUser") Long uNo, Model model) {
-        // 사용자가 이미 좋아요를 눌렀는지 확인
-        boolean isLiked = likeServiceImpl.hasLiked(id, uNo);
 
-        if (isLiked) {
-            // 이미 좋아요를 눌렀다면 좋아요 취소
-            likeServiceImpl.deleteLike(id, uNo);
-        } else {
-            // 좋아요를 누르지 않았다면 좋아요 추가
-            likeServiceImpl.addLike(id, uNo);
+    @PostMapping("/like/{No}")
+    public String likePost(@PathVariable("No") Long rId,
+                           Model model, RedirectAttributes redirectAttributes) {
+
+        // 로그인한 회원의 계정 정보를 JWT에서 추출
+        String userId = loginServiceImpl.getLoginUserId();
+
+        // 로그인한 회원의 모든 정보를 가져온다
+        UserDTO user = loginServiceImpl.getLoginUserInfo();
+        // 만약에 회원 번호가 필요하다
+        long userNo = user.getUserNo();
+
+        if (userNo == 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "유효하지 않은 토큰입니다. 로그인이 필요합니다.");
+            return "redirect:/login"; // 로그인 페이지로 리디렉트
         }
 
-        // 좋아요 카운트 업데이트
-        likeServiceImpl.updateLikeCount(id);
+        Long effectiveUserId = userNo;
 
-        // 게시글 상세 페이지로 리다이렉트
-        return "redirect:/experienceBoard/post/" + id;
+        // 사용자가 이미 좋아요를 눌렀는지 확인
+        boolean isLiked = likeServiceImpl.hasLiked(rId, effectiveUserId);
+
+        if (isLiked) {
+            likeServiceImpl.deleteLike(rId, effectiveUserId);
+        } else {
+            likeServiceImpl.addLike(rId, effectiveUserId);
+        }
+
+        likeServiceImpl.updateLikeCount(rId);
+
+        return "redirect:/experienceBoard/post/" + rId;
     }
 
     // 검색

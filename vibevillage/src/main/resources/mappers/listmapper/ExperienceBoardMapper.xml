@@ -32,7 +32,7 @@
     <!-- 게시글 삽입 -->
     <insert id="createPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         INSERT INTO REVIEWS (R_ID, U_NO, C_ID, R_TITLE, R_CONTENT, R_CREATED_AT)
-        VALUES (#{rId}, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
+        VALUES (REVIEWS_SEQ.nextval, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
     </insert>
 
     <!-- 게시글 수정 -->

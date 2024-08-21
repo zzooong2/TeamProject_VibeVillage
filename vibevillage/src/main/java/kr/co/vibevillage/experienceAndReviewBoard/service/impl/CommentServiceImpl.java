@@ -5,6 +5,7 @@ import kr.co.vibevillage.experienceAndReviewBoard.listmapper.CommentMapper;
 import kr.co.vibevillage.experienceAndReviewBoard.service.CommentService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,11 +19,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void addComment(CommentDTO commentDTO) {
-        CommentDTO comment = new CommentDTO();
-        comment.setRId(commentDTO.getRId());
-        comment.setUNo(commentDTO.getUNo());
-        comment.setCContent(commentDTO.getCContent());
-        commentMapper.insertComment(comment);
+        commentDTO.setCCreatedAt(LocalDateTime.now());
+        commentMapper.insertComment(commentDTO);
     }
 
     @Override
@@ -45,5 +43,8 @@ public class CommentServiceImpl implements CommentService {
         return commentMapper.countCommentsByPostId(rId);
     }
 
-
+    @Override
+    public CommentDTO getCommentById(Long commentId) {
+        return commentMapper.getCommentById(commentId);
+    }
 }

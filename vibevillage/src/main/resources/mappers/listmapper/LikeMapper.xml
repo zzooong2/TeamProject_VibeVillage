@@ -4,8 +4,8 @@
 
     <!-- Like 삽입 -->
     <insert id="insertLike" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.LikeDTO">
-        INSERT INTO R_LIKES (L_ID, R_ID, U_NO, L_CREATED_AT)
-        VALUES (R_LIKES_SEQ.NEXTVAL, #{rId}, #{uNo}, CURRENT_TIMESTAMP)
+        INSERT INTO R_LIKES (L_ID, R_ID, U_NO, L_CREATED_AT, R_LIKE_COUNT)
+        VALUES (R_LIKES_SEQ.NEXTVAL, #{rId}, #{uNo}, CURRENT_TIMESTAMP, 0)
     </insert>
 
     <!-- Like 삭제 -->
@@ -30,7 +30,7 @@
 
     <!-- 게시글의 좋아요 카운트를 R_LIKES 테이블에서 가져와서 REVIEWS 테이블에 업데이트 -->
     <update id="updateLikeCount" parameterType="long">
-        UPDATE REVIEWS
+        UPDATE R_LIKES
         SET R_LIKE_COUNT = (
             SELECT COUNT(*)
             FROM R_LIKES

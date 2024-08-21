@@ -18,6 +18,8 @@
 <!--       카테고리-->
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
+        <!--        유저-->
+        <result column="u_nickname" property="userNickName"/>
 
     </resultMap>
 
@@ -82,6 +84,7 @@
         FROM USED_BOARD u
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
+        join USER_VIBEVILLAGE uv on uv.u_no= u.u_no
         where p.used_post_id = #{id}
     </select>
 

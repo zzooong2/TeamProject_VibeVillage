@@ -25,6 +25,10 @@ public class UsedBoardCommentServiceImpl implements UsedBoardCommentService{
     @Override
     public List<UsedBoardCommentDto> getCommentList(int id){
         List<UsedBoardCommentDto> commentList = usedBoardCommentMapper.getCommentListXML(id,new UsedBoardCommentDto());
+        for(UsedBoardCommentDto item : commentList){
+            String nickName = commentMapper.getCommentListUser(item.getUNo());
+            item.setUserNickName(nickName);
+        }
         return commentList;
     }
 

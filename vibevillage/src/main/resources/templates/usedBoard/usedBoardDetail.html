@@ -35,6 +35,7 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <h1 class="product-title font-alt" th:text="${usedBoard.usedBoardTitle}"></h1>
+                    <h1 class="product-title font-alt" th:text="${usedBoard.userNickName}"></h1>
                   </div>
                 </div>
                 <div class="row mb-20">
@@ -78,7 +79,7 @@
             <br>
             <hr class="divider-w">
 
-            <div class="board-map">
+            <div class="board-map">0
               <div class="board-map text">
                    거래 장소
                 <p th:text="${usedBoard.province}+' '+${usedBoard.city}+' '+${usedBoard.usedBoardLocation}"></p>
@@ -97,7 +98,7 @@
                       <div class="comment clearfix">
                         <div class="comment-avatar"><img src="" alt="avatar"/></div>
                         <div class="comment-content clearfix">
-                          <div class="comment-author font-alt"><a href="#"th:text="${comment.uNo}"></a></div>
+                          <div class="comment-author font-alt"><a href="#"th:text="${comment.userNickName}"></a></div>
                           <div class="comment-body">
                             <p th:text="${comment.usedCommentContent}"></p>
                           </div>
@@ -112,7 +113,7 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               <label class="sr-only" for="name">Name</label>
-                              <input class="form-control" th:field="*{uNo}" id="name" placeholder="Name"/>
+                              <input class="form-control" id="name" th:field="*{userNickName}" th:value="*{userNickName}"/>
                             </div>
                           </div>
 
@@ -193,7 +194,6 @@
       function startChat() {
         const boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId'; // 게시물 ID
         const boardOwnerId = /*[[${usedBoard.userNo}]]*/ 'defaultUserId';  // 게시물 작성자 ID
-        const currentUserId = 10;
         fetch('/chat/start', {
           method: 'POST',
           headers: {
@@ -202,7 +202,6 @@
           body: JSON.stringify({
             boardId: boardId,
             boardOwnerId: boardOwnerId,
-            currentUserId: currentUserId
           })
         })
                 .then(response => response.json())
@@ -216,6 +215,41 @@
                 .catch(error => console.error('Error:', error));
       }
     </script>
+  <script>
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1]; // JWT의 두 번째 부분 (payload) 추출
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Base64 URL을 일반 Base64로 변환
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
 
+      return JSON.parse(jsonPayload); // JSON 문자열을 객체로 변환
+    }
+
+    function getJwtFromCookie() {
+      var name = "jwt=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    var jwtToken = getJwtFromCookie(); // 쿠키에서 JWT 가져오기
+    if (jwtToken) {
+      var decodedToken = parseJwt(jwtToken); // JWT 디코딩
+      var userId = decodedToken.sub; // 'sub'에서 사용자 ID 추출
+      console.log("User ID:", userId);
+    } else {
+      console.log("No JWT found in cookies");
+    }
+  </script>
   </body>
 </html>

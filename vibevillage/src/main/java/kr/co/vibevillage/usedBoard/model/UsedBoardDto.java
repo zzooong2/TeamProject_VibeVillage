@@ -21,6 +21,7 @@ public class UsedBoardDto {
  private double gpsLongitude;
  private String usedBoardStatus;
  private int usedBoardViews;
+ private String userNickName;
 
  // 직접 입력
  private String usedBoardTitle;

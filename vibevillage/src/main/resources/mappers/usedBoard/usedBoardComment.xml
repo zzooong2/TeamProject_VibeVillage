@@ -15,5 +15,9 @@
         where used_post_id = #{id}
     </select>
 
+        <select id="getCommentListUser" resultType="String">
+        select u_nickname from USER_VIBEVILLAGE
+        where u_no = #{no}
+        </select>
 
 </mapper>

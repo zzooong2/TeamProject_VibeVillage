@@ -17,5 +17,5 @@ public interface UsedBoardMapper {
     public int usedBoardProductEnrollXML(@Param("usedBoard")UsedBoardDto usedBoard);
     public int increaseViewCountXML(@Param("boardId")int boardId);
     public int deleteDetail(int id);
-    public UserDTO getUserInformation(@Param("id")String id);
+    public String getUserNickName(@Param("no")int no);
 }

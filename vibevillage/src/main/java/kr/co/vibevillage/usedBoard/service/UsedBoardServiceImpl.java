@@ -1,5 +1,6 @@
 package kr.co.vibevillage.usedBoard.service;
 
+import kr.co.vibevillage.usedBoard.mapper.UsedBoardCommentMapper;
 import kr.co.vibevillage.usedBoard.mapper.UsedBoardImageMapper;
 import kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper;
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
@@ -17,14 +18,16 @@ public class UsedBoardServiceImpl implements UsedBoardService {
     private final UsedBoardImageMapper imageMapper;
     private final UsedBoardMapper usedBoardMapper;
     private final UsedBoardImageMapper usedBoardImageMapper;
+    private final UsedBoardCommentMapper usedBoardCommentMapper;
 
     @Autowired
     public UsedBoardServiceImpl(UsedBoardMapper usedBoardMapper,
-                                UsedBoardImageMapper imageMapper, UsedBoardImageMapper usedBoardImageMapper)
+                                UsedBoardImageMapper imageMapper, UsedBoardImageMapper usedBoardImageMapper, UsedBoardCommentMapper usedBoardCommentMapper)
     {
         this.imageMapper = imageMapper;
         this.usedBoardMapper = usedBoardMapper;
         this.usedBoardImageMapper = usedBoardImageMapper;
+        this.usedBoardCommentMapper = usedBoardCommentMapper;
     }
 
     // 전체 리스트 가져오기

@@ -26,7 +26,7 @@ import kr.co.vibevillage.env.Env;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/used")
 public class UsedBoardController {
@@ -34,19 +34,9 @@ public class UsedBoardController {
     private final UsedPagination usedPagination;
     private final UploadFile uploadFile;
     private final UsedBoardServiceImpl usedBoardService;
+    private final LoginServiceImpl loginService;
     private final String USE = "usedBoard/usedBoard";
     public String kakaoMap;
-
-    @Autowired
-    public UsedBoardController(UsedBoardServiceImpl usedBoardService,
-                               UploadFile uploadFile,
-                               UsedPagination usedPagination,
-                               UsedBoardCommentServiceImpl commentService) {
-        this.usedBoardService = usedBoardService;
-        this.uploadFile = uploadFile;
-        this.usedPagination = usedPagination;
-        this.commentService = commentService;
-    }
 
     // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")
@@ -78,18 +68,14 @@ public class UsedBoardController {
     @ResponseBody
     public ResponseEntity<Map<String, String>> enrollUsedBoard(@RequestParam("mainFile") MultipartFile mainFile,
                                                                @RequestParam("previewFiles") List<MultipartFile> previewFiles,
-                                                               @ModelAttribute("usedBoard") UsedBoardDto usedBoard,
-                                                               Model model
-                                                               ) {
+                                                               @ModelAttribute("usedBoard") UsedBoardDto usedBoard) {
         Map<String, String> response = new HashMap<>();
-
-
         try {
-            model.addAttribute("kakaoMap", kakaoMap);
-
+            UserDTO user = loginService.getLoginUserInfo();
             List<MultipartFile> mainImages = List.of(mainFile);
             List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles);
             usedBoard.setImages(images);
+            usedBoard.setUserNo(user.getUserNo());
             usedBoardService.enrollUsedBoard(usedBoard);
             response.put("message", "Upload successful!");
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -108,7 +94,7 @@ public class UsedBoardController {
                                      Model model) {
         int result = usedBoardService.increaseViewCount(id);
         UsedBoardDto board = usedBoardService.getUsedBoardDetail(id);
-
+        UserDTO user = loginService.getLoginUserInfo();
         List<UsedBoardImageDto> mainImages = usedBoardService.getUsedBoardMainImage(id);
         List<UsedBoardImageDto> subImages = usedBoardService.getUsedBoardSubImage(id);
         List<UsedBoardCommentDto> commentList = commentService.getCommentList(id);
@@ -116,6 +102,7 @@ public class UsedBoardController {
         model.addAttribute("usedBoard", board);
         model.addAttribute("mainImages", mainImages);
         model.addAttribute("subImages", subImages);
+        model.addAttribute("userNickname",user.getUserNickName());
         model.addAttribute("comment", comment);
         model.addAttribute("commentList", commentList);
         model.addAttribute("commentSize", commentList.size());
@@ -127,6 +114,8 @@ public class UsedBoardController {
     @PostMapping("/boardDetail/{id}/put")
     public String putUsedBoardComment(@PathVariable("id") int id,
                                       @ModelAttribute("comment") UsedBoardCommentDto comment) {
+        UserDTO user = loginService.getLoginUserInfo();
+        comment.setUNo(user.getUserNo());
         comment.setUsedBoardId(id);
         commentService.putComment(comment);
         return "redirect:/used/boardDetail/" + id;

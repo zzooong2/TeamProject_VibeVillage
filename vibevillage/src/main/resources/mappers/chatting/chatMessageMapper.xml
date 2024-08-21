@@ -6,9 +6,10 @@
         VALUES (message_id_SEQ.nextval,#{roomId}, #{senderId}, #{message}, #{timestamp})
     </insert>
     <select id="findMessagesByRoomId" resultType="kr.co.vibevillage.chatting.model.ChatMessage">
-        SELECT message_id AS id, room_id AS roomId, sender_id AS senderId,
+        SELECT message_id AS id, room_id AS roomId, sender_id AS senderId,uv.u_nickname as senderName ,
                message, timestamp
         FROM chat_message
+        join USER_VIBEVILLAGE uv on uv.u_no = sender_id
         WHERE room_id = #{roomId}
         ORDER BY timestamp
     </select>

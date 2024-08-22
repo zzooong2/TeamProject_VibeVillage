@@ -8,6 +8,7 @@
         <result column="U_NAME" property="userName"></result>
         <result column="U_ID" property="userId"></result>
         <result column="U_PASSWORD" property="userPassword"></result>
+        <result column="U_BIRTHDATE" property="userBirthDate"></result>
         <result column="U_NICKNAME" property="userNickName"></result>
         <result column="U_PHONE" property="userPhone"></result>
         <result column="U_POSTCODE" property="userPostCode"></result>

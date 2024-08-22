@@ -47,7 +47,8 @@
                         </ul>
                     </li>
 
-                    <li>
+                    <!-- 로그인 상태에 따라 조건부 렌더링 -->
+                    <li sec:authorize="isAuthenticated()">
                         <a href="/form/myPage">마이페이지</a>
                     </li>
 

@@ -23,6 +23,7 @@ public class FormController {
 
     @GetMapping("/myPage")
     public String myPageForm() {
-        return "user/myPage";
+
+        return "redirect:/getUserInfo";
     }
 }

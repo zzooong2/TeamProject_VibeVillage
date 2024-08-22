@@ -21,52 +21,53 @@
                     <div class="col-sm-6" style="float: none; margin: 0 auto">
 
                         <br>
-                        <img class="hj-profile" id="showFile" th:src="@{/img/member/profile/basicprofile.png}">
+                        <img class="hj-profile" id="showFile"
+                             th:src="${profileResult != null ? '/images/userProfile/' + profileResult.uploadFileUniqueName : '/images/userProfile/basicprofile.png'}">
                         <br>
                         <br>
 
                         <div class="form-group">
                             <input class="form-control hj-address-number" id="fileName" type="file" name="fileName" style="display: inline-block;" onchange="profile()"/>
-                            <button class="btn btn-g btn-round" onclick="" id="fileUpload" style="position:absolute; right:15px;">업로드</button>&nbsp;
+                            <button class="btn btn-g btn-round" onclick="uploadProfile()" id="fileUpload" style="position:absolute; right:15px;">업로드</button>&nbsp;
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control" id="userName" type="text" name="userName" placeholder="이름" onkeyup="nameValidation()"/>
+                            <input class="form-control" id="userName" type="text" name="userName" placeholder="이름" onkeyup="nameValidation()" th:value="${result.userName}"/>
                             <div class="hj-validation-name" id="showName"></div>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control" id="birthDate" type="text" name="birthDate" placeholder="생년월일(yyyymmdd)" onkeyup="birthDateValidation()"/>
+                            <input class="form-control" id="birthDate" type="text" name="birthDate" placeholder="생년월일(yyyymmdd)" onkeyup="birthDateValidation()" th:value="${result.userBirthDate}"/>
                             <div class="hj-validation-name" id="showBirthDate"></div>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control hj-address-number" id="nickName" type="text" name="nickName" placeholder="닉네임" onkeyup="nickNameValidation()"/>
+                            <input class="form-control hj-address-number" id="nickName" type="text" name="nickName" placeholder="닉네임" onkeyup="nickNameValidation()" th:value="${result.userNickName}"/>
                             <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">중복확인</button>&nbsp;
                             <div class="hj-validation-name" id="showNickName"></div>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control hj-address-number" id="phone" type="text" name="phone" placeholder="연락처" onkeyup="phoneValidation()"/>
+                            <input class="form-control hj-address-number" id="phone" type="text" name="phone" placeholder="연락처" onkeyup="phoneValidation()" th:value="${result.userPhone}"/>
                             <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;">인증하기</button>&nbsp;
                             <div class="hj-validation-name" id="showPhone"></div>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control hj-address-number" id="postCode" type="text" name="postCode" placeholder="우편번호" disabled/>
+                            <input class="form-control hj-address-number" id="postCode" type="text" name="postCode" placeholder="우편번호" disabled th:value="${result.userPostCode}"/>
                             <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="addressSearch()">주소찾기</button>&nbsp;
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control" id="address" type="text" name="address" placeholder="주소" disabled/>
+                            <input class="form-control" id="address" type="text" name="address" placeholder="주소" disabled th:value="${result.userAddress}"/>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control" id="detailAddress" type="text" name="detailAddress" placeholder="상세주소"/>
+                            <input class="form-control" id="detailAddress" type="text" name="detailAddress" placeholder="상세주소" th:value="${result.userDetailAddress}"/>
                         </div>
 
                         <div class="form-group">
-                            <input class="form-control" id="extraAddress" type="text" name="extraAddress" placeholder="참고항목"/>
+                            <input class="form-control" id="extraAddress" type="text" name="extraAddress" placeholder="참고항목" th:value="${result.userExtraAddress}"/>
                         </div>
 
                         <div class="form-group">

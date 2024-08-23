@@ -41,4 +41,10 @@ public class LoginServiceImpl implements LoginService{
         String loginUserId = getLoginUserId();
         return loginMapper.getLoginUserInfo(loginUserId);
     }
+
+    // 로그인시 방문횟수 증가
+    @Override
+    public void addAccessCount(int userNo) {
+        loginMapper.addAccessCount(userNo);
+    }
 }

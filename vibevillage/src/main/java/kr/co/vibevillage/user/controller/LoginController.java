@@ -83,15 +83,11 @@ public class LoginController {
             // 로그인한 사용자의 계정정보를 가져오기 위해 getLoggedInUsername 메서드 호출
             String loginUserId = loginServiceImpl.getLoginUserId();
             model.addAttribute("loginUserId", loginUserId);
-            log.info("loginUserId: " + loginUserId);
-
             // 로그인한 사용자의 프로필 정보를 가져오기 위해 getLoginUserInfo 메서드 호출
             UserDTO loginUser = loginServiceImpl.getLoginUserInfo();
-            log.info("유저번호: " + loginUser.getUserNo());
-            log.info("닉네임: " + loginUser.getUserNickName());
-            log.info("계정: " + loginUser.getUserId());
-            log.info("암호: " + loginUser.getUserPassword());
-            log.info("등급: " + loginUser.getUserLevel());
+            int loginUserNo = loginUser.getUserNo();
+
+            loginService.addAccessCount(loginUserNo);
 
             return "로그인 성공";
         } else {

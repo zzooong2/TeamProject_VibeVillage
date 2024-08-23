@@ -52,6 +52,9 @@ public class UserDTO {
     int uploadFileNo;
     String uploadFileName, uploadFileUniqueName, uploadFilePath, uploadFileType;
 
+    // 비밀번호 변경을 위한 변수
+    String currentPassword;
+
     // UsernamePasswordAuthenticationToken 클래스 구현
     public UsernamePasswordAuthenticationToken toAuthenticationToken() {
         return new UsernamePasswordAuthenticationToken(userId, userPassword);

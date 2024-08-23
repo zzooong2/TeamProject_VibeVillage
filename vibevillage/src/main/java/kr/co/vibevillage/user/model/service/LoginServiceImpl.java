@@ -19,7 +19,6 @@ public class LoginServiceImpl implements LoginService{
     // 로그인
     @Override
     public String login(String userId, String userPassword) {
-
         return loginMapper.login(userId, userPassword);
     }
 

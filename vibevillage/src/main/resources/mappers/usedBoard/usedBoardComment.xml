@@ -13,11 +13,22 @@
                used_comment_created_at as usedCommentCreateAt
         from USED_BOARD_COMMENT
         where used_post_id = #{id}
+        and Used_Comment_DELETE_AT = 'N'
     </select>
 
         <select id="getCommentListUser" resultType="String">
         select u_nickname from USER_VIBEVILLAGE
         where u_no = #{no}
         </select>
+    <update id="increaseUserCommentCount">
+        Update USER_LEVEL_MANAGEMENT
+        set ULM_COMMENT_COUNT = ULM_COMMENT_COUNT+1
+        where U_NO = #{id}
+    </update>
+    <update id="deleteComment">
+        Update USED_BOARD_COMMENT
+        set Used_Comment_DELETE_AT = 'Y'
+        where Used_COMMENT_ID = #{commentId}
+    </update>
 
 </mapper>

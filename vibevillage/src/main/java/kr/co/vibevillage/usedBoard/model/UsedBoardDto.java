@@ -44,6 +44,9 @@ public class UsedBoardDto {
  private int categoryId;
  private String categoryName;
 
+ // 유저
+ private int userWriteCount, userCommentCount;
+
 
 }
 

@@ -80,8 +80,9 @@ public class UsedBoardServiceImplTest {
         UsedBoardDto dto = new UsedBoardDto();
         dto.setUserNo(1);
         dto.setUsedBoardTitle("New Board");
+        // 이미지 값이 비어있음
         List<UsedBoardImageDto> images = new ArrayList<>();
-        dto.setImages(images);
+        
         when(usedBoardMapper.usedBoardEnrollXML(dto)).thenReturn(expectedValue);
 
         // When

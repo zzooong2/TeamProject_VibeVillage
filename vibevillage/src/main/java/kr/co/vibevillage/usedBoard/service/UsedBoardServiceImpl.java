@@ -67,6 +67,7 @@ public class UsedBoardServiceImpl implements UsedBoardService {
                 image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
                 imageMapper.usedBoardEnrollImageXML(image);
             }
+            usedBoardMapper.increaseUserWriteCount(usedBoard.getUserNo());
         }
         return result > 0 ? 1 : 0; // 성공하면 1, 실패하면 0
     }
@@ -127,6 +128,12 @@ public class UsedBoardServiceImpl implements UsedBoardService {
 
         }
     }
+    @Override
+    public int convertProductStatus(int id ,String status){
+        int result = usedBoardMapper.convertProductStatus(id,status);
+        return result;
+    }
+
 
 
 }

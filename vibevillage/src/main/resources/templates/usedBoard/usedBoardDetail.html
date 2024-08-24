@@ -35,7 +35,12 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <h1 class="product-title font-alt" th:text="${usedBoard.usedBoardTitle}"></h1>
-                    <h1 class="product-title font-alt" th:text="${usedBoard.userNickName}"></h1>
+                    <h1 class="product-title font-alt" th:text="${usedBoard.usedBoardStatus}"></h1>
+
+                  </div>
+                </div>
+                <div class="row mb-20">
+                  <div class="col-sm-12"><span><a class="open-tab section-scroll" th:text="'아이디:'+${usedBoard.userNickName}"></a></span>
                   </div>
                 </div>
                 <div class="row mb-20">
@@ -44,7 +49,7 @@
                 </div>
                 <div class="row mb-20">
                   <div class="col-sm-12">
-                    <div class="price font-alt"><span th:text="${usedBoard.usedBoardProductPrice}" class="amount" ></span></div>
+                    <div class="price font-alt"><span class="amount" th:text="${usedBoard.usedBoardProductPrice}+'원'" ></span></div>
                   </div>
                 </div>
                 <div class="row mb-20">
@@ -61,25 +66,26 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="row mb-20">
-                  <div class="col-sm-4 mb-sm-20">
-                    <input class="form-control input-lg" type="number" name="" value="1" max="40" min="1" required="required"/>
-                  </div>
-                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#" onclick="startChat()">채팅하기</a></div>
-                </div>
                 <div class="row mb-20">
                   <div class="col-sm-12">
                     <div class="product_meta">Categories:<a href="#" th:text="${usedBoard.categoryName}"></a>
                     </div>
                   </div>
                 </div>
+
+                <div class="row mb-20" th:if="${usedBoard.userNickName != userNickName}">
+                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#" onclick="startChat()">채팅하기</a></div>
+                </div>
+                <div class="row mb-20" th:if="${usedBoard.userNickName == userNickName}">
+                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" th:href="@{/used/delete_board/{id}(id=${usedBoard.usedBoardId})}">글 삭제</a></div>
+                </div>
+
               </div>
             </div>
             <br>
             <hr class="divider-w">
 
-            <div class="board-map">0
+            <div class="board-map">
               <div class="board-map text">
                    거래 장소
                 <p th:text="${usedBoard.province}+' '+${usedBoard.city}+' '+${usedBoard.usedBoardLocation}"></p>
@@ -98,11 +104,17 @@
                       <div class="comment clearfix">
                         <div class="comment-avatar"><img src="" alt="avatar"/></div>
                         <div class="comment-content clearfix">
-                          <div class="comment-author font-alt"><a href="#"th:text="${comment.userNickName}"></a></div>
+                          <div class="comment-author font-alt"><a href="#" th:text="${comment.userNickName}"></a></div>
                           <div class="comment-body">
                             <p th:text="${comment.usedCommentContent}"></p>
                           </div>
                         </div>
+                      </div>
+                      <div th:if="${comment.userNickName==userNickName}">
+                        <a class="btn btn-danger" th:href="@{/used/delete_comment/{commentId}(commentId=${comment.usedCommentId})}">
+                          <button class="btn btn-block btn-round btn-g" type="button" >댓글 삭제
+                          </button>
+                        </a>
                       </div>
                     </div>
 <!--                    유저-->
@@ -113,7 +125,7 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               <label class="sr-only" for="name">Name</label>
-                              <input class="form-control" id="name" th:field="*{userNickName}" th:value="*{userNickName}"/>
+                              <input class="form-control" disabled id="name" th:value="*{userNickName}"/>
                             </div>
                           </div>
 

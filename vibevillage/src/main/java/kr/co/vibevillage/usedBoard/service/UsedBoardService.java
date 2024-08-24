@@ -31,5 +31,6 @@ public interface UsedBoardService {
     public List<UsedBoardDto> getMyBoards(int id);
 
     void updateUsedBoard(UsedBoardDto usedBoard);
+    public int convertProductStatus(int id ,String status);
 
 }

@@ -102,7 +102,7 @@ public class UsedBoardController {
         model.addAttribute("usedBoard", board);
         model.addAttribute("mainImages", mainImages);
         model.addAttribute("subImages", subImages);
-        model.addAttribute("userNickname",user.getUserNickName());
+        model.addAttribute("userNickName",user.getUserNickName());
         model.addAttribute("comment", comment);
         model.addAttribute("commentList", commentList);
         model.addAttribute("commentSize", commentList.size());
@@ -174,6 +174,19 @@ public class UsedBoardController {
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+    @GetMapping("/convert_status/{id}/{status}")
+    public String convertProductStatus(@PathVariable(value = "status") String status,
+                                       @PathVariable(value = "id" ) int id){
+        usedBoardService.convertProductStatus(id,status);
+
+        return "redirect:/used/my_boards";
+    }
+    @GetMapping("/delete_comment/{commentId}")
+    public String deleteComment(@PathVariable("commentId") int commentId) {
+        commentService.deleteComment(commentId);
+        return "redirect:/used/boardList/1";
     }
 
 

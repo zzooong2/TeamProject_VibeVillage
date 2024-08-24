@@ -75,7 +75,6 @@
         }
         function showMessage(message) {
             var messageElement = document.createElement('li');
-            messageElement.classList.add('message');
 
             // 메시지의 senderId에 따라 sent 또는 received 클래스를 추가합니다.
             if (message.senderId === currentUserId) {

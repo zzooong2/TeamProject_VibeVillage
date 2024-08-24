@@ -154,6 +154,16 @@
             category_id = #{categoryId}
         WHERE used_post_id = #{usedBoardId}
     </update>
+    <update id="convertProductStatus" >
+        UPDATE used_board
+        SET used_post_status = #{status}
+        WHERE used_post_id = #{id}
+    </update>
 
+    <update id="increaseUserWriteCount">
+        Update USER_LEVEL_MANAGEMENT
+        set ULM_WRITE_COUNT = ULM_WRITE_COUNT+1
+        where U_NO = #{id}
+    </update>
 
 </mapper>

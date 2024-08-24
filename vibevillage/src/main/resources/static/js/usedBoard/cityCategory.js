@@ -1,3 +1,5 @@
+
+
 function sendCategoryValue() {
     const selectedCategory = document.getElementById("category").value;
     var province = document.getElementById("province").value;
@@ -31,4 +33,13 @@ function updateCitySelect() {
             citySelect.add(option);
         });
     }
+}
+
+function convertProduct(id) {
+    var productStatus = document.getElementById("product-status").value;
+    console.log(id);
+
+    const url = `/used/convert_status/`+id+`/`+productStatus;
+    window.location.href = url;
+    
 }

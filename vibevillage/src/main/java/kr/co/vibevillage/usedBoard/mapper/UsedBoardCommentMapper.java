@@ -12,4 +12,7 @@ public interface UsedBoardCommentMapper {
     public int putCommentXML(@Param("comment")UsedBoardCommentDto commentDto);
     public List<UsedBoardCommentDto> getCommentListXML(@Param("id") int id, @Param("comment")UsedBoardCommentDto commentDto);
     public String getCommentListUser(@Param("no") int no);
+    public int increaseUserCommentCount(int id);
+    public int deleteComment(int commentId);
+
 }

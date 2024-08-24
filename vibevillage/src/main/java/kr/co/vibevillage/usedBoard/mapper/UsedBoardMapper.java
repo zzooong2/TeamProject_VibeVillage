@@ -19,4 +19,6 @@ public interface UsedBoardMapper {
     public List<UsedBoardDto> getMyBoards(@Param("id")int id);
     void updateUsedBoard(UsedBoardDto usedBoard);
     void updateProduct(UsedBoardDto usedBoard);
+    public int convertProductStatus(int id ,String status);
+    public int increaseUserWriteCount(int id);
 }

@@ -56,17 +56,18 @@
 
                             <div class="form-group">
                                 <input class="form-control hj-address-number" id="UserPhoneByFindPassword" type="text" placeholder="연락처"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="certification()">본인인증</button>&nbsp;
-                                <div class="hj-validation-name" id="showPhone"></div>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="checkUserInfoByPhone2()">본인인증</button>&nbsp;
+                                <div class="hj-validation-name" id="showPhoneByFindPassword"></div>
                             </div>
 
-                            <div class="form-group" style="display: none" id="certificationArea">
-                                <input class="form-control hj-address-number" id="certificationInput" type="text" placeholder="인증번호"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="startCertification()">인증하기</button>&nbsp;
+                            <div class="form-group" style="display: none" id="certificationAreaByFindPassword">
+                                <input class="form-control hj-address-number" id="certificationInputByFindPassword" type="text" placeholder="인증번호"/>
+                                <div style="display: none" id="checkCertificationByPassword"></div>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="startCertificationByFindPassword()">인증하기</button>&nbsp;
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-block btn-round btn-g" type="button" onclick="">비밀번호 찾기</button>
+                                <button class="btn btn-block btn-round btn-g" type="button" onclick="findUserPassword()">비밀번호 찾기</button>
                             </div>
                         </form>
 

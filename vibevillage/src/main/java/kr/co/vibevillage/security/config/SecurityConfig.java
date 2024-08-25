@@ -50,7 +50,9 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll() // 회원가입
                         .requestMatchers("/profile").permitAll() // 회원정보 가져오기
                         .requestMatchers("/findUserId").permitAll() // 회원계정 찾기
+                        .requestMatchers("/findUserPassword").permitAll() // 회원계정 찾기
                         .requestMatchers("/checkUserInfoByPhone").permitAll() // 회원계정 찾기
+                        .requestMatchers("/checkUserInfoById").permitAll() // 비밀번호 찾기
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",

@@ -22,7 +22,15 @@
         SELECT * FROM ONAIR.USER_VIBEVILLAGE uv WHERE uv.U_NAME = #{userName} AND uv.U_PHONE = #{userPhone}
     </select>
 
+    <select id="findUserPassword" resultMap="findUserInfo">
+        SELECT * FROM ONAIR.USER_VIBEVILLAGE uv WHERE uv.U_ID = #{userId}
+    </select>
+
     <select id="checkUserInfoByPhone" parameterType="string" resultType="_int">
         SELECT count(*) FROM ONAIR.USER_VIBEVILLAGE WHERE U_PHONE = #{userPhone}
+    </select>
+
+    <select id="checkUserInfoById" parameterType="string" resultType="_int">
+        SELECT count(*) FROM ONAIR.USER_VIBEVILLAGE WHERE U_ID = #{userId}
     </select>
 </mapper>

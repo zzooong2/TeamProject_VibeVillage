@@ -13,14 +13,28 @@ public class FindServiceImpl implements FindService{
     private final FindMapper findMapper;
 
     // 연락처로 회원 유무 확인하기
+    @Override
     public int checkUserInfoByPhone(String userPhone) {
         return findMapper.checkUserInfoByPhone(userPhone);
+    }
+
+    // 계정으로 회원 유무 확인하기
+    @Override
+    public int checkUserInfoById(String userId){
+        return findMapper.checkUserInfoById(userId);
     }
 
     // 계정 찾기
     @Override
     public UserDTO findUserId(UserDTO userDTO) {
         return findMapper.findUserId(userDTO);
+    }
+
+
+    // 비밀번호 찾기
+    @Override
+    public UserDTO findUserPassword(UserDTO userDTO){
+        return findMapper.findUserPassword(userDTO);
     }
 
 }

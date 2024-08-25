@@ -182,10 +182,15 @@ function editPassword() {
     // 암호 확인
     const editRePassword = document.getElementById("rePassword").value;
 
-    // 변경 여부 확인
-    if (currentPassword === editPassword) {
-        swal("현재 비밀번호로는 변경할 수 없습니다.", "", "info");
-        return; // 함수 종료, 서버로 요청을 보내지 않음
+    // 값 입력 확인
+    if(currentPassword === "" || editPassword === "" || editRePassword === ""){
+        swal("현재, 변경 비밀번호를 반드시 입력해주세요.", "", "info");
+        return;
+    }
+
+    if(currentPassword == editPassword) {
+        swal("현재 비밀번호로는 변경할 수 없습니다.", "", "error");
+        return;
     }
 
     $.ajax({
@@ -211,6 +216,8 @@ function editPassword() {
                     });
             } else if(res === "실패"){
                 swal("비밀번호 변경에 실패했습니다.", "관리자에게 문의해주세요.", "error");
+            } else if(res === "현재 비밀번호로는 변경할 수 없습니다."){
+                swal(res, "", "error");
             }
         },
     });

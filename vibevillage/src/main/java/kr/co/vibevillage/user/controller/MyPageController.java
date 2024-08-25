@@ -100,8 +100,8 @@ public class MyPageController {
         // userDTO 객체에 회원번호 초기화
         userDTO.setUserNo(loginUser.getUserNo());
 
-        if(userDTO.getCurrentPassword() == "" || userDTO.getUserPassword() == "" || userDTO.getUserRePassword() == "") {
-            return "비밀번호를 입력해주세요.";
+        if(userDTO.getCurrentPassword() == getPassword) {
+            return "현재 비밀번호로는 변경할 수 없습니다.";
         } else if(!passwordEncoder.matches(userDTO.getCurrentPassword(), getPassword)) {
             return "현재 비밀번호가 일치하지 않습니다.";
         } else {

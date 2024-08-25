@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head th:replace="~{common/head :: head}">
+    <!-- jQuery CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+    <nav th:replace="~{common/nav :: nav}"></nav>
+
+    <div class="main">
+        <section class="module">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-5 col-sm-offset-1 mb-sm-40">
+                        <h4 class="font-alt">계정 찾기</h4>
+                        <hr class="divider-w mb-10">
+
+                        <form class="form" >
+                            <div class="form-group">
+                                <input class="form-control" id="inputName" type="text" placeholder="이름" onkeyup=""/>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control hj-address-number" id="UserPhoneByFindId" type="text" placeholder="연락처"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="checkUserInfoByPhone()">본인인증</button>&nbsp;
+                                <div class="hj-validation-name" id="showPhoneByFindId"></div>
+                            </div>
+                            <div class="form-group" style="display: none" id="certificationAreaByFindId">
+                                <input class="form-control hj-address-number" id="certificationInputByFindId" type="text" placeholder="인증번호"/>
+                                <div style="display: none" id="checkCertificationById"></div>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="startCertificationByFindId()">인증하기</button>&nbsp;
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-block btn-round btn-g" type="button" onclick="findUserId()">계정 찾기</button>
+                            </div>
+
+                        </form>
+                    </div>
+
+
+                    <div class="col-sm-5">
+                        <h4 class="font-alt">비밀번호 찾기</h4>
+                        <hr class="divider-w mb-10">
+
+                        <form class="form">
+                            <div class="form-group">
+                                <input class="form-control" id="inputId" type="text" placeholder="계정" onkeyup=""/>
+                                <div id="showLoginId"></div>
+                            </div>
+
+                            <div class="form-group">
+                                <input class="form-control hj-address-number" id="UserPhoneByFindPassword" type="text" placeholder="연락처"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="certification()">본인인증</button>&nbsp;
+                                <div class="hj-validation-name" id="showPhone"></div>
+                            </div>
+
+                            <div class="form-group" style="display: none" id="certificationArea">
+                                <input class="form-control hj-address-number" id="certificationInput" type="text" placeholder="인증번호"/>
+                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" th:onclick="startCertification()">인증하기</button>&nbsp;
+                            </div>
+
+                            <div class="form-group">
+                                <button class="btn btn-block btn-round btn-g" type="button" onclick="">비밀번호 찾기</button>
+                            </div>
+                        </form>
+
+                        <div class="hj-area"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+        <footer th:replace="~{common/footer :: footer}"></footer>
+        <th:block th:replace="~{common/js :: js}"></th:block>
+    </div>
+    <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
+</main>
+
+<script src="/js/user/loginregister/registerValidation.js"></script>
+<script src="/js/user/loginregister/loginValidation.js"></script>
+<script src="/js/user/findUserInfo/finduserInfo.js"></script>
+<script src="/js/user/common/common.js"></script>
+<script src="/js/user/address/kakaoAddressAPI.js"></script>
+<script src="/js/user/coolsms/findUserIdCoolsms.js"></script>
+
+<!-- Sweet Alert -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<!-- 주소찾기 API -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+</body>
+</html>

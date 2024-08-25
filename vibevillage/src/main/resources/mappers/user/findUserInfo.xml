@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.user.model.mapper.FindMapper">
+
+    <resultMap id="findUserInfo" type="kr.co.vibevillage.user.model.dto.UserDTO">
+        <result column="U_NO" property="userNo"></result>
+        <result column="U_NAME" property="userName"></result>
+        <result column="U_ID" property="userId"></result>
+        <result column="U_PASSWORD" property="userPassword"></result>
+        <result column="U_BIRTHDATE" property="userBirthDate"></result>
+        <result column="U_NICKNAME" property="userNickName"></result>
+        <result column="U_PHONE" property="userPhone"></result>
+        <result column="U_POSTCODE" property="userPostCode"></result>
+        <result column="U_ADDRESS" property="userAddress"></result>
+        <result column="U_DETAIL_ADDRESS" property="userDetailAddress"></result>
+        <result column="U_EXTRA_ADDRESS" property="userExtraAddress"></result>
+        <result column="U_INDATE" property="userIndate"></result>
+    </resultMap>
+
+    <select id="findUserId" resultMap="findUserInfo">
+        SELECT * FROM ONAIR.USER_VIBEVILLAGE uv WHERE uv.U_NAME = #{userName} AND uv.U_PHONE = #{userPhone}
+    </select>
+
+    <select id="checkUserInfoByPhone" parameterType="string" resultType="_int">
+        SELECT count(*) FROM ONAIR.USER_VIBEVILLAGE WHERE U_PHONE = #{userPhone}
+    </select>
+</mapper>

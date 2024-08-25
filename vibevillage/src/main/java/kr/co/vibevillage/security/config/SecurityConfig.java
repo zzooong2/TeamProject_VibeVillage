@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/lib/**", "/scss/**").permitAll() // 정적 리소스에 대한 접근을 허용
                         .requestMatchers("/form/login").permitAll() // 로그인 페이지 접근 허용
+                        .requestMatchers("/form/findUserInfo").permitAll() // 계정, 비밀번호 찾기 페이지 접근 허용
                         .requestMatchers("/login").permitAll() // 로그인 처리 URL 접근 허용
                         .requestMatchers("/form").permitAll() // 메인 페이지 접근 허용
                         .requestMatchers("/sendCertificationNumber").permitAll() // coolSMS
@@ -48,6 +49,8 @@ public class SecurityConfig {
                         .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
                         .requestMatchers("/register").permitAll() // 회원가입
                         .requestMatchers("/profile").permitAll() // 회원정보 가져오기
+                        .requestMatchers("/findUserId").permitAll() // 회원계정 찾기
+                        .requestMatchers("/checkUserInfoByPhone").permitAll() // 회원계정 찾기
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",

@@ -32,23 +32,31 @@ public class CustomerServiceController {
         this.loginServiceImpl = loginServiceImpl;
     }
 
-    @GetMapping("/csList")
-    public String getCustomerService(Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
+    // 고객센터 목록
+    @GetMapping("/csList/{category}")
+    public String getCustomerService(@PathVariable("category") int icNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
+
+        // 로그인한 유저 정보
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+        String userLevel = loginInfo.getUserLevel();
+        model.addAttribute("userLevel", userLevel);
 
         // 공지사항 목록
         List<CustomerServiceDTO> csnbList = customerServiceService.getnbCustomerService();
         model.addAttribute("csnbList", csnbList);
+
         // Q&A 목록
         List<CustomerServiceDTO> csqaList = customerServiceService.getqaCustomerService();
         model.addAttribute("csqaList", csqaList);
 
-        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
-        String userNickName = loginInfo.getUserNickName();
-
-        // 1:1 문의 목록
-        List<CustomerServiceDTO>csiaList = customerServiceService.getiaCustomerService(userDTO, userNickName);
+        // 1:1 문의 목록(본인 닉네임과 일치해야만 나옴)
+        List<CustomerServiceDTO>csiaList = customerServiceService.getiaCustomerService(userDTO, userNickName, icNo);
         model.addAttribute("csiaList", csiaList);
-//        model.addAttribute("userNickName", userNickName);
+
+        // 1:1 문의 목록(관리자용)
+        List<CustomerServiceDTO>csiamList = customerServiceService.getiamCustomerService();
+        model.addAttribute("csiamList", csiamList);
 
 //        for(CustomerServiceDTO item : csiaList){
 //            System.out.println(item.getIbContent());
@@ -62,6 +70,7 @@ public class CustomerServiceController {
     @GetMapping("/noticeBoard")
     public String noticeBoard(CustomerServiceDTO customerServiceDTO, Model model) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -74,18 +83,23 @@ public class CustomerServiceController {
     @PostMapping("/noticeBoardEnroll")
     public String setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         int uNo = loginInfo.getUserNo();
 
+        // 공지사항 조회수 증가
+        int resultDto = customerServiceService.nbCount(uNo);
+
         int result = customerServiceService.setNoticeBoardEnroll(customerServiceDTO, uNo);
 
-        return "redirect:/customerService/csList";
+        return "redirect:/customerService/csList/0";
     }
 
     // 공지사항 Detail
     @GetMapping("/noticeBoardDetail/{nbNo}")
     public String getNoticeBoardDetail(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
         String userLevel = loginInfo.getUserLevel();
@@ -103,6 +117,7 @@ public class CustomerServiceController {
     @GetMapping("/noticeBoardEditForm/{nbNo}")
     public String noticeBoardEditForm(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -113,29 +128,36 @@ public class CustomerServiceController {
     }
 
     // 공지사항 수정
-    @PostMapping("/noticeBoardEdit/{nbNo}")
+    @GetMapping("/noticeBoardEdit/{nbNo}")
     public String noticeBoardEdit(@PathVariable("nbNo") int nbNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
         int nbEdit = customerServiceService.setNoticeBoardEdit(customerServiceDTO);
         model.addAttribute("nbEdit", nbEdit);
-        System.out.println(customerServiceDTO.getNbNo());
 
-        return "redirect:/customerService/csList";
+        return "redirect:/customerService/csList/0";
     }
 
     // 공지사항 삭제(nb_delete_yn y->n)
     @GetMapping("/noticeBoardDelete/{nbNo}")
     public String noticeBoardDelete(@PathVariable("nbNo") int nbNo, CustomerServiceDTO customerServiceDTO) {
 
+        // 로그인한 유저 정보
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
+
         int result = customerServiceService.nbDelete(customerServiceDTO);
 
-        return "redirect:/customerService/csList";
+        // 공지사항 삭제 조회수 감소
+        int resultDto = customerServiceService.nbCountMinus(uNo);
+
+        return "redirect:/customerService/csList/0";
     }
 
     // Q&A 작성 페이지 이동
     @GetMapping("/questionAnswer")
     public String questionAnswer(CustomerServiceDTO customerServiceDTO, Model model) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -148,24 +170,28 @@ public class CustomerServiceController {
     @PostMapping("/questionAnswerEnroll")
     public String setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         int uNo = loginInfo.getUserNo();
 
         int result = customerServiceService.setQuestionAnswerEnroll(customerServiceDTO, uNo);
 
-        return "redirect:/customerService/csList";
+        // Q&A 게시글 count 추가
+        int resultDto = customerServiceService.qaCount(uNo);
+
+        return "redirect:/customerService/csList/0";
     }
 
     // Q&A Detail
     @GetMapping("/questionAnswerDetail/{qaNo}")
     public String getQuestionAnswerDetail(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
         CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo, userNickName);
         model.addAttribute("qaDetail", qaDetail);
-//        model.addAttribute("userNickName", userNickName);
 
         return "questionAnswer/questionAnswerDetail";
     }
@@ -174,44 +200,56 @@ public class CustomerServiceController {
     @GetMapping("/questionAnswerEditForm/{qaNo}")
     public String questionAnswerEditForm(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
         CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo, userNickName);
         model.addAttribute("qaDetail", qaDetail);
-//        model.addAttribute("userNickName", userNickName);
 
         return "questionAnswer/questionAnswerEdit";
     }
 
     // Q&A 수정
-    @PostMapping("/questionAnswerEdit/{qaNo}")
+    @GetMapping("/questionAnswerEdit/{qaNo}")
     public String questionAnswerEdit(@PathVariable("qaNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
         int nbEdit = customerServiceService.setQuestionAnswerEdit(customerServiceDTO);
         model.addAttribute("nbEdit", nbEdit);
 
-        return "redirect:/customerService/csList";
+        return "redirect:/customerService/csList/0";
     }
 
     // Q&A 삭제(Q&A_yn y->n)
     @GetMapping("/questionAnswerDelete/{qaNo}")
     public String questionAnswerDelete(@PathVariable("qaNo") int qaNo, CustomerServiceDTO customerServiceDTO) {
 
+        // 로그인한 유저 정보
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
+
         int result = customerServiceService.qaDelete(customerServiceDTO);
 
-        return "redirect:/customerService/csList";
+        // Q&A 삭제 count 감소
+        int resultDto = customerServiceService.qaCountMinus(uNo);
+
+        return "redirect:/customerService/csList/0";
     }
 
     // 사용자가 작성 1:1 문의 질문
     @PostMapping("/inquiryBoard")
     public String setCustomerService(Model model, CustomerServiceDTO customerServiceDTO) {
 
-        int result = customerServiceService.setibCustomerService(customerServiceDTO);
-        System.out.println(customerServiceDTO.getIcNo());
-        System.out.println(customerServiceDTO.getIcName());
+        // 로그인한 유저 정보
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
 
-        return "redirect:/customerService/csList";
+        int result = customerServiceService.setibCustomerService(customerServiceDTO, uNo, customerServiceDTO.getIcNo());
+
+        // 사용자 게시글 count 추가
+        int resultDto = customerServiceService.ibCount(uNo);
+
+        return "redirect:/customerService/csList/0";
     }
 
     // 1:1 질문 Detail
@@ -220,11 +258,13 @@ public class CustomerServiceController {
                                          @PathVariable("icNo") int icNo,
                                          Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo, icNo, userNickName);
         model.addAttribute("ibDetail", ibDetail);
+
 //        model.addAttribute("userNickName", userNickName);
 
         return "inquiryBoard/inquiryAnswerDetail";
@@ -236,6 +276,7 @@ public class CustomerServiceController {
                                         @PathVariable("icNo") int icNo,
                                         Model model, CustomerServiceDTO customerServiceDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -248,12 +289,16 @@ public class CustomerServiceController {
 
     // 1:1 문의 답변
     @PostMapping("/inquiryAnswerPage/{ibNo}")
-    public String inquiryAnswerEdit(@PathVariable("ibNo") int qaNo, Model model, CustomerServiceDTO customerServiceDTO) {
+    public String inquiryAnswerEdit(@PathVariable("ibNo") int ibNo, Model model, CustomerServiceDTO customerServiceDTO) {
 
-        int ibEdit = customerServiceService.setInquiryAnswerEdit(customerServiceDTO);
+        // 로그인한 유저 정보
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
+
+        int ibEdit = customerServiceService.setInquiryAnswerEdit(ibNo, uNo, customerServiceDTO);
         model.addAttribute("ibEdit", ibEdit);
 
-        return "redirect:/customerService/csList";
+        return "redirect:/customerService/csList/0";
     }
 
 

@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/checkId").permitAll() // 닉네임 중복검사
                         .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
                         .requestMatchers("/register").permitAll() // 회원가입
+                        .requestMatchers("/profile").permitAll() // 회원정보 가져오기
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",

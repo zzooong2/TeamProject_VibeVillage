@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.logging.Level;
 
 @Service
 public class LevelUpServiceImpl implements LevelUpService {
@@ -30,11 +31,19 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 작성
     @Override
-    public int setLevelUpBoardEnroll(LevelUpDTO levelUpDTO) {
+    public int setLevelUpBoardEnroll(LevelUpDTO levelUpDTO, int uNo, int lbNo) {
 
-        int result = levelUpMapper.levelResultBoard(levelUpDTO);
+        int resultDTO = levelUpMapper.setLevelUpBoardEnroll(levelUpDTO, uNo);
 
-        return levelUpMapper.setLevelUpBoardEnroll(levelUpDTO);
+        int result = levelUpMapper.levelResultBoard(levelUpDTO, uNo, lbNo);
+
+        return result;
+    }
+
+    @Override
+    public int lbCount(int uNo) {
+
+        return levelUpMapper.lbCount(uNo);
     }
 
     // 등업신청 Detail
@@ -46,9 +55,9 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 수정
     @Override
-    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO, String userNickName) {
+    public int setLevelUpBoardEdit(LevelUpDTO levelUpDTO, int lbNo) {
 
-        return levelUpMapper.setLevelUpBoardEdit(levelUpDTO, userNickName);
+        return levelUpMapper.setLevelUpBoardEdit(levelUpDTO, lbNo);
     }
 
     // 등업신청 삭제
@@ -56,6 +65,12 @@ public class LevelUpServiceImpl implements LevelUpService {
     public int lbDelete(LevelUpDTO levelUpDTO) {
 
         return levelUpMapper.lbDelete(levelUpDTO);
+    }
+
+    @Override
+    public int lbCountMinus(int uNo) {
+
+        return levelUpMapper.lbCountMinus(uNo);
     }
 
     @Override

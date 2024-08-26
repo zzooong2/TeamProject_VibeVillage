@@ -35,17 +35,23 @@
                         <form class="form" role="form">
 
                             <div class="form-group">
+                                <label>제목</label>
                                 <input class="form-control" type="text" th:value="*{qaDetail.qaTitle}" readonly=""/>
                             </div>
                             <!--유저의 이름 또는 닉네임으로 변경-->
                             <div class="form-group">
+                                <label>닉네임</label>
                                 <input class="form-control" type="text" th:value="*{qaDetail.userNickName}" readonly="" />
                             </div>
                             <div class="form-group">
+                                <label>올린 날짜</label>
                                 <input class="form-control" type="text" th:value="*{qaDetail.qaIndate}" readonly="" />
                             </div>
-                            <textarea class="form-control" rows="7" th:text="*{qaDetail.qaContent}" readonly=""></textarea>
-                            <div style="margin-top: 10px; float: right;">
+                            <div class="form-group">
+                                <label>내용</label>
+                                 <textarea class="form-control" rows="7" th:text="*{qaDetail.qaContent}" readonly=""></textarea>
+                            </div>
+                            <div th:if="${userLevel == '겨울'}" style="margin-top: 10px; float: right;">
                                 <a th:href="@{/customerService/questionAnswerDelete/{qaNo}(qaNo=${qaDetail.qaNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>

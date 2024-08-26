@@ -34,21 +34,28 @@
                         <hr class="divider-w mt-10 mb-20">
 
                             <div class="form-group">
+                                <label>제목</label>
                                 <input class="form-control" type="text" th:value="*{nbDetail.nbTitle}" readonly=""/>
                             </div>
                             <!--유저의 이름 또는 닉네임으로 변경-->
                             <div class="form-group">
+                                <label>닉네임</label>
                                 <input class="form-control" type="text" th:value="*{nbDetail.userNickName}" readonly="" />
                             </div>
                             <div class="form-group">
+                                <label>올린 날짜</label>
                                 <input class="form-control" type="text" th:value="*{nbDetail.nbIndate}" readonly="" />
                             </div>
                             <div class="form-group">
+                                <label>조회수</label>
                                 <input class="form-control" th:value="*{nbDetail.nbViews}" readonly=""/>
                             </div>
-                            <textarea class="form-control" rows="7" th:text="*{nbDetail.nbContent}" readonly=""></textarea>
+                            <div class="form-group">
+                                 <label>내용</label>
+                                 <textarea class="form-control" rows="7" th:text="*{nbDetail.nbContent}" readonly=""></textarea>
+                            </div>
                             <!--관리자만 볼수있음-->
-                            <div style="margin-top: 10px; float: right;">
+                            <div th:if="${userLevel == '겨울'}" style="margin-top: 10px; float: right;">
                                 <a th:href="@{/customerService/noticeBoardDelete/{nbNo}(nbNo=${nbDetail.nbNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>

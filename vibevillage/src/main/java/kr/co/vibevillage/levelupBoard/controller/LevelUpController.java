@@ -6,6 +6,7 @@ import kr.co.vibevillage.levelupBoard.model.LevelUpDTO;
 import kr.co.vibevillage.levelupBoard.service.LevelUpServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
@@ -30,17 +31,21 @@ public class LevelUpController {
         this.loginServiceImpl = loginServiceImpl;
     }
 
+    // 등업 신청 목록
     @GetMapping("/levelUpBoard")
     public String getLevelUp(Model model, LevelUpDTO levelUpDTO, UserDTO userDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
+        int uNo = loginInfo.getUserNo();
+        String loginUserId = loginInfo.getUserId();
 
         // 등업신청 목록
         List<LevelUpDTO> lbList = levelUpService.getLevelUpList(userNickName);
         model.addAttribute("lbList", lbList);
+        model.addAttribute("loginUserId", loginUserId);
 //        model.addAttribute("userNickName", userNickName);
-
 
 //        for(LevelUpDTO item : lbList) {
 //            System.out.println(item.getLbTitle());
@@ -52,7 +57,12 @@ public class LevelUpController {
 
     // 등업신청 작성 페이지 이동
     @GetMapping("/levelUpEnroll")
-    public String levelUpEnroll(LevelUpDTO levelUpDTO) {
+    public String levelUpEnroll(LevelUpDTO levelUpDTO, Model model) {
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+
+        model.addAttribute("userNickName", userNickName);
 
         return "levelUpBoard/levelUpBoardEnroll";
     }
@@ -60,21 +70,30 @@ public class LevelUpController {
     // 등업신청 작성
     @PostMapping("/levelUpBoardEnroll")
     public String setLevelUpBoardEnroll(LevelUpDTO levelUpDTO) {
-        int result = levelUpService.setLevelUpBoardEnroll(levelUpDTO);
+
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        String userNickName = loginInfo.getUserNickName();
+        int uNo = loginInfo.getUserNo();
+
+        int result = levelUpService.setLevelUpBoardEnroll(levelUpDTO, uNo, levelUpDTO.getLbNo());
+
+        int resultDto = levelUpService.lbCount(uNo);
 
         return "redirect:/levelUp/levelUpBoard";
     }
 
     // 등업신청 Detail
     @GetMapping("/levelUpBoardDetail/{lbNo}")
-    public String getLevelUpBoardDetail(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
+    public String getLevelUpBoardDetail(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO, UserDTO userDTO) {
 
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
+        String userLevel = loginInfo.getUserLevel();
 
         LevelUpDTO lbDetail = levelUpService.getLevelUpBoardDetail(lbNo, userNickName);
         model.addAttribute("lbDetail", lbDetail);
-//        model.addAttribute("userNickName", userNickName);
+        model.addAttribute("userLevel", userLevel);
+        model.addAttribute("userNickName", userNickName);
 
         return "levelUpBoard/levelUpBoardDetail";
     }
@@ -94,15 +113,14 @@ public class LevelUpController {
     }
 
     // 등업신청 수정
-    @PostMapping("/levelUpBoardEdit/{lbNo}")
+    @GetMapping("/levelUpBoardEdit/{lbNo}")
     public String levelUpBoardEdit(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
-        int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO, userNickName);
+        int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO, lbNo);
         model.addAttribute("lbEdit", lbEdit);
-//        model.addAttribute("userNickName", userNickName);
 
         return "redirect:/levelUp/levelUpBoard";
     }
@@ -111,7 +129,13 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardDelete/{lbNo}")
     public String levelUpBoardDelete(@PathVariable("lbNo") int lbNo, LevelUpDTO levelUpDTO) {
 
+        UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
+        int uNo = loginInfo.getUserNo();
+
         int result = levelUpService.lbDelete(levelUpDTO);
+
+        // 게시글수 count 감소
+        int resultDto = levelUpService.lbCountMinus(uNo);
 
         return "redirect:/levelUp/levelUpBoard";
     }

@@ -33,29 +33,52 @@
                         <hr class="divider-w mt-10 mb-20">
 
                             <div class="form-group">
+                                <label>제목</label>
                                 <input class="form-control" type="text" th:value="*{lbDetail.lbTitle}" readonly=""/>
                             </div>
                             <!--유저의 이름 또는 닉네임으로 변경-->
                             <div class="form-group">
+                                <label>닉네임</label>
                                 <input class="form-control" type="text" th:value="*{lbDetail.userNickName}" readonly="" />
                             </div>
                             <div class="form-group">
+                                <label>올린 날짜</label>
                                 <input class="form-control" type="text" th:value="*{lbDetail.lbIndate}" readonly="" />
                             </div>
                             <div class="form-group">
+                                <label>내용</label>
                                 <textarea class="form-control" rows="7" th:text="*{lbDetail.lbContent}" readonly=""></textarea>
                             </div>
-                            <div class="form-group">
-                                <textarea class="form-control" placeholder="등" rows="7" th:text="*{lbDetail.lrContent}" readonly=""></textarea>
-                            </div>
-                            <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/levelUp/levelUpApprove/{lbNo}/{uNo}(lbNo=${lbDetail.lbNo}, uNo=${lbDetail.uNo})}">
+                        <div th:if="${userLevel == '겨울'}" class="form-group">
+                            <label>등급</label>
+                            <input id="lbLevel" class="form-control" type="text" th:value="*{lbDetail.ulmLevel}" readonly="" />
+                        </div>
+                        <div th:if="${userLevel == '겨울'}" class="form-group">
+                            <label>작성 수</label>
+                            <input class="form-control" type="text" th:value="*{lbDetail.ulmWriteCount}" readonly="" />
+                        </div>
+                        <div th:if="${userLevel == '겨울'}" class="form-group">
+                            <label>접속 수</label>
+                            <input class="form-control" type="text" th:value="*{lbDetail.ulmAccessCount}" readonly="" />
+                        </div>
+                        <div th:if="${userLevel == '겨울'}" class="form-group">
+                            <label>가입 날짜</label>
+                            <input class="form-control" type="text" th:value="*{lbDetail.ulmAccessTime}" readonly="" />
+                        </div>
+
+                        <div style="margin-top: 10px; float: right;">
+                            <!-- 등업 승인은 관리자만 가능 -->
+                            <!-- 가을 > 여름으로
+                                 여름 > 봄으로 등업 가능   -->
+                                <a th:if="${userLevel == '겨울'}" th:href="@{/levelUp/levelUpApprove/{lbNo}/{uNo}(lbNo=${lbDetail.lbNo}, uNo=${lbDetail.uNo})}">
                                     <button class="btn btn-g btn-circle" type="button">등 업</button>
                                 </a>
-                                <a th:href="@{/levelUp/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                            <!-- 본인만 삭제 가능 -->
+                                <a th:if="${userNickName == lbDetail.userNickName}" th:href="@{/levelUp/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>
-                                <a th:href="@{/levelUp/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                            <!-- 본인만 수정 가능 -->
+                                <a th:if="${userNickName == lbDetail.userNickName}" th:href="@{/levelUp/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
                              <button class="btn btn-g btn-circle" type="button">수 정</button>
                                 </a>
                             </div>

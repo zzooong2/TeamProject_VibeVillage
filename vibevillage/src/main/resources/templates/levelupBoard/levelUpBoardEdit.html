@@ -31,7 +31,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <h4 class="font-alt mb-0">등업신청서</h4>
                         <hr class="divider-w mt-10 mb-20">
-                        <form class="form" role="form" th:action="@{/levelUp/levelUpBoardEdit/{lbNo}(lbNo=${lbDetail.lbNo})}" th:object="${lbDetail}" method="post">
+                        <form class="form" role="form" th:action="@{/levelUp/levelUpBoardEdit/{lbNo}(lbNo=${lbDetail.lbNo})}" th:object="${lbDetail}" method="get">
 
                             <div class="form-group">
                                 <input class="form-control" type="text" th:field="*{lbTitle}"/>

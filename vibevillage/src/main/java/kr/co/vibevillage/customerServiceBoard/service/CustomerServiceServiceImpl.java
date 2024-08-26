@@ -37,9 +37,18 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 1:1 문의 목록
     @Override
-    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO, String userNickName) {
-        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService(userDTO, userNickName);
+    public List<CustomerServiceDTO> getiaCustomerService(UserDTO userDTO, String userNickName, int icNo) {
+
+        List<CustomerServiceDTO> iaList = customerServiceMapper.getiaCustomerService(userDTO, userNickName, icNo);
         return iaList;
+    }
+
+    // 1:1 문의 목록(관리자용)
+    @Override
+    public List<CustomerServiceDTO> getiamCustomerService() {
+
+        List<CustomerServiceDTO> iamList = customerServiceMapper.getiamCustomerService();
+        return iamList;
     }
 
     // 공지사항 작성
@@ -47,6 +56,12 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     public int setNoticeBoardEnroll(CustomerServiceDTO customerServiceDTO, int uNo) {
 
         return customerServiceMapper.setNoticeBoardEnroll(customerServiceDTO, uNo);
+    }
+
+    @Override
+    public int nbCount(int uNo) {
+
+        return customerServiceMapper.nbCount(uNo);
     }
 
     // 공지사항 Detail
@@ -70,6 +85,12 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         return customerServiceMapper.nbDelete(customerServiceDTO);
     }
 
+    @Override
+    public int nbCountMinus(int uNo) {
+
+        return customerServiceMapper.nbCountMinus(uNo);
+    }
+
     // 공지사항 수정
     @Override
     public int setNoticeBoardEdit(CustomerServiceDTO customerServiceDTO) {
@@ -82,6 +103,13 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     public int setQuestionAnswerEnroll(CustomerServiceDTO customerServiceDTO, int uNo) {
 
         return customerServiceMapper.setQuestionAnswerEnroll(customerServiceDTO, uNo);
+    }
+
+    // Q&A 게시글 count 추가
+    @Override
+    public int qaCount(int uNo) {
+
+        return customerServiceMapper.qaCount(uNo);
     }
 
     // Q&A Detail
@@ -98,6 +126,13 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
         return customerServiceMapper.qaDelete(customerServiceDTO);
     }
 
+    // Q&A 삭제 count 감소
+    @Override
+    public int qaCountMinus(int uNo) {
+
+        return customerServiceMapper.qaCountMinus(uNo);
+    }
+
     // Q&A 수정
     @Override
     public int setQuestionAnswerEdit(CustomerServiceDTO customerServiceDTO) {
@@ -107,9 +142,15 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 사용자가 작성 1:1 문의 질문
     @Override
-    public int setibCustomerService(CustomerServiceDTO customerServiceDTO) {
+    public int setibCustomerService(CustomerServiceDTO customerServiceDTO, int uNo, int icNo) {
 
-        return customerServiceMapper.setibCustomerService(customerServiceDTO);
+        return customerServiceMapper.setibCustomerService(customerServiceDTO, uNo, icNo);
+    }
+
+    @Override
+    public int ibCount(int uNo) {
+
+        return customerServiceMapper.ibCount(uNo);
     }
 
     // 1:1 질문 Detail
@@ -121,8 +162,8 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
 
     // 1:1 질문 수정
     @Override
-    public int setInquiryAnswerEdit(CustomerServiceDTO customerServiceDTO) {
+    public int setInquiryAnswerEdit(int ibNo, int uNo, CustomerServiceDTO customerServiceDTO) {
 
-        return customerServiceMapper.setInquiryAnswerEdit(customerServiceDTO);
+        return customerServiceMapper.setInquiryAnswerEdit(ibNo, uNo, customerServiceDTO);
     }
 }

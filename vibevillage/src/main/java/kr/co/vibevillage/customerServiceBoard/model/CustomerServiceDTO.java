@@ -41,4 +41,8 @@ public class CustomerServiceDTO {
 
     private int uNo;
     private String userNickName;
+    private String uId;
+
+    private String ulmLevel;
+    private String ulmWriteCount;
 }

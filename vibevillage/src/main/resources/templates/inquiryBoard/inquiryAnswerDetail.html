@@ -34,22 +34,29 @@
 <!--                            <div class="form-group">-->
 <!--                                <input class="form-control" type="text" th:value="*{ibDetail.ibContent}" readonly=""/>-->
 <!--                            </div>-->
+
+                            <label>제목</label>
                             <textarea class="form-control" rows="2" th:text="*{ibDetail.ibContent}" readonly=""></textarea>
                             <div class="form-group" style="margin-top: 14px;">
+                                <label>카테고리</label>
                                 <input class="form-control" type="text" th:value="*{ibDetail.icName}" readonly="" disabled="" />
                             </div>
                             <div class="form-group" style="margin-top: 14px;">
+                                <label>닉네임</label>
                                 <input class="form-control" type="text" th:value="*{ibDetail.userNickName}" readonly="" disabled="" />
                             </div>
                             <div class="form-group">
+                                <label>올린 날짜</label>
                                 <input class="form-control" placeholder="질문 날짜" th:value="*{ibDetail.ibIndate}" readonly=""/>
                             </div>
                             <div class="form-group">
-                            <input class="form-control" placeholder="답변 날짜" th:value="*{ibDetail.iaIndate}" readonly=""/>
+                                <input class="form-control" placeholder="답변 날짜" th:value="*{ibDetail.iaIndate}" readonly=""/>
                             </div>
-                            <textarea class="form-control" rows="7" placeholder="답변" th:text="*{ibDetail.iaContent}" readonly=""></textarea>
-                            <div style="margin-top: 10px; float: right;">
-                                <a th:href="@{/customerService/inquiryAnswerForm/{ibNo}(ibNo=${ibDetail.ibNo})}">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="7" placeholder="답변" th:text="*{ibDetail.iaContent}" readonly=""></textarea>
+                            </div>
+                            <div th:if="${userLevel == '겨울'}" style="margin-top: 10px; float: right;">
+                                <a th:href="@{/customerService/inquiryAnswerForm/{ibNo}/{icNo}(ibNo=${ibDetail.ibNo}, icNo=${ibDetail.icNo})}">
                                 <button class="btn btn-g btn-circle" type="button">답 변</button>
                                 </a>
                             </div>

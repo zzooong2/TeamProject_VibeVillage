@@ -25,7 +25,6 @@ public class RegisterServiceImpl implements RegisterService{
     // 회원가입
     @Override
     public int register(UserDTO userDTO) {
-
         // 유저가 입력한 비밀번호를 passwordEncoder객체를 이용하여 암호화를 진행한다.
         String bcryptPassword = passwordEncoder.encode(userDTO.getUserPassword());
         // 암호화된 비밀번호를 userDTO갹채에 초기화한다.
@@ -74,12 +73,6 @@ public class RegisterServiceImpl implements RegisterService{
         } else{
             return "인증성공";
         }
-
-//        if (isVerify(userPhone, certificationInput)) {
-//            throw new IllegalArgumentException("인증번호가 일치하지 않습니다.");
-//        } else {
-//            return "인증 완료되었습니다.";
-//        }
     }
 
     private boolean isVerify(String userPhone, String certificationInput) {

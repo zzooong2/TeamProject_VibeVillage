@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.user.model.mapper.MyPageMapper">
+
+    <resultMap id="loginUserInfo" type="kr.co.vibevillage.user.model.dto.UserDTO">
+        <result column="UU_NO" property="uploadFileNo"></result>
+        <result column="UU_NAME" property="uploadFileName"></result>
+        <result column="UU_UNIQUE_NAME" property="uploadFileUniqueName"></result>
+        <result column="UU_LOCAL_PATH" property="uploadFilePath"></result>
+        <result column="UU_FILE_TYPE" property="uploadFileType"></result>
+    </resultMap>
+
+    <insert id="uploadProfile" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+
+        <selectKey keyProperty="uploadFileNo" resultType="_int" order="BEFORE">
+            SELECT USER_UPLOAD_SEQ.nextval FROM dual
+        </selectKey>
+
+        INSERT INTO USER_UPLOAD VALUES(#{uploadFileNo}, #{uploadFileName}, #{uploadFileUniqueName}, #{uploadFilePath}, null, #{uploadFileType}, #{userNo})
+    </insert>
+
+    <select id="getProfileInfo" resultMap="loginUserInfo">
+        SELECT U_NO, UU_NO, UU_NAME, UU_UNIQUE_NAME, UU_LOCAL_PATH, UU_SERVER_PATH, UU_FILE_TYPE FROM USER_UPLOAD WHERE U_NO = #{loginUserNo}
+    </select>
+
+    <delete id="deleteProfile">
+        DELETE USER_UPLOAD WHERE U_NO = #{loginUserNo}
+    </delete>
+
+    <update id="updateProfile" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+    UPDATE USER_VIBEVILLAGE
+        SET
+            U_NAME = #{userName},
+            U_NICKNAME = #{userNickName},
+            U_PHONE = #{userPhone},
+            U_POSTCODE = #{userPostCode},
+            U_ADDRESS = #{userAddress},
+            U_DETAIL_ADDRESS = #{userDetailAddress},
+            U_EXTRA_ADDRESS = #{userExtraAddress},
+            U_BIRTHDATE = #{userBirthDate}
+        WHERE
+            U_NO = #{userNo}
+    </update>
+
+    <update id="updatePassword" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_VIBEVILLAGE SET U_PASSWORD = #{userPassword} WHERE U_NO = #{userNo}
+    </update>
+
+</mapper>

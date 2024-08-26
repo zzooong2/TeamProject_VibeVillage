@@ -19,4 +19,7 @@ public interface MyPageService {
 
     // 비밀번호 변경
     public int updatePassword(UserDTO userDTO);
+
+    // 비밀번호 변경 (암호화 없는 임시 비밀번호)
+    public int updatePasswordNoneProtected(UserDTO userDTO);
 }

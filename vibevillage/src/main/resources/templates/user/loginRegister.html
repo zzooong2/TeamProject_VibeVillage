@@ -133,24 +133,5 @@
 <!-- 주소찾기 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-<script>
-    // 페이지가 로드된 후, 에러 메시지 표시 로직
-    document.addEventListener("DOMContentLoaded", function() {
-        // 에러 메시지 div 가져오기
-        const errorDiv = document.getElementById("errorMessage");
-
-        // 에러 메시지가 존재하는지 확인
-        if (errorDiv && errorDiv.textContent.trim() !== "") {
-            // SweetAlert2를 사용하여 에러 메시지 표시
-            Swal.fire({
-                title: '로그인 실패',
-                text: errorDiv.textContent,
-                icon: 'error',
-                confirmButtonText: '확인'
-            });
-        }
-    });
-</script>
-
 </body>
 </html>

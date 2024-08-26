@@ -71,6 +71,7 @@ public class MyPageServiceImpl implements MyPageService{
     }
 
     // 프로필 변경
+    @Override
     public int updateProfile(UserDTO userDTO) {
         System.out.println(userDTO.toString());
         return myPageMapper.updateProfile(userDTO);
@@ -83,6 +84,12 @@ public class MyPageServiceImpl implements MyPageService{
         // 암호화된 비밀번호를 userDTO 객체에 초기화
         userDTO.setUserPassword(bcryptPassword);
 
+        return myPageMapper.updatePassword(userDTO);
+    }
+
+    // 비밀번호 변경 (암호화 없는 임시 비밀번호)
+    @Override
+    public int updatePasswordNoneProtected(UserDTO userDTO) {
         return myPageMapper.updatePassword(userDTO);
     }
 }

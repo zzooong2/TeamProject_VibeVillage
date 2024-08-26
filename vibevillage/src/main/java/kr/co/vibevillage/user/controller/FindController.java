@@ -63,13 +63,19 @@ public class FindController {
 
         // 회원이 존재한다면
         if (user != null) {
-            // 임시 비밀번호 발급 (랜덤문자열)
-            String temporaryPassword =  RandomStringGenerator.generateRandomString(8);
+            // 임시 비밀번호를 명시하는 문자열
+            String temporaryKey = "TKtk";
+            // 랜덤 문자열 생성
+            String createTemporaryPassword =  RandomStringGenerator.generateRandomString(8);
+            // 임시 비밀번호 설정
+            String temporaryPassword = temporaryKey + createTemporaryPassword;
             System.out.println("임시 비밀번호: " + temporaryPassword);
+
             // user 객체에 임시비밀번호 초기화
             user.setUserPassword(temporaryPassword);
+
             // 임시 비밀번호로 비밀번호 변경
-            int result = myPageService.updatePassword(user);
+            int result = myPageService.updatePasswordNoneProtected(user);
             System.out.println("임시비번으로 변경한 결과: " + result);
 
             if(result == 1) { // 변경 완료

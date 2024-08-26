@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en-US" dir="ltr">
+<html dir="ltr" lang="en-US">
 <head th:replace="~{common/head :: head}">
     <!-- jQuery CDN -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 
-<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<body data-offset="60" data-spy="scroll" data-target=".onpage-navigation">
 <main>
     <div class="page-loader">
         <div class="loader">Loading...</div>
@@ -22,22 +22,22 @@
 
                         <form class="form" >
                             <div class="form-group">
-                                <input class="form-control" id="inputName" type="text" placeholder="이름" onkeyup=""/>
+                                <input class="form-control" id="inputName" onkeyup="" placeholder="이름" type="text"/>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control hj-address-number" id="UserPhoneByFindId" type="text" placeholder="연락처"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="checkUserInfoByPhone()">본인인증</button>&nbsp;
+                                <input class="form-control hj-address-number" id="UserPhoneByFindId" placeholder="연락처" type="text"/>
+                                <button class="btn btn-g btn-round" onclick="checkUserInfoByPhone()" style="position:absolute; right:15px;" type="button">본인인증</button>&nbsp;
                                 <div class="hj-validation-name" id="showPhoneByFindId"></div>
                             </div>
-                            <div class="form-group" style="display: none" id="certificationAreaByFindId">
-                                <input class="form-control hj-address-number" id="certificationInputByFindId" type="text" placeholder="인증번호"/>
-                                <div style="display: none" id="checkCertificationById"></div>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="startCertificationByFindId()">인증하기</button>&nbsp;
+                            <div class="form-group" id="certificationAreaByFindId" style="display: none">
+                                <input class="form-control hj-address-number" id="certificationInputByFindId" placeholder="인증번호" type="text"/>
+                                <div id="checkCertificationById" style="display: none"></div>
+                                <button class="btn btn-g btn-round" onclick="startCertificationByFindId()" style="position:absolute; right:15px;" type="button">인증하기</button>&nbsp;
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-block btn-round btn-g" type="button" onclick="findUserId()">계정 찾기</button>
+                                <button class="btn btn-block btn-round btn-g" onclick="findUserId()" type="button">계정 찾기</button>
                             </div>
 
                         </form>
@@ -50,24 +50,24 @@
 
                         <form class="form">
                             <div class="form-group">
-                                <input class="form-control" id="inputId" type="text" placeholder="계정" onkeyup=""/>
+                                <input class="form-control" id="inputId" onkeyup="" placeholder="계정" type="text"/>
                                 <div id="showLoginId"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control hj-address-number" id="UserPhoneByFindPassword" type="text" placeholder="연락처"/>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="checkUserInfoByPhone2()">본인인증</button>&nbsp;
+                                <input class="form-control hj-address-number" id="UserPhoneByFindPassword" placeholder="연락처" type="text"/>
+                                <button class="btn btn-g btn-round" onclick="checkUserInfoByPhone2()" style="position:absolute; right:15px;" type="button">본인인증</button>&nbsp;
                                 <div class="hj-validation-name" id="showPhoneByFindPassword"></div>
                             </div>
 
-                            <div class="form-group" style="display: none" id="certificationAreaByFindPassword">
-                                <input class="form-control hj-address-number" id="certificationInputByFindPassword" type="text" placeholder="인증번호"/>
-                                <div style="display: none" id="checkCertificationByPassword"></div>
-                                <button class="btn btn-g btn-round" type="button" style="position:absolute; right:15px;" onclick="startCertificationByFindPassword()">인증하기</button>&nbsp;
+                            <div class="form-group" id="certificationAreaByFindPassword" style="display: none">
+                                <input class="form-control hj-address-number" id="certificationInputByFindPassword" placeholder="인증번호" type="text"/>
+                                <div id="checkCertificationByPassword" style="display: none"></div>
+                                <button class="btn btn-g btn-round" onclick="startCertificationByFindPassword()" style="position:absolute; right:15px;" type="button">인증하기</button>&nbsp;
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-block btn-round btn-g" type="button" onclick="findUserPassword()">비밀번호 찾기</button>
+                                <button class="btn btn-block btn-round btn-g" onclick="findUserPassword()" type="button">비밀번호 찾기</button>
                             </div>
                         </form>
 

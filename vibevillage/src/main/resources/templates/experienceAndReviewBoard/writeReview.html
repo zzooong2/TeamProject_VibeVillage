@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{common/head :: head}"></div>
+    <!-- 스마트에디터 CSS 파일 -->
+    <link rel="stylesheet" type="text/css" href="/smarteditor/css/smart_editor2.css">
 </head>
 <body>
 <div th:replace="~{common/nav :: nav}"></div>
@@ -12,9 +14,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <h4 class="font-alt mb-0">글쓰기</h4>
                 <hr class="divider-w mt-10 mb-20">
-                <!-- Form action 경로를 업데이트하고, th:action으로 설정 -->
                 <form class="form" role="form" th:action="@{/experienceBoard/write}" method="post" enctype="multipart/form-data" id="postForm">
-
                     <div class="form-group">
                         <input class="form-control" type="text" placeholder="제목을 입력해주세요." name="rTitle" id="rTitle" />
                     </div>
@@ -34,15 +34,16 @@
 
                     <div class="form-group">
                         <label for="imageUpload">이미지 업로드:</label>
-                        <input type="file" class="form-control-file" id="imageUpload" name="imageUpload" accept="image/*" multiple onchange="previewImages(event)" />
+                        <input type="file" class="form-control-file" id="imageUpload" name="file" accept="image/*" multiple onchange="previewImages(event)" />
                         <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
                     </div>
 
-                    <textarea class="form-control" rows="7" placeholder="내용을 입력해주세요." name="rContent" id="rContent"></textarea>
+                    <div class="form-group">
+                        <textarea name="rContent" id="rContent" rows="10" cols="100" style="width:100%; height:412px;"></textarea>
+                    </div>
 
                     <div class="form-actions">
-                        <button class="btn btn-g btn-circle" type="submit" onclick="return validateForm()" >등록</button>
-                        <!-- 취소 버튼의 경로를 업데이트 -->
+                        <button class="btn btn-g btn-circle" type="submit" onclick="return validateForm()">등록</button>
                         <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/experienceBoard}'|">취소</button>
                     </div>
                 </form>
@@ -51,31 +52,27 @@
     </div>
 </section>
 
-<script>
-    function previewImages(event) {
-        const files = event.target.files;
-        const container = document.getElementById('imagePreviewContainer');
-        container.innerHTML = ''; // Clear the container
-
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '100px'; // Adjust as needed
-                img.style.margin = '10px';
-                container.appendChild(img);
-            }
-
-            reader.readAsDataURL(file);
-        }
-    }
+<!-- 스마트에디터 JS 파일 -->
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var oEditors = [];
+    nhn.husky.EZCreator.createInIFrame({
+        oAppRef: oEditors,
+        elPlaceHolder: "rContent",
+        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+        htParams: {
+            bUseToolbar: true,
+            bUseVerticalResizer: true,
+            bUseModeChanger: true,
+        },
+        fCreator: "createSEditor2"
+    });
 
     function validateForm() {
+        submitContents();
         const rTitle = document.getElementById('rTitle').value.trim();
         const categoryId = document.getElementById('categoryId').value.trim();
+        oEditors.getById["rContent"].exec("UPDATE_CONTENTS_FIELD", []); // 에디터의 내용을 textarea에 업데이트
         const rContent = document.getElementById('rContent').value.trim();
 
         if (!rTitle) {
@@ -92,7 +89,6 @@
             alert('내용을 입력해주세요.');
             return false;
         }
-
         return true;
     }
 </script>

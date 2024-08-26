@@ -3,6 +3,7 @@ package kr.co.vibevillage.experienceAndReviewBoard.dto;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class ExperienceBoardDTO {
@@ -17,8 +18,9 @@ public class ExperienceBoardDTO {
     private int rViewCount = 0;    // 조회수
     private int rLikeCount = 0;    // 좋아요 수
     private int commentCount = 0;
-    private UploadDTO uploadDTO;
+    private List<UploadDTO> uploadDTOs;
     private String categoryName;
 
+    private String userId;
 }
 

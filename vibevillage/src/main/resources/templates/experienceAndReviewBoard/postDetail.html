@@ -10,10 +10,24 @@
 
 <div class="post-container">
     <h2 th:text="${post.rTitle}">게시글 제목</h2>
-    <p class="author">작성자: <span th:text="${post.uNo}">작성자 번호</span></p>
+    <p class="author">작성자: <span th:text="${post.uNickname}">작성자</span></p>
     <p class="date">작성일: <span th:text="${post.rCreatedAt}">작성일</span></p>
     <div class="content" th:text="${post.rContent}">
         게시글 내용
+    </div>
+
+    <div th:if="${post.uploadDTOs != null}">
+        <div th:each="upload : ${post.uploadDTOs}">
+            <img th:src="@{/uploadReviewFile/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+        </div>
+    </div>
+
+    <!-- 게시글 수정/삭제 버튼 섹션 -->
+    <div th:if="${post.uNo == currentUserId}">
+        <a th:href="@{'/experienceBoard/post/edit/' + ${post.rId}}" class="btn btn-primary">수정</a>
+        <form th:action="@{/experienceBoard/post/delete/{id}(id=${post.rId})}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">삭제</button>
+        </form>
     </div>
 
     <div class="post-interaction">
@@ -26,6 +40,7 @@
         </form>
     </div>
 </div>
+
 
 <div class="comment-section">
     <h2>댓글</h2>

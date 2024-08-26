@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.vibevillage.experienceAndReviewBoard.listmapper.CommentMapper">
+    <update id="addCommentCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_COMMENT_COUNT = ULM_COMMENT_COUNT +1
+    </update>
 
+    <update id="subCommentCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_COMMENT_COUNT = ULM_COMMENT_COUNT -1
+    </update>
     <!-- 댓글 삽입 -->
     <insert id="insertComment" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.CommentDTO">
         INSERT INTO R_COMMENTS (COMMENT_ID, R_ID, U_NICKNAME, C_CONTENT, C_CREATED_AT)

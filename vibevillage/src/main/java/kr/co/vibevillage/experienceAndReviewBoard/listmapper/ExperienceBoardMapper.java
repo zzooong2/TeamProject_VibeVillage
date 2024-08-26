@@ -5,6 +5,7 @@ import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.io.IOException;
 import java.util.List;
 
 @Mapper
@@ -12,8 +13,6 @@ public interface ExperienceBoardMapper {
     List<ExperienceBoardDTO> findAllWithPagination(@Param("limit") int limit, @Param("offset") int offset);
 
     void insertUpload(UploadDTO uploadDTO);
-
-//    void insert(ExperienceBoardDTO experienceBoard, int userNo);
 
     void update(ExperienceBoardDTO experienceBoard);
 
@@ -47,16 +46,32 @@ public interface ExperienceBoardMapper {
     List<ExperienceBoardDTO> findPostsByCategory(@Param("categoryId")Long categoryId);
 
     String getCategoryNameById(@Param("categoryId")Long categoryId);
+
     List<ExperienceBoardDTO> findAllPosts();
 
     int countTotalPosts();
 
-    // 추천글을 가져오는 메서드 (페이징 처리)
     List<ExperienceBoardDTO> findTopLikedPosts(@Param("offset") int offset, @Param("size") int size);
 
-    // 추천글의 총 개수를 세는 메서드
-    int countTotalRecommendedPosts();
+    void createPost(ExperienceBoardDTO experienceBoardDto) throws IOException;
 
-    void createPost(ExperienceBoardDTO experienceBoardDTO);
-    void updatePost(ExperienceBoardDTO experienceBoardDTO);
+    List<UploadDTO> findUploadsByPostId(Long rId);
+
+    void deletePost(Long rId);
+
+    void deleteUploadsByPostId(Long rId);
+
+    void deleteCommentsByPostId(Long postId);
+
+    void updatePost(@Param("rId") Long rId, @Param("rTitle") String rTitle, @Param("rContent") String rContent);
+
+    void deleteUploadById(Long id);
+
+    void addWriteCount(int userNo);
+
+    void subWriteCount(int userNo);
 }
+
+
+
+

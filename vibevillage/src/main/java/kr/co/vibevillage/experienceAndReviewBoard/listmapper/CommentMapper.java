@@ -16,4 +16,8 @@ public interface CommentMapper {
     int countCommentsByPostId(Long rId);
 
     CommentDTO getCommentById(Long commentId);
+
+    void addCommentCount(int userNo);
+
+    void subCommentCount(int userNo);
 }

@@ -28,13 +28,28 @@
         ]]>
     </select>
 
+    <update id="addWriteCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_WRITE_COUNT = ULM_WRITE_COUNT +1
+    </update>
+
+    <update id="subWriteCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_WRITE_COUNT = ULM_WRITE_COUNT -1
+    </update>
 
     <!-- 게시글 삽입 -->
     <insert id="createPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         INSERT INTO REVIEWS (R_ID, U_NO, C_ID, R_TITLE, R_CONTENT, R_CREATED_AT)
         VALUES (REVIEWS_SEQ.nextval, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
+        <selectKey keyProperty="rId" resultType="long" order="AFTER">
+            SELECT REVIEWS_SEQ.currval FROM dual
+        </selectKey>
     </insert>
 
+    <!-- 파일 업로드 정보 삽입 -->
+    <insert id="insertUpload" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO">
+        INSERT INTO R_UPLOAD (RU_NO, R_ID, RU_NAME, RU_UNIQUE_NAME, RU_LOCAL_PATH, RU_SERVER_PATH, RU_FILE_TYPE)
+        VALUES (R_UPLOAD_SEQ.nextval, #{rId}, #{ruName}, #{ruUniqueName}, #{ruLocalPath}, #{ruServerPath}, #{ruFileType})
+    </insert>
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         UPDATE REVIEWS
@@ -43,8 +58,20 @@
     </update>
 
     <!-- 게시글 삭제 -->
+    <delete id="deleteCommentsByPostId" parameterType="long">
+        DELETE FROM R_COMMENTS WHERE R_ID = #{postId}
+    </delete>
+
+    <delete id="deleteUploadsByPostId" parameterType="Long">
+        DELETE FROM R_UPLOAD WHERE R_ID = #{postId}
+    </delete>
+
     <delete id="deletePost" parameterType="long">
         DELETE FROM REVIEWS WHERE R_ID = #{rId}
+    </delete>
+
+    <delete id="deleteUploadById" parameterType="long">
+        DELETE FROM R_UPLOAD WHERE RU_NO = #{ruNo}
     </delete>
 
     <!-- 게시글 검색 -->
@@ -67,24 +94,39 @@
            OR r.R_CONTENT LIKE '%' || #{keyword} || '%'
     </select>
 
-    <!-- 게시글 ID로 조회 -->
     <select id="findById" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
         SELECT
-            r.R_ID as rId,
-            r.U_NO as uNo,
-            u.U_NICKNAME as uNickname,
-            r.C_ID as categoryId,
-            c.C_NAME as categoryName,
-            r.R_TITLE as rTitle,
-            r.R_CONTENT as rContent,
-            r.R_CREATED_AT as rCreatedAt,
-            r.R_UPDATED_AT as rUpdatedAt,
-            r.R_VIEW_COUNT as rViewCount
+        r.R_ID as rId,
+        r.U_NO as uNo,
+        u.U_ID as userId,
+        u.U_NICKNAME as uNickname,
+        r.C_ID as categoryId,
+        c.C_NAME as categoryName,
+        r.R_TITLE as rTitle,
+        r.R_CONTENT as rContent,
+        r.R_CREATED_AT as rCreatedAt,
+        r.R_UPDATED_AT as rUpdatedAt,
+        r.R_VIEW_COUNT as rViewCount
         FROM REVIEWS r
-                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
-                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+        JOIN CATEGORIES c ON r.C_ID = c.C_ID
         WHERE r.R_ID = #{rId}
+
     </select>
+
+    <select id="findUploadsByPostId" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO">
+        SELECT
+            RU_NO as ruNo,
+            R_ID as rId,
+            RU_NAME as ruName,
+            RU_UNIQUE_NAME as ruUniqueName,
+            RU_LOCAL_PATH as ruLocalPath,
+            RU_SERVER_PATH as ruServerPath,
+            RU_FILE_TYPE as ruFileType
+        FROM R_UPLOAD
+        WHERE R_ID = #{rId}
+    </select>
+
 
     <!-- 다른 게시글 조회 (특정 게시글 제외) -->
     <select id="findOtherPosts" parameterType="long" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
@@ -204,14 +246,6 @@
                  JOIN CATEGORIES c ON r.C_ID = c.C_ID
         WHERE r.C_ID = #{categoryId}
     </select>
-
-
-    <!-- 파일 업로드 정보 삽입 -->
-    <insert id="insertUpload" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO">
-        INSERT INTO R_UPLOAD (RU_NO, R_ID, RU_NAME, RU_UNIQUE_NAME, RU_LOCAL_PATH, RU_SERVER_PATH, RU_FILE_TYPE)
-        VALUES (#{ruNo}, #{rId}, #{ruName}, #{ruUniqueName}, #{ruLocalPath}, #{ruServerPath}, #{ruFileType})
-    </insert>
-
 
     <select id="countTotalPosts" resultType="int">
         SELECT COUNT(*) AS totalPostsCount FROM REVIEWS

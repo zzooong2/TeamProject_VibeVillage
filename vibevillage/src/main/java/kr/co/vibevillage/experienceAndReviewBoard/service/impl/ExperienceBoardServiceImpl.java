@@ -4,17 +4,23 @@ import kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO;
 import kr.co.vibevillage.experienceAndReviewBoard.listmapper.ExperienceBoardMapper;
 import kr.co.vibevillage.experienceAndReviewBoard.service.ExperienceBoardService;
+import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ExperienceBoardServiceImpl implements ExperienceBoardService {
 
     private final ExperienceBoardMapper experienceBoardMapper;
     private final LoginServiceImpl loginServiceImpl;
+
 
     @Autowired
     public ExperienceBoardServiceImpl(ExperienceBoardMapper experienceBoardMapper, LoginServiceImpl loginServiceImpl) {
@@ -29,36 +35,94 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     }
 
     @Override
-    public void createPost(ExperienceBoardDTO experienceBoardDto, int userNo) {
-
+    public void createPost(ExperienceBoardDTO experienceBoardDto, int userNo, MultipartFile[] files) throws IOException {
         experienceBoardDto.setUNo((long) userNo);  // 사용자 번호 설정
 
-//        ExperienceBoardDTO experienceBoard = new ExperienceBoardDTO();
-//        experienceBoard.setUNo(experienceBoardDto.getUNo());
-//        experienceBoard.setCategoryId(experienceBoardDto.getCategoryId());
-//        experienceBoard.setRTitle(experienceBoardDto.getRTitle());
-//        experienceBoard.setRContent(experienceBoardDto.getRContent());
-
-        System.out.println("No: " + userNo);
-        System.out.println("CategoryId: " + experienceBoardDto.getCategoryId());
-        System.out.println("Title: " + experienceBoardDto.getRTitle());
-        System.out.println("Content: " + experienceBoardDto.getRContent());
-
+        // 게시글 생성
         experienceBoardMapper.createPost(experienceBoardDto);
+        experienceBoardMapper.addWriteCount(userNo);
+
+        // 생성된 게시글의 ID 가져오기 (MyBatis의 selectKey 사용)
+        Long rId = experienceBoardDto.getRId();
+
+        // 파일 업로드 처리
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    handleFileUpload(file, rId);  // 파일 개별 처리
+                }
+            }
+        }
     }
 
     @Override
-    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDto) {
-        ExperienceBoardDTO experienceBoard = new ExperienceBoardDTO();
-        experienceBoard.setRId(rId);
-        experienceBoard.setRTitle(experienceBoardDto.getRTitle());
-        experienceBoard.setRContent(experienceBoardDto.getRContent());
-        experienceBoardMapper.update(experienceBoardDto); // Mapper 호출 추가
+    public void deleteUploadsByIds(Long[] deleteImageIds) {
+        for (Long id : deleteImageIds) {
+
+            experienceBoardMapper.deleteUploadById(id);
+        }
+    }
+
+    @Override
+    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files) throws IOException {
+        // 기존 게시글 업데이트
+        experienceBoardMapper.updatePost(rId, experienceBoardDTO.getRTitle(), experienceBoardDTO.getRContent());
+
+        // 파일 업로드 처리
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    handleFileUpload(file, rId);
+                }
+            }
+        }
+    }
+
+    private void handleFileUpload(MultipartFile file, Long rId) throws IOException {
+        String uploadDirectory = "C:\\dev\\final\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
+        File directory = new File(uploadDirectory);
+        if (!directory.exists()) {
+            directory.mkdirs(); // 디렉터리 생성
+        }
+
+        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+        File destinationFile = new File(uploadDirectory + "/" + fileName);
+
+        file.transferTo(destinationFile);
+
+        UploadDTO uploadDTO = new UploadDTO();
+        uploadDTO.setRId(rId);
+        uploadDTO.setRuName(fileName);
+        uploadDTO.setRuUniqueName(file.getOriginalFilename());
+        uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
+        uploadDTO.setRuServerPath("/static/uploadReviewFile/" + fileName);
+        uploadDTO.setRuFileType(file.getContentType());
+
+        // 파일 정보 DB 저장
+        experienceBoardMapper.insertUpload(uploadDTO);
     }
 
     @Override
     public void deletePost(Long rId) {
-        experienceBoardMapper.delete(rId); // Mapper 호출 추가
+
+        UserDTO loginUser = loginServiceImpl.getLoginUserInfo();
+        int loginUserNo = loginUser.getUserNo();
+        experienceBoardMapper.subWriteCount(loginUserNo);
+
+        // 게시글 삭제
+        experienceBoardMapper.deletePost(rId);
+        // 게시글에 관련된 파일도 삭제 (필요 시)
+        experienceBoardMapper.deleteUploadsByPostId(rId);
+    }
+
+    @Override
+    public void deletePostAndRelatedData(Long postId) {
+        // 자식 테이블의 관련 데이터를 먼저 삭제
+        experienceBoardMapper.deleteCommentsByPostId(postId);
+        experienceBoardMapper.deleteUploadsByPostId(postId);
+
+        // 그 후 부모 테이블의 레코드를 삭제
+        experienceBoardMapper.deletePost(postId);
     }
 
     @Override
@@ -70,65 +134,21 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     public ExperienceBoardDTO getPostById(Long rId) {
         // 조회수 증가
         experienceBoardMapper.incrementViewCount(rId);
+
         // 게시글 상세정보 가져오기
         ExperienceBoardDTO experienceBoardDTO = experienceBoardMapper.findById(rId);
+
         if (experienceBoardDTO == null) {
             return null;
         }
 
-        ExperienceBoardDTO dto = new ExperienceBoardDTO();
-        dto.setRId(experienceBoardDTO.getRId());
-        dto.setUNo(experienceBoardDTO.getUNo());
-        dto.setCategoryId(experienceBoardDTO.getCategoryId());
-        dto.setRTitle(experienceBoardDTO.getRTitle());
-        dto.setRContent(experienceBoardDTO.getRContent());
-        dto.setRCreatedAt(experienceBoardDTO.getRCreatedAt());
-        dto.setRUpdatedAt(experienceBoardDTO.getRUpdatedAt());
-        dto.setRViewCount(Math.toIntExact(experienceBoardDTO.getRViewCount()));
-        dto.setRLikeCount(Math.toIntExact(experienceBoardDTO.getRLikeCount()));
+        // 업로드된 파일 정보 가져오기
+        List<UploadDTO> uploadDTOs = experienceBoardMapper.findUploadsByPostId(rId);
+        experienceBoardDTO.setUploadDTOs(uploadDTOs);
 
-        return dto;
-    }
-    @Override
-    public List<ExperienceBoardDTO> getOtherPosts(Long excludeId) {
-        return experienceBoardMapper.findOtherPosts(excludeId);
+        return experienceBoardDTO;
     }
 
-    @Override
-    public void toggleLike(Long rId, Long uNo) {
-        if (experienceBoardMapper.isLiked(rId, uNo)) {
-            experienceBoardMapper.deleteLike(rId, uNo);
-        } else {
-            experienceBoardMapper.insertLike(rId, uNo);
-        }
-    }
-
-
-
-    @Override
-    public boolean isPostLikedByUser(Long rId, Long uNo) {
-        return experienceBoardMapper.isLiked(rId, uNo);
-    }
-
-    @Override
-    public int countLikes(Long rId) {
-        return experienceBoardMapper.countLikes(rId);
-    }
-
-    @Override
-    public List<ExperienceBoardDTO> getPostsWithCommentCount() {
-        return experienceBoardMapper.getPostsWithCommentCount();
-    }
-
-    @Override
-    public List<ExperienceBoardDTO> getPostsWithCommentCount(int page, int size) {
-        return List.of();
-    }
-
-    @Override
-    public List<ExperienceBoardDTO> getTopLikedPosts() {
-        return experienceBoardMapper.getTopLikedPosts();
-    }
 
     @Override
     public List<ExperienceBoardDTO> getPostsByCategory(Long categoryId) {
@@ -164,12 +184,6 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         return posts;
     }
 
-
-    @Override
-    public void saveUpload(UploadDTO uploadDTO) {
-        experienceBoardMapper.insertUpload(uploadDTO);
-    }
-
     @Override
     public String getCategoryNameById(Long categoryId) {
         return experienceBoardMapper.getCategoryNameById(categoryId);
@@ -185,14 +199,11 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         return experienceBoardMapper.countTotalPosts();
     }
 
+
     @Override
     public List<ExperienceBoardDTO> getTopLikedPosts(int page, int size) {
         int offset = (page - 1) * size;
         return experienceBoardMapper.findTopLikedPosts(offset, size);
     }
 
-    @Override
-    public int getTotalRecommendedPosts() {
-        return experienceBoardMapper.countTotalRecommendedPosts();
-    }
 }

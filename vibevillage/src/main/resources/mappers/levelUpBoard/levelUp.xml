@@ -29,7 +29,7 @@
 
     <!-- 등업신청서 목록 -->
     <select id="getLevelUpList" resultMap="levelResultSet">
-        select lb.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LR_STATUS, lb.U_NO, uv.u_nickname,
+        select lb.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LR_NO, LR_STATUS, LR_INDATE, LR_STATUS, lb.U_NO, uv.u_nickname,
         ULM_LEVEL, ULM_ACCESS_COUNT, ULM_WRITE_COUNT, ULM_COMMENT_COUNT,ULM_ACCESS_TIME
         from LEVELUP_BOARD lb
         full join LEVELUP_RESULT_BOARD lrb
@@ -54,7 +54,7 @@
     <!--등업신청시 생성-->
     <insert id="levelResultBoard" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
         insert into LEVELUP_RESULT_BOARD (LR_NO, LR_STATUS, LR_INDATE, LB_NO, U_NO)
-        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, DEFAULT, SYSDATE, #{lbNo}, #{uNo})
+        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, '진행중', SYSDATE, #{levelUpDTO.lbNo}, #{uNo})
     </insert>
 
     <!--등업신청서 count 추가-->

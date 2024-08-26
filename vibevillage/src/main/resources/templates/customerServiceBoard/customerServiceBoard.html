@@ -47,9 +47,9 @@
                                 <li th:if="${userLevel == '겨울'}">
                                     <a href="#inquiry_list" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li>
                                 <li th:if="${userLevel == '겨울'}">
-                                    <a th:href="@{noticeBoard}"><span></span>공지사항 쓰기</a></li>
+                                    <a th:href="@{/customerService/noticeBoard}"><span></span>공지사항 쓰기</a></li>
                                 <li th:if="${userLevel == '겨울'}">
-                                    <a th:href="@{questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
+                                    <a th:href="@{/customerService/questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="notice_board">
@@ -183,38 +183,6 @@
                                     </div>
                                 </div>
 
-                                <!--                                <script>-->
-
-                                <!--                                function filterAnswers() {-->
-                                <!--                                var selectedCategory = document.getElementById("category").value;-->
-                                <!--                                if (selectedCategory !== null) {-->
-                                <!--                                const url = `/customerService/csList/${selectedCategory}`;-->
-                                <!--                                window.location.href = url;-->
-                                <!--                                }-->
-                                <!--                                }-->
-                                <!--                                </script>-->
-
-<!--                                <script>-->
-<!--                                    function filterAnswers() {-->
-<!--                                        var selectedCategory = document.getElementById("category").value;-->
-<!--                                        if (selectedCategory !== null) {-->
-<!--                                            const url = `/customerService/csList/${selectedCategory}`;-->
-<!--                                            // 선택된 카테고리를 로컬 스토리지에 저장-->
-<!--                                            localStorage.setItem('selectedCategory', selectedCategory);-->
-<!--                                            window.location.href = url;-->
-<!--                                        }-->
-<!--                                    }-->
-
-<!--                                    // 페이지 로드 시 선택된 카테고리 복원-->
-<!--                                    document.addEventListener("DOMContentLoaded", function() {-->
-<!--                                        var selectedCategory = localStorage.getItem('selectedCategory');-->
-<!--                                        if (selectedCategory !== null) {-->
-<!--                                            document.getElementById("category").value = selectedCategory;-->
-<!--                                        }-->
-<!--                                    });-->
-<!--                                </script>-->
-
-
                                 <div class="tab-pane" id="inquiry_list"
                                      style="padding-top: 20px; padding-bottom: 20px;">
                                     <div class="panel-group" id="accordion">
@@ -268,9 +236,10 @@
             if (selectedCategory !== null) {
                 document.getElementById("category").value = selectedCategory;
                 localStorage.removeItem('selectedCategory');
-                localStorage.removeItem('lastTab');
+               // localStorage.removeItem('lastTab');
             }
         }
+
     });
 
     // 카테고리 선택시 URL 이동
@@ -288,117 +257,11 @@
         // 고객센터 페이지를 떠날 때 로컬 스토리지 초기화
         if (window.location.pathname.startsWith('/customerService/csList')) {
             // 이 부분은 선택된 카테고리의 초기화를 제거하여 유지하도록 변경
+            // localStorage.removeItem('selectedCategory');
             // localStorage.removeItem('lastTab');
         }
     });
-
 </script>
-
-
-
-<!--<script>-->
-<!--    document.addEventListener("DOMContentLoaded", function () {-->
-<!--        if (window.location.pathname.startsWith('/customerService/csList')) {-->
-<!--            // 고객센터 페이지일 때 마지막으로 활성화된 탭 복원-->
-<!--            var lastTab = localStorage.getItem('lastTab');-->
-<!--            if (lastTab) {-->
-<!--                $('.nav-tabs a[href="' + lastTab + '"]').tab('show');-->
-<!--            }-->
-
-<!--            // 탭 클릭 시 활성화된 탭을 로컬 스토리지에 저장-->
-<!--            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {-->
-<!--                var activeTab = $(e.target).attr('href');-->
-<!--                localStorage.setItem('lastTab', activeTab);-->
-<!--            });-->
-
-<!--            // 페이지 로드 시 선택된 카테고리 복원-->
-<!--            var selectedCategory = localStorage.getItem('selectedCategory');-->
-<!--            if (selectedCategory !== null) {-->
-<!--                document.getElementById("category").value = selectedCategory;-->
-<!--            }-->
-
-<!--            // 고객센터 페이지를 떠날 때 로컬 스토리지 초기화-->
-<!--            window.addEventListener("beforeunload", function (event) {-->
-<!--                if (window.location.pathname.startsWith('/customerService/csList')) {-->
-<!--                    localStorage.removeItem('selectedCategory');-->
-<!--                }-->
-<!--            });-->
-<!--        }-->
-<!--    });-->
-
-<!--    function filterAnswers() {-->
-<!--        var selectedCategory = document.getElementById("category").value;-->
-<!--        if (selectedCategory !== null) {-->
-<!--            const url = `/customerService/csList/${selectedCategory}`;-->
-<!--            // 선택된 카테고리를 로컬 스토리지에 저장-->
-<!--            localStorage.setItem('selectedCategory', selectedCategory);-->
-<!--            window.location.href = url;-->
-<!--        }-->
-<!--    }-->
-<!--</script>-->
-
-
-
-
-
-<!--<script>-->
-
-<!--    function filterAnswers() {-->
-<!--    var selectedCategory = document.getElementById("category").value;-->
-<!--      if (selectedCategory !== null) {-->
-<!--    const url = `/customerService/csList/${selectedCategory}`;-->
-<!--    // 선택된 카테고리를 로컬 스토리지에 저장-->
-<!--    localStorage.setItem('selectedCategory', selectedCategory);-->
-<!--    window.location.href = url;-->
-<!--    }-->
-<!--    }-->
-
-<!--    // 페이지 로드 시 선택된 카테고리 복원-->
-<!--    document.addEventListener("DOMContentLoaded", function() {-->
-<!--    var selectedCategory = localStorage.getItem('selectedCategory');-->
-<!--     if (selectedCategory !== null) {-->
-<!--    document.getElementById("category").value = selectedCategory;-->
-<!--    }-->
-<!--    });-->
-
-<!--      document.addEventListener("DOMContentLoaded", function () {-->
-<!--          // 로그인 이벤트가 감지되면 로컬 스토리지 초기화-->
-<!--          if (window.location.pathname === '/form/login') {-->
-<!--              localStorage.removeItem('lastTab');-->
-<!--          }-->
-
-<!--          // 마지막으로 활성화된 탭 복원-->
-<!--          var lastTab = localStorage.getItem('lastTab');-->
-<!--          if (lastTab) {-->
-<!--              $('.nav-tabs a[href="' + lastTab + '"]').tab('show');-->
-<!--          }-->
-
-<!--          // 탭 클릭 시 활성화된 탭을 로컬 스토리지에 저장-->
-<!--          $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {-->
-<!--              var activeTab = $(e.target).attr('href');-->
-<!--              localStorage.setItem('lastTab', activeTab);-->
-<!--          });-->
-<!--      });-->
-<!--</script>-->
-
-
-<!--<script>-->
-<!--    document.addEventListener("DOMContentLoaded", function () {-->
-<!--        // 마지막으로 활성화된 탭 복원-->
-<!--        var lastTab = localStorage.getItem('lastTab');-->
-<!--        if (lastTab) {-->
-<!--            $('.nav-tabs a[href="' + lastTab + '"]').tab('show');-->
-<!--        }-->
-
-<!--        // 탭 클릭 시 활성화된 탭을 로컬 스토리지에 저장-->
-<!--        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {-->
-<!--            var activeTab = $(e.target).attr('href');-->
-<!--            localStorage.setItem('lastTab', activeTab);-->
-<!--        });-->
-
-<!--    });-->
-<!--</script>-->
-
 
 </body>
 

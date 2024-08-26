@@ -109,6 +109,7 @@ public class CustomerServiceController {
 
         CustomerServiceDTO nbDetail = customerServiceService.getNoticeBoardDetail(nbNo, userDTO);
         model.addAttribute("nbDetail", nbDetail);
+        model.addAttribute("userLevel", userLevel);
 
         return "noticeBoard/noticeBoardDetail";
     }
@@ -189,9 +190,11 @@ public class CustomerServiceController {
         // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
+        String userLevel = loginInfo.getUserLevel();
 
         CustomerServiceDTO qaDetail = customerServiceService.getQuestionAnswerDetail(qaNo, userNickName);
         model.addAttribute("qaDetail", qaDetail);
+        model.addAttribute("userLevel", userLevel);
 
         return "questionAnswer/questionAnswerDetail";
     }
@@ -261,9 +264,11 @@ public class CustomerServiceController {
         // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
+        String userLevel = loginInfo.getUserLevel();
 
         CustomerServiceDTO ibDetail = customerServiceService.getInquiryAnswerDetail(ibNo, icNo, userNickName);
         model.addAttribute("ibDetail", ibDetail);
+        model.addAttribute("userLevel",userLevel);
 
 //        model.addAttribute("userNickName", userNickName);
 

@@ -18,17 +18,22 @@
           <div class="row">
             <div class="col-sm-6 mb-sm-40">
               메인 이미지
-
               <div class="gallery" id="mainImg">
-
-
+                <div id="currentMain" th:each="item:${mainImages}">
+                  <img class="gallery"  th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
+                  <button class="btn btn-g btn-circle" th:onclick="deleteCurrentMainImage([[${item?.uploadUniqueName}]])" type="button">Delete</button>
+                </div>
               </div>
               <input class="btn btn-g btn-circle" id="main-file-input" name="mainFile" type="file">
 
               서브 이미지
 
               <ul class="product-gallery" id="preview-container">
+              <li class="gallery" th:each="item:${subImages}">
+                <img class="gallery"  th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
+                <button class="btn btn-g btn-circle" th:onclick="deleteCurrentSubImage([[${item?.uploadUniqueName}]])" type="button">Delete</button>
 
+              </li>
               </ul>
               <input class="btn btn-g btn-circle" id="preview-file-input" multiple name="previewFiles" type="file">
             </div>
@@ -64,7 +69,7 @@
 
               <div class="row mb-20">
                 <div class="col-sm-4 mb-sm-20">
-                  <input class="form-control" id="sample5_address" placeholder="주소"  type="text">
+                  <input class="form-control" id="sample5_address" placeholder="주소"  th:value="${usedBoard.usedBoardLocation}" type="text">
                   <input onclick="sample5_execDaumPostcode()" type="button" value="주소 검색" ><br>
 
                 </div>
@@ -116,6 +121,30 @@
 <div th:replace="~{common/js :: js}"></div>
 <script th:src="@{/js/usedBoard/boardCreate.js}"></script>
 <script th:inline="javascript">
+  let usedBoard = /*[[${usedBoard}]]*/ {};
+  let deleteList = [];
+  addressData = {
+    sido: `${usedBoard.province}`,
+    sigungu:`${usedBoard.city}`
+  }
+  latitude =`${usedBoard.gpsLatitude}`;
+  longitude =`${usedBoard.gpsLongitude}`
+  function deleteCurrentMainImage(item) {
+    const main = document.getElementById("currentMain");
+    if (main) {
+      deleteList.push(item);  // 삭제 리스트에 추가
+      main.remove();  // 화면에서 이미지 제거
+    }
+  }
+
+  function deleteCurrentSubImage(item) {
+    const subImage = document.querySelector(`img[src*="${item}"]`);
+    if (subImage) {
+      deleteList.push(item);  // 삭제 리스트에 추가
+      subImage.closest('li').remove();  // 화면에서 이미지 제거
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     const mainFileInput = document.getElementById('main-file-input');
     const previewFileInput = document.getElementById('preview-file-input');
@@ -126,7 +155,10 @@
     let mainImage = null;
     let previewImages = [];
     let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
-    ;
+
+
+
+
 
     mainFileInput.addEventListener('change', function () {
       const file = mainFileInput.files[0];

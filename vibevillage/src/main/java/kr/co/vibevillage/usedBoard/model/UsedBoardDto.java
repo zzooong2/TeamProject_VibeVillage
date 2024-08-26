@@ -21,11 +21,15 @@ public class UsedBoardDto {
  private double gpsLongitude;
  private String usedBoardStatus;
  private int usedBoardViews;
+ private String userNickName;
 
  // 직접 입력
  private String usedBoardTitle;
  private String usedBoardContent;
  private String usedBoardLocation;
+
+ private String province;
+ private String city;
 
  private String usedBoardComment;
 
@@ -39,6 +43,9 @@ public class UsedBoardDto {
  // 카테고리
  private int categoryId;
  private String categoryName;
+
+ // 유저
+ private int userWriteCount, userCommentCount;
 
 
 }

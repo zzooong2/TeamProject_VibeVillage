@@ -23,4 +23,9 @@
         FROM USED_BOARD_IMAGE WHERE used_post_id = #{id} and upload_image_type = 'MAIN'
     </select>
 
+    <delete id="deleteImages" parameterType="int">
+        delete from USED_BOARD_IMAGE
+        where used_post_id = #{id}
+    </delete>
+
 </mapper>

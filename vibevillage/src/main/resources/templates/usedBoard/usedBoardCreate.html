@@ -1,13 +1,10 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head>
-  <style>
-    .input-image{
-      display: none;
-    }
-  </style>
+  <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services" type="text/javascript"></script>
+
   <div th:replace="~{common/head :: head}"></div>
-  <script th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
 <main>
@@ -40,16 +37,7 @@
                   </div>
                 </div>
               </div>
-              <div class="row mb-20">
-                <div class="col-sm-12">
-                  <span><i class="fa fa-star star"></i></span>
-                  <span><i class="fa fa-star star"></i></span>
-                  <span><i class="fa fa-star star"></i></span>
-                  <span><i class="fa fa-star star"></i></span>
-                  <span><i class="fa fa-star star-off"></i></span>
-                  <a class="open-tab section-scroll" href="#reviews">-2 customer reviews</a>
-                </div>
-              </div>
+
               <div class="row mb-20">
                 <div class="col-sm-12">
                   <div class="form-group">
@@ -71,11 +59,9 @@
               </div>
 
               <div class="row mb-20">
-                <div class="col-sm-4 mb-sm-20">
-                  <input type="text" id="sample5_address" class="form-control" placeholder="주소">
-                </div>
-                <div class="col-sm-4">
-                  <input type="button" onclick="sample5_execDaumPostcode()" class="btn btn-g btn-circle" value="주소 검색">
+                <div class="col-sm-8 mb-sm-40">
+                  <input class="form-control" id="sample5_address" placeholder="주소" type="text" >
+                  <input class="btn btn-g btn-round" onclick="sample5_execDaumPostcode()" type="button" value="주소 검색" ><br>
                 </div>
               </div>
 
@@ -121,9 +107,15 @@
     <a href="#totop"><i class="fa fa-angle-double-up"></i></a>
   </div>
 </main>
+<script th:inline="javascript">
+
+</script>
+
+
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
-<script th:src="@{/js/usedBoard/common/locationSearch.js}"></script>
+<script th:src="@{/js/usedBoard/cityCategory.js}"></script>
+<script th:src="@{/js/usedBoard/boardCreate.js}"></script>
 <script th:src="@{/js/usedBoard/common/preview.js}"></script>
 </body>
 </html>

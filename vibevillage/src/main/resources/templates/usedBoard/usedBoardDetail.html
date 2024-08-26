@@ -2,14 +2,9 @@
 <html lang="en-US" dir="ltr">
   <head>
     <div th:replace="~{common/head :: head}"></div>
+    <link rel="stylesheet" th:href="@{/css/usedBoard/usedBoardDetail.css}">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services"></script>
-    <!-- Kakao Maps SDK -->
-    <script type="text/javascript" th:inline="none">
-      var kakaoMapKey = /*[[${kakaoMap}]]*/ 'defaultKey';
-      var script = document.createElement('script');
-      script.src = '//dapi.kakao.com/v2/maps/sdk.js?appkey=' + kakaoMapKey + '&libraries=services';
-      document.head.appendChild(script);
-    </script>
+
 
   </head>
   <body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
@@ -40,6 +35,12 @@
                 <div class="row">
                   <div class="col-sm-12">
                     <h1 class="product-title font-alt" th:text="${usedBoard.usedBoardTitle}"></h1>
+                    <h1 class="product-title font-alt" th:text="${usedBoard.usedBoardStatus}"></h1>
+
+                  </div>
+                </div>
+                <div class="row mb-20">
+                  <div class="col-sm-12"><span><a class="open-tab section-scroll" th:text="'아이디:'+${usedBoard.userNickName}"></a></span>
                   </div>
                 </div>
                 <div class="row mb-20">
@@ -48,7 +49,7 @@
                 </div>
                 <div class="row mb-20">
                   <div class="col-sm-12">
-                    <div class="price font-alt"><span th:text="${usedBoard.usedBoardProductPrice}" class="amount" ></span></div>
+                    <div class="price font-alt"><span class="amount" th:text="${usedBoard.usedBoardProductPrice}+'원'" ></span></div>
                   </div>
                 </div>
                 <div class="row mb-20">
@@ -65,21 +66,35 @@
                     </div>
                   </div>
                 </div>
-
-                <div class="row mb-20">
-                  <div class="col-sm-4 mb-sm-20">
-                    <input class="form-control input-lg" type="number" name="" value="1" max="40" min="1" required="required"/>
-                  </div>
-                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#" onclick="startChat()">채팅하기</a></div>
-                </div>
                 <div class="row mb-20">
                   <div class="col-sm-12">
                     <div class="product_meta">Categories:<a href="#" th:text="${usedBoard.categoryName}"></a>
                     </div>
                   </div>
                 </div>
+
+                <div class="row mb-20" th:if="${usedBoard.userNickName != userNickName}">
+                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" href="#" onclick="startChat()">채팅하기</a></div>
+                </div>
+                <div class="row mb-20" th:if="${usedBoard.userNickName == userNickName}">
+                  <div class="col-sm-8"><a class="btn btn-lg btn-block btn-round btn-b" th:href="@{/used/delete_board/{id}(id=${usedBoard.usedBoardId})}">글 삭제</a></div>
+                </div>
+
               </div>
             </div>
+            <br>
+            <hr class="divider-w">
+
+            <div class="board-map">
+              <div class="board-map text">
+                   거래 장소
+                <p th:text="${usedBoard.province}+' '+${usedBoard.city}+' '+${usedBoard.usedBoardLocation}"></p>
+
+              </div>
+              <div id="map" style="width:50%;height:350px;"></div>
+            </div>
+            <hr class="divider-w">
+  <br>
             <div class="row mt-70">
               <div class="col-sm-12">
                   <span class="icon-tools-2" th:text="'Reviews (' + ${commentSize} + ')'"></span>
@@ -89,13 +104,17 @@
                       <div class="comment clearfix">
                         <div class="comment-avatar"><img src="" alt="avatar"/></div>
                         <div class="comment-content clearfix">
-                          <div class="comment-author font-alt"><a href="#"th:text="${comment.uNo}"></a></div>
+                          <div class="comment-author font-alt"><a href="#" th:text="${comment.userNickName}"></a></div>
                           <div class="comment-body">
                             <p th:text="${comment.usedCommentContent}"></p>
                           </div>
-                          <div class="comment-meta font-alt">Today, 14:55 -<span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star"></i></span><span><i class="fa fa-star star-off"></i></span>
-                          </div>
                         </div>
+                      </div>
+                      <div th:if="${comment.userNickName==userNickName}">
+                        <a class="btn btn-danger" th:href="@{/used/delete_comment/{commentId}(commentId=${comment.usedCommentId})}">
+                          <button class="btn btn-block btn-round btn-g" type="button" >댓글 삭제
+                          </button>
+                        </a>
                       </div>
                     </div>
 <!--                    유저-->
@@ -106,7 +125,7 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               <label class="sr-only" for="name">Name</label>
-                              <input class="form-control" th:field="*{uNo}" id="name" placeholder="Name"/>
+                              <input class="form-control" disabled id="name" th:value="*{userNickName}"/>
                             </div>
                           </div>
 
@@ -128,7 +147,6 @@
         </section>
         <hr class="divider-w">
 
-        <div id="map" style="width:100%;height:350px;"></div>
 
 
 
@@ -142,6 +160,8 @@
     -->
 
     <div th:replace="~{common/js :: js}"></div>
+    <script th:src="@{/js/usedBoard/boardDetail.js}"></script>
+    <script th:src="@{/js/chat/chat.js}"></script>
 
     <script th:inline="javascript">
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div
@@ -157,7 +177,7 @@
       var geocoder = new kakao.maps.services.Geocoder();
 
       // 주소로 좌표를 검색합니다
-      geocoder.addressSearch(`[(${usedBoard.usedBoardLocation})]`, function(result, status) {
+      geocoder.addressSearch(`[(${usedBoard.province}+${usedBoard.city}+${usedBoard.usedBoardLocation})]`, function(result, status) {
 
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
@@ -186,7 +206,6 @@
       function startChat() {
         const boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId'; // 게시물 ID
         const boardOwnerId = /*[[${usedBoard.userNo}]]*/ 'defaultUserId';  // 게시물 작성자 ID
-        const currentUserId = 10;
         fetch('/chat/start', {
           method: 'POST',
           headers: {
@@ -195,7 +214,6 @@
           body: JSON.stringify({
             boardId: boardId,
             boardOwnerId: boardOwnerId,
-            currentUserId: currentUserId
           })
         })
                 .then(response => response.json())
@@ -209,6 +227,41 @@
                 .catch(error => console.error('Error:', error));
       }
     </script>
+  <script>
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1]; // JWT의 두 번째 부분 (payload) 추출
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Base64 URL을 일반 Base64로 변환
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
 
+      return JSON.parse(jsonPayload); // JSON 문자열을 객체로 변환
+    }
+
+    function getJwtFromCookie() {
+      var name = "jwt=";
+      var decodedCookie = decodeURIComponent(document.cookie);
+      var ca = decodedCookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    var jwtToken = getJwtFromCookie(); // 쿠키에서 JWT 가져오기
+    if (jwtToken) {
+      var decodedToken = parseJwt(jwtToken); // JWT 디코딩
+      var userId = decodedToken.sub; // 'sub'에서 사용자 ID 추출
+      console.log("User ID:", userId);
+    } else {
+      console.log("No JWT found in cookies");
+    }
+  </script>
   </body>
 </html>

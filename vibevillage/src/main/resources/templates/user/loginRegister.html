@@ -20,19 +20,19 @@
                         <h4 class="font-alt">로그인</h4>
                         <hr class="divider-w mb-10">
 
-                        <form class="form" th:action="@{/login}" th:object="${userDTO}" method="POST">
+                        <form class="form" method="POST" th:action="@{/login}" th:object="${userDTO}">
                             <div class="form-group">
-                                <input class="form-control" id="loginId" type="text" th:field="*{userId}" placeholder="계정" onkeyup=""/>
+                                <input class="form-control" id="loginId" onkeyup="" placeholder="계정" th:field="*{userId}" type="text"/>
                                 <div id="showLoginId"></div>
                             </div>
 
                             <div class="form-group">
-                                <input class="form-control" id="loginPassword" type="password" th:field="*{userPassword}" placeholder="암호" onkeyup=""/>
+                                <input class="form-control" id="loginPassword" onkeyup="" placeholder="암호" th:field="*{userPassword}" type="password"/>
                                 <div id="showLoginPassword"></div>
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-block btn-round btn-g" type="button" onclick="login()">로그인</button>
+                                <button class="btn btn-block btn-round btn-g" onclick="login()" type="button">로그인</button>
                             </div>
                         </form>
 

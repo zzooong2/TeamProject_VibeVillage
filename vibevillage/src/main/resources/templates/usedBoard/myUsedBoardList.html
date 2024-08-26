@@ -88,15 +88,15 @@
             <div class="col-sm-6 col-md-3 col-lg-3" th:each="item : ${usedList}">
               <div class="shop-item">
                 <div>
-                <p class="product-status" th:text="${item.usedBoardStatus}"></p>
+                  <div th:with="boardId=${item.usedBoardId}">
+                    <select class="form-control" id="product-status" name="product-status"
+                            th:onchange="|convertProduct(${boardId})|">
+                      <option th:selected="${item.usedBoardStatus} == '판매중'" value="판매중">판매중</option>
+                      <option th:selected="${item.usedBoardStatus} == '판매완료'" value="판매완료">판매완료</option>
+                    </select>
+                  </div>
                 </div>
-                <div th:with="boardId=${item.usedBoardId}">
-                  <select class="form-control" id="product-status" name="product-status"
-                          th:onchange="|convertProduct(${boardId})|">
-                    <option th:selected="${item.usedBoardStatus} == '판매중'" value="판매중">판매중</option>
-                    <option th:selected="${item.usedBoardStatus} == '판매완료'" value="판매완료">판매완료</option>
-                  </select>
-                </div>
+
 
 
                 <div class="shop-item-image" th:each="image : ${item.images}">

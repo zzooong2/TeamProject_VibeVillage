@@ -12,6 +12,8 @@
         <result column="used_post_status" property="usedBoardStatus"/>
         <result column="used_create_at" property="usedBoardCreateAt"/>
         <result column="location" property="usedBoardLocation"/>
+        <result column="GPS_LATITUDE" property="gpsLatitude"/>
+        <result column="GPS_LONGITUDE" property="gpsLongitude"/>
         <result column="views" property="usedBoardViews"/>
         <result column="product_name" property="usedBoardProductName"/>
         <result column="product_price" property="usedBoardProductPrice"/>
@@ -53,14 +55,18 @@
         u.USED_UPDATE_AT,
         u.province,
         u.city,
+        u.GPS_LATITUDE,
+        u.GPS_LONGITUDE,
         u.VIEWS,
         p.PRODUCT_NAME,
         p.PRODUCT_PRICE,
         c.CATEGORY_NAME,
+        uv.U_NICKNAME,
         ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
         FROM USED_BOARD u
         JOIN product p ON p.used_post_id = u.used_post_id
         JOIN category c ON c.category_id = p.category_id
+        join USER_VIBEVILLAGE uv on u.U_NO = uv.U_NO
         WHERE u.used_delete = 'N'
         <choose>
             <when test="category > 0">
@@ -93,7 +99,7 @@
                 SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
             </selectKey>
             INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views,province,city)
-            VALUES (#{usedBoard.usedBoardId}, #{usedBoard.userNo}, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
+            VALUES (#{usedBoard.usedBoardId}, #{usedBoard.userNo}, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, #{usedBoard.gpsLatitude}, #{usedBoard.gpsLongitude}, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
         </insert>
 
     <insert id="usedBoardProductEnrollXML" >
@@ -143,6 +149,8 @@
         SET used_post_title = #{usedBoardTitle},
             used_post_content = #{usedBoardContent},
             location = #{usedBoardLocation},
+            gps_latitude=#{gpsLatitude},
+            gps_longitude = #{gpsLongitude},
             used_update_at = sysdate
         WHERE used_post_id = #{usedBoardId}
     </update>

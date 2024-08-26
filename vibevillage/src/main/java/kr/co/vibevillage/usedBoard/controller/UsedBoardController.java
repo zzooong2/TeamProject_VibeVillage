@@ -36,7 +36,6 @@ public class UsedBoardController {
     private final UsedBoardServiceImpl usedBoardService;
     private final LoginServiceImpl loginService;
     private final String USE = "usedBoard/usedBoard";
-    public String kakaoMap;
 
     // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")

@@ -89,6 +89,9 @@
     <hr class="divider-w">
     <section class="module-small">
       <div class="container">
+        <script th:inline="javascript">
+          let usedList = /*[[${usedList}]]*/ [];
+        </script>
         <div class="row multi-columns-row">
           <div class="col-sm-6 col-md-3 col-lg-3" th:each="item : ${usedList}">
             <div class="shop-item">
@@ -105,10 +108,13 @@
                 <p th:text="${item.usedBoardTitle}"></p>
                 </a>
               </h4>
+
               <a th:href="@{/used/boardDetail/{id}(id=${item.usedBoardId})}">
+                <p class="used_location_style" th:text="${item.userNickName}"></p>
                 <p style="font-weight: bold; text-align: left;" th:text="${item.usedBoardProductPrice + '원'}"></p>
-                <p class="used_location_style" th:text="${item.province}+' '+${item.city}+' '+${item.usedBoardLocation}"></p>
+                <p class="used_location_style" th:text="${item.usedBoardLocation}"></p>
                 <p class="used_location_style" th:text="'카테고리:'+${item.categoryName}"></p>
+                <p class="used_location_style" th:text="'물품:'+${item.usedBoardProductName}"></p>
                 <p class="used_location_style" th:text="'조회수:'+${item.usedBoardViews}"></p>
               </a>
             </div>
@@ -161,13 +167,7 @@ JavaScripts
 
 </script>
 <script th:inline="javascript">
-  function decodeUnicode(str) {
-    return decodeURIComponent(JSON.parse('"' + str.replace(/\"/g, '\\"') + '"'));
-  }
-
-  // 사용 예시
-  var province = decodeUnicode([[${province}]]);
-  var citySelect = decodeUnicode([[${citySelect}]]);
+  $(document).ready(function(){
 
   var mapContainer = document.getElementById('map'), // 지도를 표시할 div
           mapOption = {
@@ -175,36 +175,49 @@ JavaScripts
             level: 3 // 지도의 확대 레벨
           };
 
-  // 지도를 생성합니다
-  var map = new kakao.maps.Map(mapContainer, mapOption);
+  var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-  // 주소-좌표 변환 객체를 생성합니다
-  var geocoder = new kakao.maps.services.Geocoder();
-
-  // 주소로 좌표를 검색합니다
-  geocoder.addressSearch(province+" "+citySelect, function(result, status) {
-
-    // 정상적으로 검색이 완료됐으면
-    if (status === kakao.maps.services.Status.OK) {
-
-      var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-      // 결과값으로 받은 위치를 마커로 표시합니다
-      var marker = new kakao.maps.Marker({
-        map: map,
-        position: coords
-      });
-
-      // 인포윈도우로 장소에 대한 설명을 표시합니다
-      var infowindow = new kakao.maps.InfoWindow({
-        content: '<div style="width:150px;text-align:center;padding:6px 0;">거래장소</div>'
-      });
-      infowindow.open(map, marker);
-
-      // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-      map.setCenter(coords);
-    }
+  // 마커를 표시할 위치와 title 객체 배열입니다
+  var positions = [];
+  var bounds = new kakao.maps.LatLngBounds();
+  usedList.forEach(function(item) {
+    positions.push({
+      title: item.usedBoardProductName,
+      latlng: new kakao.maps.LatLng(item.gpsLatitude, item.gpsLongitude)
+    });
+    bounds.extend(new kakao.maps.LatLng(item.gpsLatitude, item.gpsLongitude));
   });
+
+  // 마커 이미지의 이미지 주소입니다
+  var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+  for (var i = 0; i < positions.length; i ++) {
+
+    // 마커 이미지의 이미지 크기 입니다
+    var imageSize = new kakao.maps.Size(24, 35);
+
+    // 마커 이미지를 생성합니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+      map: map, // 마커를 표시할 지도
+      position: positions[i].latlng, // 마커를 표시할 위치
+      title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      image : markerImage // 마커 이미지
+    });
+    var iwContent = '<div style="padding:5px;">'+positions[i].title+' <br></div>'; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+// 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+      position : positions[i].latlng,
+      content : iwContent
+    });
+    infowindow.open(map, marker);
+  }
+
+    map.setBounds(bounds);
+  });
+
 </script>
 <script th:src="@{/js/usedBoard/cityCategory.js}"></script>
 

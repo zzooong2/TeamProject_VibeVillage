@@ -85,14 +85,16 @@ document.addEventListener('DOMContentLoaded', function() {
         previewImages.forEach(image => {
             formData.append('previewFiles', image);
         });
-        formData.append('province',document.getElementById('province').value);
-        formData.append('city',document.getElementById('city').value);
+        formData.append('province',addressData.sido);
+        formData.append('city',addressData.sigungu);
         formData.append('usedBoardTitle', document.getElementById('usedBoardTitle').value);
         formData.append('usedBoardProductName', document.getElementById('usedBoardProductName').value);
         formData.append('usedBoardProductPrice', document.getElementById('usedBoardProductPrice').value);
         formData.append('usedBoardContent', document.getElementById('usedBoardContent').value);
         formData.append('usedBoardLocation', document.getElementById('sample5_address').value);
         formData.append('categoryId', document.getElementById('categoryId').value);
+        formData.append('gpsLatitude', latitude);
+        formData.append('gpsLongitude', longitude);
 
 
         fetch('/used/boardEnroll', {

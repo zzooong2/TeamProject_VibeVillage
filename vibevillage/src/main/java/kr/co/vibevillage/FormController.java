@@ -23,6 +23,12 @@ public class FormController {
 
     @GetMapping("/myPage")
     public String myPageForm() {
-        return "user/myPage";
+        return "redirect:/getUserInfo";
+    }
+
+    @GetMapping("/findUserInfo")
+    public String findUserInfo(Model model) {
+        System.out.println("컨트롤러 탐 findUserInfo");
+        return "user/findUserInfo";
     }
 }

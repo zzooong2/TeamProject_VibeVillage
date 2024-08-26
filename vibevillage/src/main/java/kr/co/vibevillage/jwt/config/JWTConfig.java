@@ -12,9 +12,6 @@ import java.util.List;
 @Component
 public class JWTConfig {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
     // JWT 생성
     public String createJwt(UserDTO userDTO, String secretKey, Long expiredMs){
         List<String> authorities = userDTO.getAuthorities();

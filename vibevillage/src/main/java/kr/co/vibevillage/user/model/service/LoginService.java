@@ -12,4 +12,7 @@ public interface LoginService {
 
     // 로그인 유저 계정으로 데이터베이스에 있는 정보 가져오기
     public UserDTO getLoginUserInfo();
+
+    // 로그인시 방문횟수 증가
+    public void addAccessCount(int userNo);
 }

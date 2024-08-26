@@ -20,7 +20,7 @@
                         <h4 class="font-alt">로그인</h4>
                         <hr class="divider-w mb-10">
 
-                        <form class="form" method="GET" th:action="@{/login}" th:object="${userDTO}">
+                        <form class="form" method="POST" th:action="@{/login}" th:object="${userDTO}">
                             <div class="form-group">
                                 <input class="form-control" id="loginId" onkeyup="" placeholder="계정" th:field="*{userId}" type="text"/>
                                 <div id="showLoginId"></div>
@@ -32,12 +32,12 @@
                             </div>
 
                             <div class="form-group">
-                                <button class="btn btn-round btn-g" type="button" onclick="login()">로그인</button>
+                                <button class="btn btn-block btn-round btn-g" onclick="login()" type="button">로그인</button>
                             </div>
-
                         </form>
+
                             <div style="display:none;" id="errorMessage" th:if="${errorMessage}" th:text="${errorMessage}"></div>
-                            <div class="form-group"><a href="">비밀번호 찾기</a></div>
+                            <div class="form-group"><a href="/form/findUserInfo">계정,비밀번호 찾기</a></div>
 
                     </div>
                     <div class="col-sm-5">
@@ -132,25 +132,6 @@
 
 <!-- 주소찾기 API -->
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-<script>
-    // 페이지가 로드된 후, 에러 메시지 표시 로직
-    document.addEventListener("DOMContentLoaded", function() {
-        // 에러 메시지 div 가져오기
-        const errorDiv = document.getElementById("errorMessage");
-
-        // 에러 메시지가 존재하는지 확인
-        if (errorDiv && errorDiv.textContent.trim() !== "") {
-            // SweetAlert2를 사용하여 에러 메시지 표시
-            Swal.fire({
-                title: '로그인 실패',
-                text: errorDiv.textContent,
-                icon: 'error',
-                confirmButtonText: '확인'
-            });
-        }
-    });
-</script>
 
 </body>
 </html>

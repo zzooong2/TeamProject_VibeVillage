@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,12 @@ public class UserDTO {
     String userLevel, userAccessTime;
     int userAccessCount, userWriteCount, userCommentCount;
 
+    // USER_UPLOAD TABLE
+    int uploadFileNo;
+    String uploadFileName, uploadFileUniqueName, uploadFilePath, uploadFileType;
+
+    // 비밀번호 변경을 위한 변수
+    String currentPassword;
 
     // 권한 정보를 담는 필드 추가
     private List<String> authorities;

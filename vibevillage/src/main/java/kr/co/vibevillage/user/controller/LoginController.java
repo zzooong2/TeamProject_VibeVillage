@@ -42,15 +42,14 @@ public class LoginController {
     private final LoginServiceImpl loginServiceImpl;
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secretKey; // 토큰 생성시 포함하는 시크릿 키
     @Value("${jwt.expiration_time}")
-    private Long expiredMs;
+    private Long expiredMs; // 유효 시간 86400
 
     @ResponseBody
     @PostMapping("/login")
     public String login(@RequestBody UserDTO userDTO, HttpServletResponse response, Model model) {
         log.info("--------------------------logincontroller-------------------------");
-
         String userId = userDTO.getUserId();
         String userPassword = userDTO.getUserPassword();
 
@@ -64,9 +63,12 @@ public class LoginController {
 
         // 평문 비밀번호와 암호화된 비밀번호 비교
         if (passwordEncoder.matches(userPassword, getPassword)) {
+
             // JWT 생성
             String token = jwt.createJwt(userDTO, secretKey, expiredMs);
-            log.info("JWT: " + token);
+            System.out.println("로그인 컨트롤러에서 JWT 생성함");
+            System.out.println("expiredMs: " + expiredMs);
+            System.out.println("JWT: " + token);
 
             // JWT로부터 Authentication 객체 생성
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
@@ -86,7 +88,6 @@ public class LoginController {
             // 로그인한 사용자의 프로필 정보를 가져오기 위해 getLoginUserInfo 메서드 호출
             UserDTO loginUser = loginServiceImpl.getLoginUserInfo();
             int loginUserNo = loginUser.getUserNo();
-
             loginService.addAccessCount(loginUserNo);
 
             return "로그인 성공";
@@ -95,3 +96,4 @@ public class LoginController {
         }
     }
 }
+

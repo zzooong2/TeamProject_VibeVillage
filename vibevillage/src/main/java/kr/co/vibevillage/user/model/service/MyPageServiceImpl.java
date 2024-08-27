@@ -23,7 +23,7 @@ public class MyPageServiceImpl implements MyPageService{
     @Override
     public int uploadProfile(UserDTO userDTO, MultipartFile uploadFile) {
         // 유저가 업로드한 파일을 저장할 위치
-        String uploadPath = "C:\\dev\\File\\FinalProject\\Vibevillage\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\images\\userProfile\\";
+        String uploadPath = "/Users/keem/finalProject/vibevillage/src/main/resources/static/images/userProfile/";
         // 위치 + 유니크 파일명
         String filePathName = uploadPath + userDTO.getUploadFileUniqueName();
         // Path 타입으로 형변환

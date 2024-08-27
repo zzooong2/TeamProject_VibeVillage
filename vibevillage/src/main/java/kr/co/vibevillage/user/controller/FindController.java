@@ -29,7 +29,7 @@ public class FindController {
     public int checkUserInfoByPhone(@RequestParam("userPhone") String userPhone) {
         int result = findService.checkUserInfoByPhone(userPhone);
 
-        if (result == 1) {
+        if (result != 0) {
             System.out.println("연락처로 회원 유무 확인 완료");
             return result;
         } else {
@@ -75,7 +75,7 @@ public class FindController {
             user.setUserPassword(temporaryPassword);
 
             // 임시 비밀번호로 비밀번호 변경
-            int result = myPageService.updatePasswordNoneProtected(user);
+            int result = myPageService.updatePassword(user);
             System.out.println("임시비번으로 변경한 결과: " + result);
 
             if(result == 1) { // 변경 완료

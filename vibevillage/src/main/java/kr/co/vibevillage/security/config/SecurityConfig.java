@@ -40,7 +40,7 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/lib/**", "/scss/**").permitAll() // 정적 리소스에 대한 접근을 허용
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/lib/**", "/scss/**", "/videos/**").permitAll() // 정적 리소스에 대한 접근을 허용
                         .requestMatchers("/form/login").permitAll() // 로그인 페이지 접근 허용
                         .requestMatchers("/form/findUserInfo").permitAll() // 계정, 비밀번호 찾기 페이지 접근 허용
                         .requestMatchers("/login").permitAll() // 로그인 처리 URL 접근 허용
@@ -81,7 +81,7 @@ public class SecurityConfig {
                         }).permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout") // 로그아웃 처리 URL 설정
-                        .logoutSuccessUrl("/form/login") // 로그아웃 후 리다이렉트할 URL 설정
+                        .logoutSuccessUrl("/form") // 로그아웃 후 리다이렉트할 URL 설정
                         .deleteCookies("JWT", "AccessToken", "JSESSIONID") // 로그아웃 시 삭제할 쿠키들 설정
                         .invalidateHttpSession(true) // 로그아웃 시 세션 무효화
                         .clearAuthentication(true) // 로그아웃 시 인증 정보 제거

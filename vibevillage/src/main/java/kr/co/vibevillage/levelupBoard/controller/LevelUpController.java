@@ -40,12 +40,13 @@ public class LevelUpController {
         String userNickName = loginInfo.getUserNickName();
         int uNo = loginInfo.getUserNo();
         String loginUserId = loginInfo.getUserId();
+        String userLevel = loginInfo.getUserLevel();
 
         // 등업신청 목록
         List<LevelUpDTO> lbList = levelUpService.getLevelUpList(userNickName);
         model.addAttribute("lbList", lbList);
         model.addAttribute("loginUserId", loginUserId);
-//        model.addAttribute("userNickName", userNickName);
+        model.addAttribute("userNickName", userNickName);
 
 //        for(LevelUpDTO item : lbList) {
 //            System.out.println(item.getLbTitle());

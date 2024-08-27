@@ -44,7 +44,6 @@
                   <a th:href="@{/levelUp/levelUpBoardDetail/{lbNo}(lbNo=${lbList.lbNo})}" style="font-size: 16px;" class="menu-title font-alt" th:text="${lbList.lbTitle}"></a>
                   <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.lbIndate}"></div>
                   <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.userNickName}"></div>
-                  <div class="menu-detail" style="padding-top: 10px; font-size: 13px; text-align: start;" th:text="${lbList.lrStatus}"></div>
                   <!-- 등업 신청한 사람만 볼수있게 완료/반려/진행중 -->
                 </div>
                 <!-- <div class="col-sm-4 menu-price-detail">
@@ -52,7 +51,7 @@
                 </div> -->
                 <div>
                   <div style="float: right; padding-right: 15px;">
-                    <button style="padding: 10px 10px;" class="btn btn-g btn-circle" th:text="${lbList.ulmLevel}"></button></div>
+                    <button style="padding: 10px 10px;" class="btn btn-g btn-circle" th:text="${lbList.lrStatus}"></button></div>
                 </div>
               </div>
             </div>

@@ -67,7 +67,7 @@
 
     <!--등업신청서 디테일-->
     <select id="getLevelUpBoardDetail" resultMap="levelResultSet">
-        select lr.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, lr.U_NO, uv.u_nickname,
+        select lr.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, lr.U_NO, uv.u_nickname, LR_STATUS,
         ULM_LEVEL, ULM_ACCESS_COUNT, ULM_WRITE_COUNT, ULM_COMMENT_COUNT,ULM_ACCESS_TIME
         from LEVELUP_BOARD lr
         full join LEVELUP_RESULT_BOARD lrb

@@ -3,7 +3,7 @@
 <head>
     <div th:replace="~{common/head :: head}"></div>
     <!-- 스마트에디터 CSS 파일 -->
-    <link rel="stylesheet" type="text/css" href="/smarteditor/css/smart_editor2.css">
+    <link rel="stylesheet" type="text/css" href="/smarteditor/dist/css/ko_KR/smart_editor2.css">
 </head>
 <body>
 <div th:replace="~{common/nav :: nav}"></div>
@@ -53,13 +53,13 @@
 </section>
 
 <!-- 스마트에디터 JS 파일 -->
-<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
+<script type="text/javascript" src="/smarteditor/dist/js/service/HuskyEZCreator.js" charset="utf-8"></script>
 <script type="text/javascript">
     var oEditors = [];
     nhn.husky.EZCreator.createInIFrame({
         oAppRef: oEditors,
         elPlaceHolder: "rContent",
-        sSkinURI: "/smarteditor/SmartEditor2Skin.html",
+        sSkinURI: "/smarteditor/dist/SmartEditor2Skin.html",
         htParams: {
             bUseToolbar: true,
             bUseVerticalResizer: true,

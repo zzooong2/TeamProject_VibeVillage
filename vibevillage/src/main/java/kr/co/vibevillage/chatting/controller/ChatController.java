@@ -27,7 +27,7 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatController {
 
-        public final SimpMessageSendingOperations sendingOperations;
+    public final SimpMessageSendingOperations sendingOperations;
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final LoginServiceImpl loginService;
@@ -44,7 +44,13 @@ public class ChatController {
         response.put("roomId", roomId);
         return ResponseEntity.ok(response);
     }
-
+    @GetMapping("/room_list")
+    public String getChatRoomList(Model model) {
+        UserDTO user = loginService.getLoginUserInfo();
+        List<ChatRoom> chatRooms =chatMessageService.getChatRoomList(user.getUserNo());
+        model.addAttribute("chatRoomList", chatRooms);
+        return "chat/chatList";
+    }
 
     // 채팅방 입장
     @GetMapping("/room/{roomId}")

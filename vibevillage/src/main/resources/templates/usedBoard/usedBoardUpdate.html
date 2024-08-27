@@ -123,16 +123,29 @@
 <script th:inline="javascript">
   let usedBoard = /*[[${usedBoard}]]*/ {};
   let deleteList = [];
+  let subImages = [[${subImages}]]; // DB에 저장되어 있던 서브 이미지
+  let mainImages = [[${mainImages}]]; // DB에 저장되어 있던 이미지
+  let mainImage = null; // 메인 업로드 파일
+  let previewImages = []; // 서브 업로드 파일
+
+  subImages.forEach((item)=>{ // 서브 이미지 변수 전달
+    previewImages.push(item.PROJECTREACTOR+item.uploadUniqueName);
+  })
+  mainImage = mainImages.uploadUniqueName; // 메인 이미지 변수 전달
+
+
   addressData = {
     sido: `${usedBoard.province}`,
     sigungu:`${usedBoard.city}`
   }
   latitude =`${usedBoard.gpsLatitude}`;
   longitude =`${usedBoard.gpsLongitude}`
+
   function deleteCurrentMainImage(item) {
     const main = document.getElementById("currentMain");
     if (main) {
       deleteList.push(item);  // 삭제 리스트에 추가
+      mainImage = null;
       main.remove();  // 화면에서 이미지 제거
     }
   }
@@ -141,6 +154,13 @@
     const subImage = document.querySelector(`img[src*="${item}"]`);
     if (subImage) {
       deleteList.push(item);  // 삭제 리스트에 추가
+
+      // item의 인덱스를 찾은 후, 해당 인덱스의 요소를 배열에서 제거
+      const index = previewImages.indexOf(item);
+      if (index > -1) {  // item이 배열에 존재하는 경우
+        previewImages.splice(index, 1);
+      }
+
       subImage.closest('li').remove();  // 화면에서 이미지 제거
     }
   }
@@ -152,11 +172,11 @@
     const previewContainer = document.getElementById('preview-container');
     const submitButton = document.getElementById('submit-button');
 
-    let mainImage = null;
-    let previewImages = [];
     let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
-
-
+  subImages.forEach((item)=>{
+    previewImages.push(item.uploadUniqueName);
+  })
+  mainImage = mainImages.uploadUniqueName;
 
 
 

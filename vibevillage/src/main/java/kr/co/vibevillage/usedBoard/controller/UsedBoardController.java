@@ -1,7 +1,5 @@
 package kr.co.vibevillage.usedBoard.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import kr.co.vibevillage.common.UploadFile;
 import kr.co.vibevillage.common.UsedPagination;
 import kr.co.vibevillage.usedBoard.model.UsedBoardCommentDto;
@@ -13,14 +11,12 @@ import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import kr.co.vibevillage.env.Env;
 
 
 import java.util.HashMap;

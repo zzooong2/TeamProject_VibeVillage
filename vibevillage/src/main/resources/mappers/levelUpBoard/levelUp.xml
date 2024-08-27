@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.levelupBoard.mapper.LevelUpMapper">
+
+    <resultMap id="levelResultSet" type="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        <result column="lb_no" property="lbNo"></result>
+        <result column="lb_title" property="lbTitle"></result>
+        <result column="lb_content" property="lbContent"></result>
+        <result column="lb_indate" property="lbIndate"></result>
+        <result column="lb_update" property="lbUpdate"></result>
+        <result column="lb_delete" property="lbDelete"></result>
+        <result column="lb_delete_yn" property="lbDeleteYN"></result>
+
+        <result column="lr_no" property="lrNo"></result>
+        <result column="lr_status" property="lrStatus"></result>
+        <result column="lr_indate" property="lrIndate"></result>
+
+        <result column="u_no" property="uNo"></result>
+        <result column="u_nickName" property="userNickName"></result>
+        <result column="u_id" property="uId"></result>
+
+        <result column="ulm_level" property="ulmLevel"></result>
+        <result column="ulm_write_count" property="ulmWriteCount"></result>
+        <result column="ulm_access_count" property="ulmAccessCount"></result>
+        <result column="ulm_comment_count" property="ulmCommentCount"></result>
+        <result column="ulm_access_time" property="ulmAccessTime"></result>
+    </resultMap>
+
+    <!-- 등업신청서 목록 -->
+    <select id="getLevelUpList" resultMap="levelResultSet">
+        select lb.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LR_NO, LR_STATUS, LR_INDATE, LR_STATUS, lb.U_NO, uv.u_nickname,
+        ULM_LEVEL, ULM_ACCESS_COUNT, ULM_WRITE_COUNT, ULM_COMMENT_COUNT,ULM_ACCESS_TIME
+        from LEVELUP_BOARD lb
+        full join LEVELUP_RESULT_BOARD lrb
+        on lb.LB_NO = lrb.LB_NO
+        join USER_VIBEVILLAGE uv
+        on lb.U_NO = uv.U_NO
+        full join USER_LEVEL_MANAGEMENT ulm
+        ON ulm.U_NO = uv.U_NO
+        where LB_DELETE_YN = 'N'
+        ORDER BY LB_INDATE DESC
+    </select>
+
+    <!--등업신청서 작성-->
+    <insert id="setLevelUpBoardEnroll">
+        <selectKey keyProperty="levelUpDTO.lbNo" resultType="int" order="BEFORE">
+            SELECT LEVELUP_BOARD_SEQ.NEXTVAL FROM dual
+        </selectKey>
+        insert into LEVELUP_BOARD (LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, LB_UPDATE, LB_DELETE, LB_DELETE_YN, U_NO)
+        VALUES (#{levelUpDTO.lbNo}, #{levelUpDTO.lbTitle}, #{levelUpDTO.lbContent}, SYSDATE, NULL, NULL, 'N', #{uNo})
+    </insert>
+
+    <!--등업신청시 생성-->
+    <insert id="levelResultBoard" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        insert into LEVELUP_RESULT_BOARD (LR_NO, LR_STATUS, LR_INDATE, LB_NO, U_NO)
+        values (LEVELUP_RESULT_BOARD_SEQ.NEXTVAL, '진행중', SYSDATE, #{levelUpDTO.lbNo}, #{uNo})
+    </insert>
+
+    <!--등업신청서 count 추가-->
+    <update id="lbCount" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count+1
+        where u_no = #{uNo}
+    </update>
+
+
+    <!--등업신청서 디테일-->
+    <select id="getLevelUpBoardDetail" resultMap="levelResultSet">
+        select lr.LB_NO, LB_TITLE, LB_CONTENT, LB_INDATE, lr.U_NO, uv.u_nickname, LR_STATUS,
+        ULM_LEVEL, ULM_ACCESS_COUNT, ULM_WRITE_COUNT, ULM_COMMENT_COUNT,ULM_ACCESS_TIME
+        from LEVELUP_BOARD lr
+        full join LEVELUP_RESULT_BOARD lrb
+        on lr.LB_NO = lrb.LB_NO
+        join USER_VIBEVILLAGE uv
+        on lr.U_NO = uv.U_NO
+        full join USER_LEVEL_MANAGEMENT ulm
+        ON ulm.U_NO = uv.U_NO
+        where lr.LB_NO = #{lbNo}
+    </select>
+
+    <!--등업신청서 수정-->
+    <update id="setLevelUpBoardEdit" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_BOARD
+        set LB_TITLE = #{levelUpDTO.lbTitle},
+            LB_CONTENT = #{levelUpDTO.lbContent}
+        where LB_NO = #{lbNo}
+    </update>
+
+    <!--등업신청서 삭제-->
+    <update id="lbDelete" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_BOARD
+        set LB_DELETE = default,
+            LB_DELETE_YN = 'Y'
+        where LB_NO = #{lbNo}
+    </update>
+
+    <!--등업신청서 count 감소-->
+    <update id="lbCountMinus" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count-1
+        where u_no = #{uNo}
+    </update>
+
+    <!--등업-->
+    <update id="levelUpXML" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ULM_LEVEL = CASE
+        WHEN ULM_LEVEL = '가을' THEN '여름'
+        WHEN ULM_LEVEL = '여름' THEN '봄'
+        ELSE ULM_LEVEL
+        END
+        where U_NO = #{uNo}
+    </update>
+
+    <!--등업신청서 승인-->
+    <update id="levelUpApprove" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_RESULT_BOARD lrb
+        set LR_STATUS = '완료',
+            LR_INDATE = SYSDATE
+        where LB_NO = #{lbNo}
+    </update>
+
+</mapper>

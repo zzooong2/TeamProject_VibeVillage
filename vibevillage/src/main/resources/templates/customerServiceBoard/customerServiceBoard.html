@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<div th:replace="~{common/nav :: nav}"></div>
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+    <div class="main">
+        <section class="module bg-dark-60 faq-page-header" style="background-color: #587379cf;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3" style="padding-top: 20px;">
+                        <h2 class="module-title font-alt">고 객 센 터</h2>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="module" style="padding-top: 100px;">
+            <div class="container">
+                <div class="row mb-60">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <form role="form">
+                            <div class="search-box">
+                                <input class="form-control" type="text" placeholder="Search..."/>
+                                <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div role="tabpanel">
+                            <ul class="nav nav-tabs font-alt" role="tablist">
+                                <li class="active"><a href="#notice_board" data-toggle="tab"><span></span>공지사항</a></li>
+                                <li><a href="#question" data-toggle="tab"><span></span>자주 묻는 질문</a></li>
+                                <li><a href="#inquiry" data-toggle="tab"><span></span>1:1 문의</a></li>
+                                <!-- 관리자만 보이기 -->
+                                <li th:if="${userLevel == '겨울'}">
+                                    <a href="#inquiry_list" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li>
+                                <li th:if="${userLevel == '겨울'}">
+                                    <a th:href="@{/customerService/noticeBoard}"><span></span>공지사항 쓰기</a></li>
+                                <li th:if="${userLevel == '겨울'}">
+                                    <a th:href="@{/customerService/questionAnswer}"><span></span>자주 묻는 질문 쓰기</a></li>
+                            </ul>
+                            <!-- 공지사항 목록 -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="notice_board">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default" th:each="csnbList, iterStat : ${csnbList}">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt">
+                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#notice_board' + ${iterStat.index}" th:text="${csnbList.nbTitle}"></a>
+                                                </h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" th:id="'notice_board' + ${iterStat.index}">
+                                                <a th:href="@{/customerService/noticeBoardDetail/{nbNo}(nbNo=${csnbList.nbNo})}">
+                                                    <div class="panel-body" th:text="${csnbList.nbContent}"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 자주 묻는 질문 목록 -->
+                                <div class="tab-pane" id="question">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default" th:each="csqaList, iterStat : ${csqaList}">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt">
+                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#question' + ${iterStat.index}" th:text="${csqaList.qaTitle}"></a></h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" th:id="'question' + ${iterStat.index}">
+                                                <a th:href="@{/customerService/questionAnswerDetail/{qaNo}(qaNo=${csqaList.qaNo})}">
+                                                    <div class="panel-body" th:text="${csqaList.qaContent}"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 1:1 문의 게시판 -->
+                                <div class="tab-pane" id="inquiry">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="categoryPanel panel panel-default">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt">
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#inquiry1">문의</a>
+                                                </h4>
+                                            </div>
+                                            <div class="panel-collapse collapse" id="inquiry1">
+                                                <div class="panel-body">
+                                                    <form th:action="@{/customerService/inquiryBoard}" th:object="${customerServiceDTO}" method="post">
+                                                        <div style="padding-bottom: 10px;">
+                                                            <select id="categorySelect" class="form-control" th:field="*{icNo}">
+                                                                <option th:value="0">카테고리를 선택해주세요</option>
+                                                                <option th:value="1">로그인 및 회원가입</option>
+                                                                <option th:value="2">등업게시판</option>
+                                                                <option th:value="3">중고거래 게시판</option>
+                                                                <option th:value="4">경험 및 공유게시판</option>
+                                                                <option th:value="5">기타문의</option>
+                                                            </select>
+                                                        </div>
+                                                        <textarea class="form-control" th:field="*{ibContent}" rows="7" placeholder="문의 내용을 입력하세요"></textarea>
+                                                        <div style="margin-top: 10px; float: right;">
+                                                            <button class="btn btn-g btn-circle" type="submit">등 록
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 1:1 문의 게시판 목록 -->
+                                    <div role="tabpanel" style="padding-top: 40px;">
+                                        <ul class="nav nav-tabs font-alt" role="tablist">
+                                            <!-- 질문한 회원만 보임 -->
+                                            <!-- 답변은 관리자만이 가능 -->
+                                            <li class="active"><a href="#inquiry_Answer" data-toggle="tab"><span></span>1:1 문의 답변</a></li>
+                                            <span style="margin-left: 5px; float: right; vertical-align: middle; position: relative; top: 5px">※답변은 3일 이내로 드립니다.</span>
+                                        </ul>
+                                        <!-- 카테고리 필터 -->
+                                        <div style="margin-top: 20px; margin-bottom: 20px;">
+                                            <select name="category" id="category" th:value="${customerServiceDTO.icNo}" class="form-control" onchange="filterAnswers()">
+                                                <option value="0">전체</option>
+                                                <option value="1">로그인 및 회원가입</option>
+                                                <option value="2">등업게시판</option>
+                                                <option value="3">중고거래 게시판</option>
+                                                <option value="4">경험 및 공유게시판</option>
+                                                <option value="5">기타문의</option>
+                                            </select>
+                                        </div>
+                                        <div class="tab-panel active" id="inquiry_Answer" style="padding-top: 20px; padding-bottom: 20px;">
+                                            <div class="panel-group" id="accordion">
+                                                <div class="categoryPanel panel panel-default" th:each="csiaList, iterStat : ${csiaList}" data-category="${csiaList.icNo}">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title font-alt">
+                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.userNickName}"></a>
+                                                        </h4>
+                                                        <span th:text="${csiaList.icName}"></span><br/>
+                                                        <span th:text="${csiaList.ibIndate}"></span>
+                                                    </div>
+                                                    <div class="panel-collapse collapse" th:id="'inquiry_Answer' + ${iterStat.index}">
+                                                        <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiaList.ibNo}, icNo=${csiaList.icNo})}">
+                                                            <div class="panel-body" th:text="${csiaList.ibContent}"></div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 1:1 문의 게시판 목록(관리자용) -->
+                                <div class="tab-pane" id="inquiry_list" style="padding-top: 20px; padding-bottom: 20px;">
+                                    <div class="panel-group" id="accordion">
+                                        <div class="panel panel-default" th:each="csiamList, iterStat : ${csiamList}">
+                                            <div class="panel-heading">
+                                                <h4 class="panel-title font-alt">
+                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_list' + ${iterStat.index}" th:text="${csiamList.ibContent}"></a></h4>
+                                                <span th:text="${csiamList.userNickName}"></span><br/>
+                                                <span th:text="${csiamList.icName}"></span><br/>
+                                                <span th:text="${csiamList.ibIndate}"></span>
+                                            </div>
+                                            <div class="panel-collapse collapse" th:id="'inquiry_list' + ${iterStat.index}">
+                                                <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiamList.ibNo}, icNo=${csiamList.icNo})}">
+                                                    <div class="panel-body" th:text="${csiamList.iaContent}"></div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.location.pathname.startsWith('/customerService/csList')) {
+            // 고객센터 페이지일 때 마지막으로 활성화된 탭 복원
+            var lastTab = localStorage.getItem('lastTab');
+            if (lastTab) {
+                $('.nav-tabs a[href="' + lastTab + '"]').tab('show');
+            }
+
+            // 탭 클릭 시 활성화된 탭을 로컬 스토리지에 저장
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var activeTab = $(e.target).attr('href');
+                localStorage.setItem('lastTab', activeTab);
+            });
+
+            // 페이지 로드 시 선택된 카테고리 복원
+            var selectedCategory = localStorage.getItem('selectedCategory');
+            if (selectedCategory !== null) {
+                document.getElementById("category").value = selectedCategory;
+                localStorage.removeItem('selectedCategory');
+               // localStorage.removeItem('lastTab');
+            }
+        }
+
+    });
+
+    // 카테고리 선택시 URL 이동
+    function filterAnswers() {
+        var selectedCategory = document.getElementById("category").value;
+        if (selectedCategory !== null) {
+            const url = `/customerService/csList/${selectedCategory}`;
+            // 선택된 카테고리를 로컬 스토리지에 저장
+            localStorage.setItem('selectedCategory', selectedCategory);
+            window.location.href = url;
+        }
+    }
+
+    window.addEventListener("beforeunload", function (event) {
+        // 고객센터 페이지를 떠날 때 로컬 스토리지 초기화
+        if (window.location.pathname.startsWith('/customerService/csList')) {
+            // 이 부분은 선택된 카테고리의 초기화를 제거하여 유지하도록 변경
+            // localStorage.removeItem('selectedCategory');
+            // localStorage.removeItem('lastTab');
+        }
+    });
+</script>
+
+</body>
+
+</html>

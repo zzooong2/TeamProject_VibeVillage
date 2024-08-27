@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+
+<body data-spy="scroll" data-target=".onpage-navigation" data-offset="60">
+<div th:replace="~{common/nav :: nav}"></div>
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...</div>
+    </div>
+
+    <!-- 관리자만 작성 가능 -->
+    <div class="main">
+        <section class="module bg-dark-30 about-page-header" data-background="resources/images/about_bg.jpg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3">
+                        <h1 class="module-title font-alt mb-0">자주 묻는 질문</h1>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="module">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h4 class="font-alt mb-0">자주 묻는 질문</h4>
+                        <hr class="divider-w mt-10 mb-20">
+                        <form class="form" role="form" th:action="@{/customerService/questionAnswerEdit/{qaNo}(qaNo=${qaDetail.qaNo})}" th:object="${qaDetail}" method="get">
+
+                            <div class="form-group">
+                                <input class="form-control" type="text" th:field="*{qaTitle}"/>
+                            </div>
+                            <!--유저의 이름 또는 닉네임으로 변경-->
+                            <div class="form-group">
+                                <p class="form-control" type="text" th:text="*{userNickName}"/>
+                            </div>
+                            <div class="form-group">
+                                <p class="form-control" type="text" th:text="*{qaIndate}"/>
+                            </div>
+                            <textarea class="form-control" rows="7" th:field="*{qaContent}"></textarea>
+                            <div style="margin-top: 10px; float: right;">
+                                <button class="btn btn-g btn-circle" type="submit">수 정</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="divider-d">
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+</body>
+</html>

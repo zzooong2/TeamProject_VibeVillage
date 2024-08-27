@@ -150,6 +150,7 @@ function postCodeValidation() {
 
 // 계정 중복검사
 function checkId() {
+    console.log("checkId 메소드 실행");
     const userId = document.getElementById("userId").value;
 
     if(userId === "") {
@@ -177,6 +178,7 @@ function checkId() {
 
 // 닉네임 중복검사
 function checkNickName() {
+    console.log("checkNickName 메소드 실행");
     const nickName = document.getElementById("nickName").value;
 
     if(nickName === ""){

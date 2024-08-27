@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.vibevillage.customerServiceBoard.mapper.CustomerServiceMapper">
+
+        <resultMap id="csbResultSet" type="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+            <result column="nb_no" property="nbNo"></result>
+            <result column="nb_title" property="nbTitle"></result>
+            <result column="nb_content" property="nbContent"></result>
+            <result column="nb_indate" property="nbIndate"></result>
+            <result column="nb_update" property="nbUpdate"></result>
+            <result column="nb_delete" property="nbDelete"></result>
+            <result column="nb_delete_yn" property="nbDeleteYN"></result>
+            <result column="nb_views" property="nbViews"></result>
+
+            <result column="qa_no" property="qaNo"></result>
+            <result column="qa_title" property="qaTitle"></result>
+            <result column="qa_content" property="qaContent"></result>
+            <result column="qa_indate" property="qaIndate"></result>
+            <result column="qa_update" property="qaUpdate"></result>
+            <result column="qa_delete" property="qaDelete"></result>
+            <result column="qa_delete_yn" property="qaDeleteYN"></result>
+
+            <result column="ib_no" property="ibNo"></result>
+            <result column="ib_content" property="ibContent"></result>
+            <result column="ib_indate" property="ibIndate"></result>
+            <result column="ia_no" property="iaNo"></result>
+            <result column="ia_content" property="iaContent"></result>
+            <result column="ia_indate" property="iaIndate"></result>
+
+            <result column="ic_no" property="icNo"></result>
+            <result column="ic_name" property="icName"></result>
+
+            <result column="u_no" property="uNo"></result>
+            <result column="u_nickName" property="userNickName"></result>
+            <result column="u_id" property="uId"></result>
+
+            <result column="ulm_level" property="ulmLevel"></result>
+            <result column="ulm_write_count" property="ulmWriteCount"></result>
+        </resultMap>
+
+    <!--공지사항 목록 조회-->
+    <select id="getnbCustomerService" resultMap="csbResultSet">
+        select NB_TITLE, NB_CONTENT, NB_NO, NB_INDATE, NB_VIEWS, nb.U_NO, uv.u_nickname
+        from NOTICE_BOARD nb
+        join USER_VIBEVILLAGE uv
+        on nb.U_NO = uv.U_NO
+        where NB_DELETE_YN = 'N'
+        ORDER BY NB_INDATE DESC
+    </select>
+
+    <!--Q&A 목록 조회-->
+    <select id="getqaCustomerService" resultMap="csbResultSet">
+        select QA_TITLE, QA_CONTENT, QA_NO, QA_INDATE, qb.U_NO, uv.u_nickname
+        from QA_BOARD qb
+        join USER_VIBEVILLAGE uv
+        on qb.U_NO = uv.U_NO
+        where QA_DELETE_YN = 'N'
+        ORDER BY QA_INDATE DESC
+    </select>
+
+    <!--1:1 문의 질문 목록 조회하기(본인 닉네임과 일치시에만 나옴)-->
+    <select id="getiaCustomerService" resultMap="csbResultSet">
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
+        from INQUIRY_BOARD ib
+        full join INQUIRY_ANSWER_BOARD ia
+        on ia.IB_NO = ib.IB_NO
+        full join INQUIRY_CATEGORY_BOARD ic
+        on ib.IC_NO = ic.IC_NO
+        join USER_VIBEVILLAGE uv
+        on ib.U_NO = uv.U_NO
+        where uv.u_nickname = #{userNickName}
+        <if test="icNo != null and icNo > 0">
+            AND ic.IC_NO = #{icNo}
+        </if>
+<!--                <choose>-->
+<!--                    <when test="icNo > 0">-->
+<!--                        where ic.IC_NO = #{icNo}-->
+<!--                    </when>-->
+<!--                    <otherwise>-->
+
+<!--                    </otherwise>-->
+<!--                </choose>-->
+        ORDER BY IB_INDATE DESC
+    </select>
+
+    <select id="getiamCustomerService" resultMap="csbResultSet">
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname, uv.u_id
+        from INQUIRY_BOARD ib
+        full join INQUIRY_ANSWER_BOARD ia
+        on ia.IB_NO = ib.IB_NO
+        full join INQUIRY_CATEGORY_BOARD ic
+        on ib.IC_NO = ic.IC_NO
+        join USER_VIBEVILLAGE uv
+        on ib.U_NO = uv.U_NO
+        ORDER BY IB_INDATE DESC
+    </select>
+
+    <!--공지사항 등록하기-->
+    <insert id="setNoticeBoardEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        insert into NOTICE_BOARD (NB_NO, NB_TITLE, NB_CONTENT, NB_INDATE, NB_UPDATE, NB_DELETE, NB_DELETE_YN, NB_VIEWS, U_NO)
+        VALUES (NOTICE_BOARD_SEQ.NEXTVAL, #{customerServiceDTO.nbTitle}, #{customerServiceDTO.nbContent}, SYSDATE, NULL, NULL, 'N', 1, #{uNo})
+    </insert>
+
+    <!--사용자 게시글 count 추가-->
+    <update id="nbCount" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count+1
+        where u_no = #{uNo}
+    </update>
+
+
+    <!--공지사항 디테일 조회-->
+    <select id="getNoticeBoardDetail" resultMap="csbResultSet">
+        select NB_NO, NB_TITLE, NB_CONTENT, NB_VIEWS, NB_INDATE, nb.U_NO, uv.u_nickname
+        from NOTICE_BOARD nb
+        join USER_VIBEVILLAGE uv
+        on nb.U_NO = uv.U_NO
+        where NB_NO = #{nbNo}
+    </select>
+
+    <!--공지사항 조회수 증가-->
+    <update id="nbAddViews" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update NOTICE_BOARD
+        set NB_VIEWS = NB_VIEWS+1
+        where NB_NO = #{nbNo}
+    </update>
+
+    <!--공지사항 삭제-->
+    <update id="nbDelete" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update Notice_BOARD
+        set NB_DELETE = default,
+        NB_DELETE_YN = 'Y'
+        where NB_NO = #{nbNo}
+    </update>
+
+    <!--공지사항 삭제 조회수 감소-->
+    <update id="nbCountMinus" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count-1
+        where u_no = #{uNo}
+    </update>
+
+    <!--공지사항 수정-->
+    <update id="setNoticeBoardEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update NOTICE_BOARD
+        set NB_TITLE = #{nbTitle},
+            NB_UPDATE = default,
+            NB_CONTENT = #{nbContent}
+        where NB_NO = #{nbNo}
+    </update>
+
+    <!--Q&A 등록하기-->
+    <insert id="setQuestionAnswerEnroll" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        INSERT INTO QA_BOARD (QA_NO, QA_TITLE, QA_CONTENT, QA_INDATE, QA_UPDATE, QA_DELETE, QA_DELETE_YN, U_NO)
+        VALUES (QA_BOARD_SEQ.NEXTVAL, #{customerServiceDTO.qaTitle}, #{customerServiceDTO.qaContent}, SYSDATE, NULL, NULL, 'N', #{uNo})
+    </insert>
+
+    <!--Q&A 게시글 count 추가-->
+    <update id="qaCount" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count+1
+        where u_no = #{uNo}
+    </update>
+
+    <!--Q&A 디테일 조회-->
+    <select id="getQuestionAnswerDetail" resultMap="csbResultSet">
+        select QA_NO, QA_TITLE, QA_CONTENT, QA_INDATE, qb.U_NO, uv.u_nickname
+        from QA_BOARD qb
+        join USER_VIBEVILLAGE uv
+        on qb.U_NO = uv.U_NO
+        where QA_NO = #{qaNo}
+    </select>
+
+    <!--Q&A 삭제-->
+    <update id="qaDelete" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update QA_BOARD
+        set QA_DELETE = default,
+        QA_DELETE_YN = 'Y'
+        where QA_NO = #{qaNo}
+    </update>
+
+    <!--Q&A 게시글 count 감소-->
+    <update id="qaCountMinus" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count-1
+        where u_no = #{uNo}
+    </update>
+
+    <!--Q&A 수정-->
+    <update id="setQuestionAnswerEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update QA_BOARD
+        set QA_TITLE = #{qaTitle},
+        QA_UPDATE = default,
+        QA_CONTENT = #{qaContent}
+        where QA_NO = #{qaNo}
+    </update>
+
+    <!--1:1 문의 고객이 질문한것-->
+    <insert id="setibCustomerService" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
+        insert into INQUIRY_BOARD (IB_NO, IB_CONTENT, IB_INDATE, U_NO, IC_NO)
+        values (INQUIRY_BOARD_SEQ.NEXTVAL, #{customerServiceDTO.ibContent}, sysdate, #{uNo}, #{icNo})
+    </insert>
+
+    <!--사용자 게시글 count 추가-->
+    <update id="ibCount" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO">
+        update USER_LEVEL_MANAGEMENT
+        set ulm_write_count = ulm_write_count+1
+        where u_no = #{uNo}
+    </update>
+
+    <!--1:1 문의 디테일 조회-->
+    <select id="getInquiryAnswerDetail" resultMap="csbResultSet">
+        select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname
+        from INQUIRY_BOARD ib
+        full join INQUIRY_ANSWER_BOARD ia
+        on ia.IB_NO = ib.IB_NO
+        full join INQUIRY_CATEGORY_BOARD ic
+        on ib.IC_NO = ic.IC_NO
+        full join USER_VIBEVILLAGE uv
+        on ib.U_NO = uv.U_NO
+        where ib.IB_NO = #{ibNo}
+    </select>
+
+    <!--1:1 문의 답변-->
+    <insert id="setInquiryAnswerEdit" parameterType="kr.co.vibevillage.customerServiceBoard.model.CustomerServiceDTO" >
+        INSERT INTO INQUIRY_ANSWER_BOARD (IA_NO, IA_CONTENT, IA_INDATE, IB_NO, U_NO)
+        VALUES ( INQUIRY_ANSWER_BOARD_SEQ.NEXTVAL, #{customerServiceDTO.iaContent}, sysdate, #{ibNo}, #{uNo})
+    </insert>
+
+</mapper>

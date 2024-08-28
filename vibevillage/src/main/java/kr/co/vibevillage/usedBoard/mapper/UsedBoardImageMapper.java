@@ -17,5 +17,5 @@
         // 게시글 리스트 이미지
         public List<UsedBoardImageDto> usedBoardGetImageListOnceXML(@Param("id") int id);
 
-    public int deleteImages(@Param("id")int id);
+        public int deleteImages(@Param("id")int id);
     }

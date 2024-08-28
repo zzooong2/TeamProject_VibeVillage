@@ -28,7 +28,5 @@ public class ChatMessageService {
     public List<ChatMessage> findMessagesByRoomId(Long roomId) {
         return chatMessageMapper.findMessagesByRoomId(roomId);
     }
-    public List<ChatRoom> getChatRoomList(int userNo){
-        return chatRoomMapper.getChatRoomList(userNo);
-    }
+
 }

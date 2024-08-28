@@ -26,5 +26,9 @@
         FROM chat_room
         WHERE other_user_id = #{userNo}
     </select>
+    <select id="getUserNickNameById">
+            select u_nickname from USER_VIBEVILLAGE
+            where u_no = #{userNo}
+    </select>
 
 </mapper>

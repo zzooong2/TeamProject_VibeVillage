@@ -114,18 +114,23 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         return list;
     }
     @Override
-    public void updateUsedBoard(UsedBoardDto usedBoard) {
+    public void updateUsedBoard(UsedBoardDto usedBoard,List<Integer> deleteList) {
         // 게시물 정보 업데이트
         usedBoardMapper.updateUsedBoard(usedBoard);
         usedBoardMapper.updateProduct(usedBoard);
-        int deleteResult = usedBoardImageMapper.deleteImages(usedBoard.getUsedBoardId());
-        // 메인 이미지 업데이트
-        if( deleteResult > 0) {
-        for (UsedBoardImageDto image : usedBoard.getImages()) {
-            image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
-            imageMapper.usedBoardEnrollImageXML(image);
+        int deleteResult;
+        // 삭제할 이미지가 있을 경우
+        if(deleteList != null){
+            for (Integer id : deleteList) {
+                deleteResult = usedBoardImageMapper.deleteImages(id);
+            }
         }
-
+        // 등록할 이미지가 있을 경우
+        if( usedBoard.getImages() != null) {
+            for (UsedBoardImageDto image : usedBoard.getImages()) {
+                image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
+                imageMapper.usedBoardEnrollImageXML(image);
+            }
         }
     }
     @Override
@@ -133,6 +138,7 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         int result = usedBoardMapper.convertProductStatus(id,status);
         return result;
     }
+
 
 
 

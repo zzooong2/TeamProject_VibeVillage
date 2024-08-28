@@ -1,6 +1,7 @@
 package kr.co.vibevillage.chatting.mapper;
 
 import kr.co.vibevillage.chatting.model.ChatRoom;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -15,4 +16,6 @@ public interface ChatRoomMapper {
 
     ChatRoom findRoomById(Long roomId);
     List<ChatRoom> getChatRoomList(int userNo);
+    String getUserNickNameById(long userNo);
+
 }

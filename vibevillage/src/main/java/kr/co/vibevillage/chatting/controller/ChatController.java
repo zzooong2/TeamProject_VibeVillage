@@ -47,8 +47,11 @@ public class ChatController {
     @GetMapping("/room_list")
     public String getChatRoomList(Model model) {
         UserDTO user = loginService.getLoginUserInfo();
-        List<ChatRoom> chatRooms =chatMessageService.getChatRoomList(user.getUserNo());
+        String currentUser = user.getUserNickName();
+        List<ChatRoom> chatRooms =chatRoomService.getChatRoomList(user.getUserNo());
         model.addAttribute("chatRoomList", chatRooms);
+        model.addAttribute("currentUser", currentUser);
+
         return "chat/chatList";
     }
 

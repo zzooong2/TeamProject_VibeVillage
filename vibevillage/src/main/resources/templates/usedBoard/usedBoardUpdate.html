@@ -21,7 +21,7 @@
               <div class="gallery" id="mainImg">
                 <div id="currentMain" th:each="item:${mainImages}">
                   <img class="gallery"  th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
-                  <button class="btn btn-g btn-circle" th:onclick="deleteCurrentMainImage([[${item?.uploadUniqueName}]])" type="button">Delete</button>
+                  <button class="btn btn-g btn-circle" th:onclick="deleteCurrentMainImage([[${item?.imageId}]])" type="button">Delete</button>
                 </div>
               </div>
               <input class="btn btn-g btn-circle" id="main-file-input" name="mainFile" type="file">
@@ -30,8 +30,8 @@
 
               <ul class="product-gallery" id="preview-container">
               <li class="gallery" th:each="item:${subImages}">
-                <img class="gallery"  th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
-                <button class="btn btn-g btn-circle" th:onclick="deleteCurrentSubImage([[${item?.uploadUniqueName}]])" type="button">Delete</button>
+                <img class="gallery" th:name="${item.imageId}" th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
+                <button class="btn btn-g btn-circle"  th:onclick="deleteCurrentSubImage([[${item?.imageId}]])" type="button">Delete</button>
 
               </li>
               </ul>
@@ -127,11 +127,8 @@
   let mainImages = [[${mainImages}]]; // DB에 저장되어 있던 이미지
   let mainImage = null; // 메인 업로드 파일
   let previewImages = []; // 서브 업로드 파일
-
-  subImages.forEach((item)=>{ // 서브 이미지 변수 전달
-    previewImages.push(item.PROJECTREACTOR+item.uploadUniqueName);
-  })
-  mainImage = mainImages.uploadUniqueName; // 메인 이미지 변수 전달
+  //
+  let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
 
 
   addressData = {
@@ -145,22 +142,19 @@
     const main = document.getElementById("currentMain");
     if (main) {
       deleteList.push(item);  // 삭제 리스트에 추가
-      mainImage = null;
       main.remove();  // 화면에서 이미지 제거
     }
   }
 
   function deleteCurrentSubImage(item) {
-    const subImage = document.querySelector(`img[src*="${item}"]`);
+    const subImage = document.querySelector(`img[name="${item}"]`);
     if (subImage) {
       deleteList.push(item);  // 삭제 리스트에 추가
-
       // item의 인덱스를 찾은 후, 해당 인덱스의 요소를 배열에서 제거
       const index = previewImages.indexOf(item);
       if (index > -1) {  // item이 배열에 존재하는 경우
         previewImages.splice(index, 1);
       }
-
       subImage.closest('li').remove();  // 화면에서 이미지 제거
     }
   }
@@ -171,12 +165,6 @@
     const mainImgContainer = document.getElementById('mainImg');
     const previewContainer = document.getElementById('preview-container');
     const submitButton = document.getElementById('submit-button');
-
-    let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
-  subImages.forEach((item)=>{
-    previewImages.push(item.uploadUniqueName);
-  })
-  mainImage = mainImages.uploadUniqueName;
 
 
 
@@ -268,7 +256,7 @@
       formData.append('usedBoardId', boardId);
       formData.append('gpsLatitude', latitude);
       formData.append('gpsLongitude', longitude);
-
+      formData.append('deleteList', deleteList);
       fetch('/used/update', {
         method: 'POST',
         body: formData,

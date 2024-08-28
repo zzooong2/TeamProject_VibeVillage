@@ -73,17 +73,10 @@
         <if test="icNo != null and icNo > 0">
             AND ic.IC_NO = #{icNo}
         </if>
-<!--                <choose>-->
-<!--                    <when test="icNo > 0">-->
-<!--                        where ic.IC_NO = #{icNo}-->
-<!--                    </when>-->
-<!--                    <otherwise>-->
-
-<!--                    </otherwise>-->
-<!--                </choose>-->
         ORDER BY IB_INDATE DESC
     </select>
 
+    <!--1:1 문의 질문 목록 조회하기(관리자용)-->
     <select id="getiamCustomerService" resultMap="csbResultSet">
         select ib.IB_NO, IB_CONTENT, IB_INDATE, ia.IA_NO, IA_CONTENT, IA_INDATE, ic.IC_NO, ic.IC_NAME, ib.U_NO, ia.U_NO, uv.u_nickname, uv.u_id
         from INQUIRY_BOARD ib

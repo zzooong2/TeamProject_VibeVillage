@@ -15,6 +15,7 @@ public interface LevelUpMapper {
     // 등업신청 작성
     int setLevelUpBoardEnroll(@Param("levelUpDTO") LevelUpDTO levelUpDTO, @Param("uNo") int uNo);
 
+    // 등업 진행 상황
     int levelResultBoard(@Param("levelUpDTO") LevelUpDTO levelUpDTO, @Param("uNo") int uNo, @Param("lbNo") int lbNo);
 
     int lbCount(int uNo);
@@ -31,8 +32,12 @@ public interface LevelUpMapper {
     int lbCountMinus(int uNo);
 
     // 등업신청 승인
-    int levelUpApprove(@Param("lbNo") int lbNo, @Param("levelUpDTO") LevelUpDTO levelUpDTO, UserDTO userDTO);
+    int levelUpApprove(@Param("lbNo") int lbNo, @Param("levelUpDTO") LevelUpDTO levelUpDTO);
 
-    int levelUpXML(@Param("uNo") int uNo, LevelUpDTO levelUpDTO, UserDTO userDTO);
+    //등업
+    int levelUpXML(@Param("uNo") int uNo, LevelUpDTO levelUpDTO);
+
+    // 반려
+    int levelUpReject(@Param("lbNo") int lbNo, @Param("levelUpDTO") LevelUpDTO levelUpDTO);
 
 }

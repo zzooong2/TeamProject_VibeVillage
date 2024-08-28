@@ -121,4 +121,13 @@
         where LB_NO = #{lbNo}
     </update>
 
+    <!--등업신청서 반려-->
+    <update id="levelUpReject" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_RESULT_BOARD lrb
+        set LR_STATUS = '반려',
+            LR_INDATE = SYSDATE
+        where LB_NO = #{levelUpDTO.lbNo}
+    </update>
+
+
 </mapper>

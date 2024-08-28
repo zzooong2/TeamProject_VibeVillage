@@ -45,7 +45,9 @@
                                 <li><a href="#inquiry" data-toggle="tab"><span></span>1:1 문의</a></li>
                                 <!-- 관리자만 보이기 -->
                                 <li th:if="${userLevel == '겨울'}">
-                                    <a href="#inquiry_list" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li>
+                                    <a href="#inquiry_Answer2" data-toggle="tab"><span></span>1:1 문의 답변 목록</a></li>
+                                <li th:if="${userLevel == '겨울'}">
+                                    <a href="#inquiry_Answer3" data-toggle="tab"><span></span>1:1 문의 답변 완료 목록</a></li>
                                 <li th:if="${userLevel == '겨울'}">
                                     <a th:href="@{/customerService/noticeBoard}"><span></span>공지사항 쓰기</a></li>
                                 <li th:if="${userLevel == '겨울'}">
@@ -58,10 +60,13 @@
                                         <div class="panel panel-default" th:each="csnbList, iterStat : ${csnbList}">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title font-alt">
-                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#notice_board' + ${iterStat.index}" th:text="${csnbList.nbTitle}"></a>
+                                                    <a data-toggle="collapse" data-parent="#accordion"
+                                                       th:href="'#notice_board' + ${iterStat.index}"
+                                                       th:text="${csnbList.nbTitle}"></a>
                                                 </h4>
                                             </div>
-                                            <div class="panel-collapse collapse" th:id="'notice_board' + ${iterStat.index}">
+                                            <div class="panel-collapse collapse"
+                                                 th:id="'notice_board' + ${iterStat.index}">
                                                 <a th:href="@{/customerService/noticeBoardDetail/{nbNo}(nbNo=${csnbList.nbNo})}">
                                                     <div class="panel-body" th:text="${csnbList.nbContent}"></div>
                                                 </a>
@@ -75,7 +80,9 @@
                                         <div class="panel panel-default" th:each="csqaList, iterStat : ${csqaList}">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title font-alt">
-                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#question' + ${iterStat.index}" th:text="${csqaList.qaTitle}"></a></h4>
+                                                    <a data-toggle="collapse" data-parent="#accordion"
+                                                       th:href="'#question' + ${iterStat.index}"
+                                                       th:text="${csqaList.qaTitle}"></a></h4>
                                             </div>
                                             <div class="panel-collapse collapse" th:id="'question' + ${iterStat.index}">
                                                 <a th:href="@{/customerService/questionAnswerDetail/{qaNo}(qaNo=${csqaList.qaNo})}">
@@ -96,9 +103,11 @@
                                             </div>
                                             <div class="panel-collapse collapse" id="inquiry1">
                                                 <div class="panel-body">
-                                                    <form th:action="@{/customerService/inquiryBoard}" th:object="${customerServiceDTO}" method="post">
+                                                    <form th:action="@{/customerService/inquiryBoard}"
+                                                          th:object="${customerServiceDTO}" method="post">
                                                         <div style="padding-bottom: 10px;">
-                                                            <select id="categorySelect" class="form-control" th:field="*{icNo}">
+                                                            <select id="categorySelect" class="form-control"
+                                                                    th:field="*{icNo}">
                                                                 <option th:value="0">카테고리를 선택해주세요</option>
                                                                 <option th:value="1">로그인 및 회원가입</option>
                                                                 <option th:value="2">등업게시판</option>
@@ -107,7 +116,8 @@
                                                                 <option th:value="5">기타문의</option>
                                                             </select>
                                                         </div>
-                                                        <textarea class="form-control" th:field="*{ibContent}" rows="7" placeholder="문의 내용을 입력하세요"></textarea>
+                                                        <textarea class="form-control" th:field="*{ibContent}" rows="7"
+                                                                  placeholder="문의 내용을 입력하세요"></textarea>
                                                         <div style="margin-top: 10px; float: right;">
                                                             <button class="btn btn-g btn-circle" type="submit">등 록
                                                             </button>
@@ -122,12 +132,14 @@
                                         <ul class="nav nav-tabs font-alt" role="tablist">
                                             <!-- 질문한 회원만 보임 -->
                                             <!-- 답변은 관리자만이 가능 -->
-                                            <li class="active"><a href="#inquiry_Answer" data-toggle="tab"><span></span>1:1 문의 답변</a></li>
+                                            <li class="active"><a href="#inquiry_Answer" data-toggle="tab"><span></span>1:1
+                                                문의 답변</a></li>
                                             <span style="margin-left: 5px; float: right; vertical-align: middle; position: relative; top: 5px">※답변은 3일 이내로 드립니다.</span>
                                         </ul>
                                         <!-- 카테고리 필터 -->
                                         <div style="margin-top: 20px; margin-bottom: 20px;">
-                                            <select name="category" id="category" th:value="${customerServiceDTO.icNo}" class="form-control" onchange="filterAnswers()">
+                                            <select name="category" id="category" th:value="${customerServiceDTO.icNo}"
+                                                    class="form-control" onchange="filterAnswers()">
                                                 <option value="0">전체</option>
                                                 <option value="1">로그인 및 회원가입</option>
                                                 <option value="2">등업게시판</option>
@@ -136,19 +148,28 @@
                                                 <option value="5">기타문의</option>
                                             </select>
                                         </div>
-                                        <div class="tab-panel active" id="inquiry_Answer" style="padding-top: 20px; padding-bottom: 20px;">
+                                        <div class="tab-panel active" id="inquiry_Answer"
+                                             style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion">
-                                                <div class="categoryPanel panel panel-default" th:each="csiaList, iterStat : ${csiaList}" data-category="${csiaList.icNo}">
+                                                <!-- 답변이 있을시에만 보임-->
+                                                <div th:if="${csiaList.iaContent != null}"
+                                                     class="categoryPanel panel panel-default"
+                                                     th:each="csiaList, iterStat : ${csiaList}"
+                                                     data-category="${csiaList.icNo}">
                                                     <div class="panel-heading">
                                                         <h4 class="panel-title font-alt">
-                                                            <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_Answer' + ${iterStat.index}" th:text="${csiaList.userNickName}"></a>
+                                                            <a data-toggle="collapse" data-parent="#accordion"
+                                                               th:href="'#inquiry_Answer' + ${iterStat.index}"
+                                                               th:text="${csiaList.userNickName}"></a>
                                                         </h4>
                                                         <span th:text="${csiaList.icName}"></span><br/>
                                                         <span th:text="${csiaList.ibIndate}"></span>
                                                     </div>
-                                                    <div class="panel-collapse collapse" th:id="'inquiry_Answer' + ${iterStat.index}">
+                                                    <div class="panel-collapse collapse"
+                                                         th:id="'inquiry_Answer' + ${iterStat.index}">
                                                         <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiaList.ibNo}, icNo=${csiaList.icNo})}">
-                                                            <div class="panel-body" th:text="${csiaList.ibContent}"></div>
+                                                            <div class="panel-body"
+                                                                 th:text="${csiaList.ibContent}"></div>
                                                         </a>
                                                     </div>
                                                 </div>
@@ -156,21 +177,56 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <!-- 1:1 문의 게시판 목록(관리자용) -->
-                                <div class="tab-pane" id="inquiry_list" style="padding-top: 20px; padding-bottom: 20px;">
-                                    <div class="panel-group" id="accordion">
-                                        <div class="panel panel-default" th:each="csiamList, iterStat : ${csiamList}">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title font-alt">
-                                                    <a data-toggle="collapse" data-parent="#accordion" th:href="'#inquiry_list' + ${iterStat.index}" th:text="${csiamList.ibContent}"></a></h4>
-                                                <span th:text="${csiamList.userNickName}"></span><br/>
-                                                <span th:text="${csiamList.icName}"></span><br/>
-                                                <span th:text="${csiamList.ibIndate}"></span>
+                                        <div class="tab-pane" id="inquiry_Answer2"
+                                             style="padding-top: 20px; padding-bottom: 20px;">
+                                            <div class="panel-group" id="accordion" style="margin-top: 20px;">
+                                                <div th:if="${csiamList.iaContent == null}" class="panel panel-default"
+                                                     th:each="csiamList, iterStat : ${csiamList}">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title font-alt">
+                                                            <a data-toggle="collapse" data-parent="#accordion"
+                                                               th:href="'#inquiry_Answer2' + ${iterStat.index}"
+                                                               th:text="${csiamList.ibContent}"></a></h4>
+                                                        <span th:text="${csiamList.userNickName}"></span><br/>
+                                                        <span th:text="${csiamList.icName}"></span><br/>
+                                                        <span th:text="${csiamList.ibIndate}"></span>
+                                                    </div>
+                                                    <div class="panel-collapse collapse"
+                                                         th:id="'inquiry_Answer2' + ${iterStat.index}">
+                                                        <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiamList.ibNo}, icNo=${csiamList.icNo})}">
+                                                            <div class="panel-body"
+                                                                 th:text="${csiamList.iaContent}"></div>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="panel-collapse collapse" th:id="'inquiry_list' + ${iterStat.index}">
-                                                <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiamList.ibNo}, icNo=${csiamList.icNo})}">
-                                                    <div class="panel-body" th:text="${csiamList.iaContent}"></div>
-                                                </a>
+                                        </div>
+
+                                        <div class="tab-pane" id="inquiry_Answer3"
+                                             style="padding-top: 20px; padding-bottom: 20px;">
+                                            <div class="panel-group" id="accordion" style="margin-top: 20px;">
+                                                <div th:if="${csiamList.iaContent != null}" class="panel panel-default"
+                                                     th:each="csiamList, iterStat : ${csiamList}">
+                                                    <div class="panel-heading">
+                                                        <h4 class="panel-title font-alt">
+                                                            <a data-toggle="collapse" data-parent="#accordion"
+                                                               th:href="'#inquiry_Answer3' + ${iterStat.index}"
+                                                               th:text="${csiamList.ibContent}"></a></h4>
+                                                        <span th:text="${csiamList.userNickName}"></span><br/>
+                                                        <span th:text="${csiamList.icName}"></span><br/>
+                                                        <span th:text="${csiamList.ibIndate}"></span>
+                                                    </div>
+                                                    <div class="panel-collapse collapse"
+                                                         th:id="'inquiry_Answer3' + ${iterStat.index}">
+                                                        <a th:href="@{/customerService/inquiryAnswer/{ibNo}/{icNo}(ibNo=${csiamList.ibNo}, icNo=${csiamList.icNo})}">
+                                                            <div class="panel-body"
+                                                                 th:text="${csiamList.iaContent}"></div>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -178,7 +234,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </section>
         <hr class="divider-d">

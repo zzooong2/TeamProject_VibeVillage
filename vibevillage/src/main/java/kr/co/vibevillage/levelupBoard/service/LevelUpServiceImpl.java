@@ -73,12 +73,19 @@ public class LevelUpServiceImpl implements LevelUpService {
         return levelUpMapper.lbCountMinus(uNo);
     }
 
+    // 등업 승인
     @Override
-    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO, UserDTO userDTO) {
+    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO) {
 
-        int result = levelUpMapper.levelUpXML(uNo, levelUpDTO, userDTO);
+        int result = levelUpMapper.levelUpXML(uNo, levelUpDTO);
 
-        return levelUpMapper.levelUpApprove(lbNo, levelUpDTO, userDTO);
+        return levelUpMapper.levelUpApprove(lbNo, levelUpDTO);
+    }
+
+    @Override
+    public int levelUpReject(int uNo, LevelUpDTO levelUpDTO) {
+
+        return levelUpMapper.levelUpReject(uNo, levelUpDTO);
     }
 
 }

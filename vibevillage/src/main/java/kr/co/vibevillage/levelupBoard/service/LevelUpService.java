@@ -25,8 +25,11 @@ public interface LevelUpService {
 
     public int lbCountMinus(int uNo);
 
-    // 등언 신청 승인
-    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO, UserDTO userDTO);
+    // 등업 승인
+    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO);
+
+    // 등업 반려
+    public int levelUpReject(int lbNo, LevelUpDTO levelUpDTO);
 }
 
 

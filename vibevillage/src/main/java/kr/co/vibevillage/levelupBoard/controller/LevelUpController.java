@@ -33,7 +33,7 @@ public class LevelUpController {
 
     // 등업 신청 목록
     @GetMapping("/levelUpBoard")
-    public String getLevelUp(Model model, LevelUpDTO levelUpDTO, UserDTO userDTO) {
+    public String getLevelUp(Model model, LevelUpDTO levelUpDTO) {
 
         // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
@@ -60,6 +60,7 @@ public class LevelUpController {
     @GetMapping("/levelUpEnroll")
     public String levelUpEnroll(LevelUpDTO levelUpDTO, Model model) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -72,6 +73,7 @@ public class LevelUpController {
     @PostMapping("/levelUpBoardEnroll")
     public String setLevelUpBoardEnroll(LevelUpDTO levelUpDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
         int uNo = loginInfo.getUserNo();
@@ -85,8 +87,9 @@ public class LevelUpController {
 
     // 등업신청 Detail
     @GetMapping("/levelUpBoardDetail/{lbNo}")
-    public String getLevelUpBoardDetail(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO, UserDTO userDTO) {
+    public String getLevelUpBoardDetail(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
         String userLevel = loginInfo.getUserLevel();
@@ -103,6 +106,7 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardEditForm/{lbNo}")
     public String levelUpBoardEditForm(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -117,6 +121,7 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardEdit/{lbNo}")
     public String levelUpBoardEdit(@PathVariable("lbNo") int lbNo, Model model, LevelUpDTO levelUpDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         String userNickName = loginInfo.getUserNickName();
 
@@ -130,6 +135,7 @@ public class LevelUpController {
     @GetMapping("/levelUpBoardDelete/{lbNo}")
     public String levelUpBoardDelete(@PathVariable("lbNo") int lbNo, LevelUpDTO levelUpDTO) {
 
+        // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
         int uNo = loginInfo.getUserNo();
 
@@ -145,10 +151,20 @@ public class LevelUpController {
     @GetMapping("/levelUpApprove/{lbNo}/{uNo}")
     public String levelUpApprove(@PathVariable("lbNo") int lbNo,
                                  @PathVariable("uNo") int uNo,
-                                 LevelUpDTO levelUpDTO, UserDTO userDTO) {
+                                 LevelUpDTO levelUpDTO) {
 
-         int result = levelUpService.levelUpApprove(uNo, lbNo, levelUpDTO, userDTO);
+         int result = levelUpService.levelUpApprove(uNo, lbNo, levelUpDTO);
 
          return "redirect:/levelUp/levelUpBoard";
+    }
+
+    // 등업 반려
+    @GetMapping("levelUpReject/{lbNo}")
+    public String levelUpReject(@PathVariable("lbNo") int lbNo,
+                                LevelUpDTO levelUpDTO) {
+
+        int result = levelUpService.levelUpReject(lbNo, levelUpDTO);
+
+        return "redirect:/levelUp/levelUpBoard";
     }
 }

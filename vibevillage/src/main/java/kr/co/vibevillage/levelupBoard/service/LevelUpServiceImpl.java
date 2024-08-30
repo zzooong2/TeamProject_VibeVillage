@@ -24,8 +24,8 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 목록
     @Override
-    public List<LevelUpDTO> getLevelUpList(String userNickName) {
-        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList(userNickName);
+    public List<LevelUpDTO> getLevelUpList(String userNickName, String lrStatus) {
+        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList(userNickName, lrStatus);
         return lbList;
     }
 

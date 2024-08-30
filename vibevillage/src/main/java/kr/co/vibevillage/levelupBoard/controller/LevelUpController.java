@@ -32,8 +32,8 @@ public class LevelUpController {
     }
 
     // 등업 신청 목록
-    @GetMapping("/levelUpBoard")
-    public String getLevelUp(Model model, LevelUpDTO levelUpDTO) {
+    @GetMapping("/levelUpBoard/{lrStatus}")
+    public String getLevelUp(@PathVariable("lrStatus") String lrStatus, Model model, LevelUpDTO levelUpDTO) {
 
         // 로그인한 유저 정보
         UserDTO loginInfo = loginServiceImpl.getLoginUserInfo();
@@ -43,7 +43,7 @@ public class LevelUpController {
         String userLevel = loginInfo.getUserLevel();
 
         // 등업신청 목록
-        List<LevelUpDTO> lbList = levelUpService.getLevelUpList(userNickName);
+        List<LevelUpDTO> lbList = levelUpService.getLevelUpList(userNickName, lrStatus);
         model.addAttribute("lbList", lbList);
         model.addAttribute("loginUserId", loginUserId);
         model.addAttribute("userNickName", userNickName);
@@ -82,7 +82,7 @@ public class LevelUpController {
 
         int resultDto = levelUpService.lbCount(uNo);
 
-        return "redirect:/levelUp/levelUpBoard";
+        return "redirect:/levelUp/levelUpBoard/all";
     }
 
     // 등업신청 Detail
@@ -128,7 +128,7 @@ public class LevelUpController {
         int lbEdit = levelUpService.setLevelUpBoardEdit(levelUpDTO, lbNo);
         model.addAttribute("lbEdit", lbEdit);
 
-        return "redirect:/levelUp/levelUpBoard";
+        return "redirect:/levelUp/levelUpBoard/all";
     }
 
     // 등업신청 삭제
@@ -144,7 +144,7 @@ public class LevelUpController {
         // 게시글수 count 감소
         int resultDto = levelUpService.lbCountMinus(uNo);
 
-        return "redirect:/levelUp/levelUpBoard";
+        return "redirect:/levelUp/levelUpBoard/all";
     }
 
     // 등업 승인
@@ -155,7 +155,7 @@ public class LevelUpController {
 
          int result = levelUpService.levelUpApprove(uNo, lbNo, levelUpDTO);
 
-         return "redirect:/levelUp/levelUpBoard";
+         return "redirect:/levelUp/levelUpBoard/전체";
     }
 
     // 등업 반려
@@ -165,6 +165,6 @@ public class LevelUpController {
 
         int result = levelUpService.levelUpReject(lbNo, levelUpDTO);
 
-        return "redirect:/levelUp/levelUpBoard";
+        return "redirect:/levelUp/levelUpBoard/전체";
     }
 }

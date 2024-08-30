@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface LevelUpMapper {
     // 등업신청 목록
-    List<LevelUpDTO> getLevelUpList(String userNickName);
+    List<LevelUpDTO> getLevelUpList(String userNickName, String lrStatus);
     
     // 등업신청 작성
     int setLevelUpBoardEnroll(@Param("levelUpDTO") LevelUpDTO levelUpDTO, @Param("uNo") int uNo);

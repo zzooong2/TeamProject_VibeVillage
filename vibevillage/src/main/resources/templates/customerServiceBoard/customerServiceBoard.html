@@ -26,16 +26,6 @@
         </section>
         <section class="module" style="padding-top: 100px;">
             <div class="container">
-                <div class="row mb-60">
-                    <div class="col-sm-8 col-sm-offset-2">
-                        <form role="form">
-                            <div class="search-box">
-                                <input class="form-control" type="text" placeholder="Search..."/>
-                                <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2">
                         <div role="tabpanel">
@@ -138,7 +128,7 @@
                                         </ul>
                                         <!-- 카테고리 필터 -->
                                         <div style="margin-top: 20px; margin-bottom: 20px;">
-                                            <select name="category" id="category" th:value="${customerServiceDTO.icNo}"
+                                            <select name="category" id="category"
                                                     class="form-control" onchange="filterAnswers()">
                                                 <option value="0">전체</option>
                                                 <option value="1">로그인 및 회원가입</option>

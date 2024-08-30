@@ -39,6 +39,17 @@
         full join USER_LEVEL_MANAGEMENT ulm
         ON ulm.U_NO = uv.U_NO
         where LB_DELETE_YN = 'N'
+        <choose>
+            <when test="lrStatus == 'all' ">
+
+            </when>
+            <when test="lrStatus != null and lrStatus != ''">
+                AND LR_STATUS = #{lrStatus}
+            </when>
+
+
+        </choose>
+
         ORDER BY LB_INDATE DESC
     </select>
 

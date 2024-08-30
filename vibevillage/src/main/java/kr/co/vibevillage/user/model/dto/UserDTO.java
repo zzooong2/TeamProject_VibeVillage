@@ -33,6 +33,8 @@ public class UserDTO {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{1,20}$")
     String userNickName;
 
+    String kakaoNickName;
+
     @NotNull
     @Pattern(regexp = "^\\d{11}$")
     String userPhone;

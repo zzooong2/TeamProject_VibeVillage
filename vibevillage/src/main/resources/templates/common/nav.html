@@ -13,7 +13,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/form">VibeVillage</a>
+                <a class="navbar-brand" th:href="@{/form}">VibeVillage</a>
             </div>
 
             <div class="collapse navbar-collapse" id="custom-collapse">
@@ -28,11 +28,6 @@
                             <li>
                                 <a href="/used/boardList/1">중고거래</a>
                             </li>
-
-                            <li>
-                                <a href="">재능모임</a>
-                            </li>
-
                             <li>
                                 <a th:href="@{/experienceBoard}">경험 및 리뷰</a>
                             </li>
@@ -45,15 +40,15 @@
 
                     <!-- 로그인 상태에 따라 조건부 렌더링 -->
                     <li sec:authorize="isAuthenticated()">
-                        <a href="/form/myPage">마이페이지</a>
+                        <a th:href="@{/form/myPage}">마이페이지</a>
                     </li>
 
                     <!-- 로그인 상태에 따라 조건부 렌더링 -->
                     <li sec:authorize="isAuthenticated()">
-                        <a href="/logout">로그아웃</a>
+                        <a th:href="@{/logout}">로그아웃</a>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
-                        <a href="/form/login">로그인</a>
+                        <a th:href="@{/form/login}">로그인</a>
                     </li>
                 </ul>
             </div>

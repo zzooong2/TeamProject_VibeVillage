@@ -68,9 +68,9 @@ public class SecurityConfig {
                 .tokenUri("https://kauth.kakao.com/oauth/token")
                 .userInfoUri("https://kapi.kakao.com/v2/user/me")
                 .userNameAttributeName("id")
-                .clientName("Kakao")
+                .clientName("kakao")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("profile_nickname")
+                .scope("account_email")
                 .build();
     }
 

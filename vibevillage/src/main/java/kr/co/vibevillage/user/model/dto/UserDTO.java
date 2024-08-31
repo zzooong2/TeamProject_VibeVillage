@@ -33,7 +33,7 @@ public class UserDTO {
     @Pattern(regexp = "^[가-힣a-zA-Z0-9]{1,20}$")
     String userNickName;
 
-    String kakaoNickName;
+//    String userKakaoId;
 
     @NotNull
     @Pattern(regexp = "^\\d{11}$")

@@ -106,22 +106,43 @@ public class LoginController {
         }
     }
 
+
     @GetMapping("/oauth2/callback/kakao")
     public String kakaoCallback(Model model,
                                 @RequestParam(required = false) String code,
-                                @RequestParam(required = false) String error) throws JsonProcessingException {
+                                @RequestParam(required = false) String error,
+                                HttpServletResponse response) throws JsonProcessingException {
 
-        if (error != null) { // 에러가 발생했을 경우
-            model.addAttribute("apiKey", kakaoRestApiKey);
-            model.addAttribute("redirectURI", kakaoRedirectUri);
-            model.addAttribute("secretKey", kakaoSecretKey);
-
-            return "redirect:/form/login"; // 로그인 창으로 돌려 보낸다.
-
-        } else { // 로그인 인가 완료됐을 경우 (에러가 뜨지 않았을 경우)
-            loginService.kakaoCallback(model, code);
-            return "redirect:/form";
+        if (error != null) {
+            return "redirect:/form/login";
+        } else {
+            UserDTO kakaoUser = loginService.kakaoLogin(model, code);
+            if (kakaoUser == null) {
+                return "redirect:/form/login";
+            } else {
+                return "redirect:/login";  // 성공 후 리다이렉트할 경로
+            }
         }
     }
+
+//    @GetMapping("/oauth2/callback/kakao")
+//    public String kakaoCallback(Model model,
+//                                @RequestParam(required = false) String code,
+//                                @RequestParam(required = false) String error) throws JsonProcessingException {
+//
+//        if (error != null) { // 에러가 발생했을 경우
+//            model.addAttribute("apiKey", kakaoRestApiKey);
+//            model.addAttribute("redirectURI", kakaoRedirectUri);
+//            model.addAttribute("secretKey", kakaoSecretKey);
+//            return "redirect:/form/login"; // 로그인 창으로 돌려 보낸다.
+//
+//        } else { // 로그인 인가 완료됐을 경우 (에러가 뜨지 않았을 경우)
+//            UserDTO result = loginService.kakaoLogin(model, code);
+//            if(result == null) {
+//                return "redirect:/form/login";
+//            }
+//                return "";
+//        }
+//    }
 }
 

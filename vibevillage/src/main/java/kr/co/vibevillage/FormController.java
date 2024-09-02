@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/form")
 public class FormController {
 
-    @GetMapping("")
+    @GetMapping
     public String home() {
         return "index";
     }

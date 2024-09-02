@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
@@ -99,30 +99,71 @@ public class ExperienceBoardController {
 
     @PostMapping("/write")
     public String createPost(@ModelAttribute ExperienceBoardDTO experienceBoardDTO,
-                             @RequestParam(value = "file", required = false) MultipartFile[] files,
+                             @RequestParam(value = "imageUrls", required = false) String imageUrls,
                              RedirectAttributes redirectAttributes) {
-        // 입력된 값 확인을 위한 출력
-        System.out.println("받은 데이터: 제목 = " + experienceBoardDTO.getRTitle() +
-                ", 카테고리 = " + experienceBoardDTO.getCategoryId() +
-                ", 내용 = " + experienceBoardDTO.getRContent());
 
         UserDTO loginUserInfo = loginServiceImpl.getLoginUserInfo();
         int userNo = loginUserInfo.getUserNo();
         experienceBoardDTO.setUNo((long) userNo);
 
         try {
-            experienceBoardService.createPost(experienceBoardDTO, userNo, files);
+            if (imageUrls != null && !imageUrls.isEmpty()) {
+                experienceBoardDTO.setImageUrls(Arrays.asList(imageUrls.split(",")));
+            } else {
+                experienceBoardDTO.setImageUrls(new ArrayList<>());
+            }
+
+            experienceBoardService.createPost(experienceBoardDTO, userNo);
             redirectAttributes.addFlashAttribute("message", "글이 성공적으로 작성되었습니다.");
             return "redirect:/experienceBoard";
-        } catch (IOException e) {
-            System.err.println("파일 업로드 오류: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("errorMessage", "파일 업로드 중 오류가 발생했습니다.");
-            return "redirect:/experienceBoard/new";
         } catch (Exception e) {
-            System.err.println("게시글 작성 오류: " + e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "게시글 작성 중 오류가 발생했습니다.");
             return "redirect:/experienceBoard/new";
         }
+    }
+
+    @PostMapping("/uploadImage")
+    @ResponseBody
+    public Map<String, Object> uploadImage(@RequestParam("file") MultipartFile file, HttpSession session) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile\\";
+            File directory = new File(uploadDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            File destinationFile = new File(uploadDirectory + "/" + fileName);
+
+            file.transferTo(destinationFile);
+
+            String fileUrl = "/uploadReviewFile/" + fileName;
+            response.put("url", fileUrl);
+            response.put("message", "이미지 업로드 성공");
+
+            // HTML로 이미지 태그를 추가
+            String imageTag = "<img src=\"" + fileUrl + "\" style=\"max-width: 1000px; margin: 10px;\" />";
+            response.put("imageTag", imageTag);
+
+            // 세션에 저장된 게시글 DTO 객체를 가져옴
+            ExperienceBoardDTO experienceBoardDTO = (ExperienceBoardDTO) session.getAttribute("experienceBoardDTO");
+            if (experienceBoardDTO == null) {
+                experienceBoardDTO = new ExperienceBoardDTO();
+                session.setAttribute("experienceBoardDTO", experienceBoardDTO);
+            }
+
+            List<String> imageUrls = experienceBoardDTO.getImageUrls();
+            if (imageUrls == null) {
+                imageUrls = new ArrayList<>();
+                experienceBoardDTO.setImageUrls(imageUrls);
+            }
+            imageUrls.add(fileUrl);
+
+        } catch (IOException e) {
+            response.put("error", "이미지 업로드 중 오류 발생");
+        }
+        return response;
     }
 
 
@@ -180,49 +221,38 @@ public class ExperienceBoardController {
             return "redirect:/experienceBoard"; // 또는 적절한 예외 처리
         }
         model.addAttribute("post", post);
-        return "experienceAndReviewBoard/editPost";
+        return "experienceAndReviewBoard/editPost"; // 수정 페이지 템플릿으로 이동
     }
-
     @PostMapping("/post/update/{id}")
     public String updatePost(@PathVariable Long id,
                              @ModelAttribute ExperienceBoardDTO experienceBoardDTO,
+                             @RequestParam(value = "imageUrls", required = false) String imageUrls,
                              @RequestParam(value = "file", required = false) MultipartFile[] files,
-                             @RequestParam(value = "deleteImages", required = false) Long[] deleteImageIds,
                              RedirectAttributes redirectAttributes) {
-        ExperienceBoardDTO existingPost = experienceBoardService.getPostById(id);
-        String currentUserId = loginServiceImpl.getLoginUserId();
 
+        ExperienceBoardDTO existingPost = experienceBoardService.getPostById(id);
         if (existingPost == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "게시글을 찾을 수 없습니다.");
             return "redirect:/experienceBoard";
         }
 
-        if (!existingPost.getUserId().equals(currentUserId)) {
-            redirectAttributes.addFlashAttribute("errorMessage", "자신의 게시글만 수정할 수 있습니다.");
-            return "redirect:/experienceBoard";
-        }
-
         try {
-            // 파일 삭제 처리
-            if (deleteImageIds != null && deleteImageIds.length > 0) {
-                System.out.println("삭제 요청된 이미지 ID들: " + Arrays.toString(deleteImageIds));
-                experienceBoardService.deleteUploadsByIds(deleteImageIds);
-                System.out.println("이미지 삭제 완료");
+            if (imageUrls != null && !imageUrls.isEmpty()) {
+                experienceBoardDTO.setImageUrls(Arrays.asList(imageUrls.split(",")));
             } else {
-                System.out.println("삭제할 이미지가 없습니다.");
+                experienceBoardDTO.setImageUrls(new ArrayList<>());
             }
 
-            // 게시글과 파일 업데이트 처리
+            // 게시글 수정 로직
             experienceBoardService.updatePost(id, experienceBoardDTO, files);
             redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 수정되었습니다.");
+            return "redirect:/experienceBoard/post/" + id;
+
         } catch (Exception e) {
-            System.out.println("게시글 수정 중 오류 발생: " + e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "게시글 수정 중 오류가 발생했습니다.");
+            return "redirect:/experienceBoard/post/edit/" + id;
         }
-        return "redirect:/experienceBoard/post/" + id;
     }
-
-
 
 
 
@@ -264,20 +294,16 @@ public class ExperienceBoardController {
     public String getPostDetail(@PathVariable Long id, Model model) {
         ExperienceBoardDTO post = experienceBoardService.getPostById(id);
         if (post == null) {
-            return "redirect:/experienceBoard"; // 또는 적절한 예외 처리
+            return "redirect:/experienceBoard"; // 예외 처리
         }
 
-        // JWT에서 현재 사용자 정보 가져오기
-        UserDTO currentUser = loginServiceImpl.getLoginUserInfo(); // JWT에서 사용자 정보 가져오는 로직
+        UserDTO currentUser = loginServiceImpl.getLoginUserInfo();
         Long currentUserId = (long) currentUser.getUserNo();
-
-        // 게시글 작성자의 유저 번호와 현재 유저의 ID 비교
-        Long uNo = post.getUNo(); // 게시글 작성자의 유저 번호
         boolean hasLiked = false;
-        if (uNo != null) {
+        if (post.getUNo() != null) {
             LikeDTO likeDto = new LikeDTO();
             likeDto.setRId(id);
-            likeDto.setUNo(uNo);
+            likeDto.setUNo(post.getUNo());
             hasLiked = likeServiceImpl.hasLiked(likeDto);
         }
 

@@ -34,24 +34,24 @@
 
                     <div class="form-group">
                         <label for="imageUpload">이미지 업로드:</label>
-                        <input type="file" class="form-control-file" id="imageUpload" name="file" accept="image/*" multiple onchange="previewImages(event)" />
+                        <input type="file" class="form-control-file" id="imageUpload" name="files" accept="image/*" multiple onchange="uploadAndPreviewImages(event)" />
                         <div id="imagePreviewContainer" style="margin-top: 10px;">
                             <!-- 이미 업로드된 파일들을 보여줌 -->
                             <div th:each="upload : ${post.uploadDTOs}">
                                 <div style="display: flex; align-items: center;">
                                     <img th:src="@{/uploadReviewFile/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100px; margin: 10px;">
-                                    <input type="checkbox" name="deleteImages" th:value="${upload.ruNo}" style="margin-left: 10px;"> 삭제
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- `textarea` 대신 `div`로 변경 -->
                     <div class="form-group">
-                        <textarea class="form-control" rows="7" placeholder="내용을 입력해주세요." name="rContent" id="rContent" required th:text="${post.rContent}"></textarea>
+                        <div class="form-control" id="rContent" contenteditable="true" style="min-height: 200px; max-width: 100%; overflow: auto;" th:utext="${post.rContent}"></div>
                     </div>
 
                     <div class="form-actions">
-                        <button class="btn btn-g btn-circle" type="submit" onclick="return validateForm()">수정</button>
+                        <button class="btn btn-g btn-circle" type="submit" onclick="return submitForm()">수정</button>
                         <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/experienceBoard}'|">취소</button>
                     </div>
                 </form>
@@ -61,31 +61,45 @@
 </section>
 
 <script>
-    function previewImages(event) {
+    let imageUrls = [];
+
+    function uploadAndPreviewImages(event) {
         const files = event.target.files;
-        const container = document.getElementById('imagePreviewContainer');
-        container.innerHTML = ''; // Clear the container
+        const container = document.getElementById('rContent');
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            const reader = new FileReader();
+            const formData = new FormData();
+            formData.append("file", file);
 
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.maxWidth = '100px'; // Adjust as needed
-                img.style.margin = '10px';
-                container.appendChild(img);
-            }
+            fetch('/experienceBoard/uploadImage', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        imageUrls.push(data.url);
 
-            reader.readAsDataURL(file);
+                        // 이미지 태그 생성 및 삽입
+                        const imgTag = `<img src="${data.url}" style="max-width: 100%; margin: 10px;" />`;
+                        container.innerHTML += imgTag;
+
+                        console.log('Image uploaded: ', data.url);
+                    } else {
+                        alert("이미지 업로드 실패");
+                    }
+                })
+                .catch(error => {
+                    console.error("이미지 업로드 오류:", error);
+                });
         }
     }
 
     function validateForm() {
         const rTitle = document.getElementById('rTitle').value.trim();
         const categoryId = document.getElementById('categoryId').value.trim();
-        const rContent = document.getElementById('rContent').value.trim();
+        const rContent = document.getElementById('rContent').innerHTML.trim();
 
         if (!rTitle) {
             alert('제목을 입력해주세요.');
@@ -102,7 +116,29 @@
             return false;
         }
 
+        // Hidden input 추가
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'rContent';
+        hiddenInput.value = rContent;
+        document.getElementById('postForm').appendChild(hiddenInput);
+
         return true;
+    }
+
+    function submitForm() {
+        if (validateForm()) {
+            const postForm = document.getElementById('postForm');
+
+            // 이미지 URL 배열을 hidden input으로 추가
+            const imageUrlsInput = document.createElement('input');
+            imageUrlsInput.type = 'hidden';
+            imageUrlsInput.name = 'imageUrls';
+            imageUrlsInput.value = imageUrls.join(','); // 콤마로 구분된 URL 리스트를 문자열로 만듦
+            postForm.appendChild(imageUrlsInput);
+
+            postForm.submit();
+        }
     }
 </script>
 

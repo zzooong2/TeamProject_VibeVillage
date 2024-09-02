@@ -2,8 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="~{common/head :: head}"></div>
-    <!-- 스마트에디터 CSS 파일 -->
-    <link rel="stylesheet" type="text/css" href="/smarteditor/dist/css/ko_KR/smart_editor2.css">
 </head>
 <body>
 <div th:replace="~{common/nav :: nav}"></div>
@@ -18,7 +16,6 @@
                     <div class="form-group">
                         <input class="form-control" type="text" placeholder="제목을 입력해주세요." name="rTitle" id="rTitle" />
                     </div>
-
                     <div class="form-group">
                         <label for="categoryId">카테고리</label>
                         <select id="categoryId" name="categoryId">
@@ -31,19 +28,16 @@
                             <option value="6">반려동물</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="imageUpload">이미지 업로드:</label>
-                        <input type="file" class="form-control-file" id="imageUpload" name="file" accept="image/*" multiple onchange="previewImages(event)" />
+                        <input type="file" class="form-control-file" id="imageUpload" name="files" accept="image/*" multiple onchange="uploadAndPreviewImages(event)" />
                         <div id="imagePreviewContainer" style="margin-top: 10px;"></div>
                     </div>
-
                     <div class="form-group">
-                        <textarea name="rContent" id="rContent" rows="10" cols="100" style="width:100%; height:412px;"></textarea>
+                        <div class="form-control" id="rContent" contenteditable="true" style="min-height: 200px;"></div>
                     </div>
-
                     <div class="form-actions">
-                        <button class="btn btn-g btn-circle" type="submit" onclick="return validateForm()">등록</button>
+                        <button class="btn btn-g btn-circle" type="submit" onclick="return submitForm()">등록</button>
                         <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/experienceBoard}'|">취소</button>
                     </div>
                 </form>
@@ -52,28 +46,46 @@
     </div>
 </section>
 
-<!-- 스마트에디터 JS 파일 -->
-<script type="text/javascript" src="/smarteditor/dist/js/service/HuskyEZCreator.js" charset="utf-8"></script>
-<script type="text/javascript">
-    var oEditors = [];
-    nhn.husky.EZCreator.createInIFrame({
-        oAppRef: oEditors,
-        elPlaceHolder: "rContent",
-        sSkinURI: "/smarteditor/dist/SmartEditor2Skin.html",
-        htParams: {
-            bUseToolbar: true,
-            bUseVerticalResizer: true,
-            bUseModeChanger: true,
-        },
-        fCreator: "createSEditor2"
-    });
+<script>
+    let imageUrls = [];
+
+    function uploadAndPreviewImages(event) {
+        const files = event.target.files;
+        const container = document.getElementById('rContent');
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const formData = new FormData();
+            formData.append("file", file);
+
+            fetch('/experienceBoard/uploadImage', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.url) {
+                        imageUrls.push(data.url);
+
+                        // 이미지 태그 생성 및 삽입
+                        const imgTag = `<img src="${data.url}" style="max-width: 100%; margin: 10px;" />`;
+                        container.innerHTML += imgTag;
+
+                        console.log('Image uploaded: ', data.url);
+                    } else {
+                        alert("이미지 업로드 실패");
+                    }
+                })
+                .catch(error => {
+                    console.error("이미지 업로드 오류:", error);
+                });
+        }
+    }
 
     function validateForm() {
-        submitContents();
         const rTitle = document.getElementById('rTitle').value.trim();
         const categoryId = document.getElementById('categoryId').value.trim();
-        oEditors.getById["rContent"].exec("UPDATE_CONTENTS_FIELD", []); // 에디터의 내용을 textarea에 업데이트
-        const rContent = document.getElementById('rContent').value.trim();
+        const rContent = document.getElementById('rContent').innerHTML.trim();
 
         if (!rTitle) {
             alert('제목을 입력해주세요.');
@@ -89,7 +101,30 @@
             alert('내용을 입력해주세요.');
             return false;
         }
+
+        // Hidden input 추가
+        const hiddenInput = document.createElement('input');
+        hiddenInput.type = 'hidden';
+        hiddenInput.name = 'rContent';
+        hiddenInput.value = rContent;
+        document.getElementById('postForm').appendChild(hiddenInput);
+
         return true;
+    }
+
+    function submitForm() {
+        if (validateForm()) {
+            const postForm = document.getElementById('postForm');
+
+            // 이미지 URL 배열을 hidden input으로 추가
+            const imageUrlsInput = document.createElement('input');
+            imageUrlsInput.type = 'hidden';
+            imageUrlsInput.name = 'imageUrls';
+            imageUrlsInput.value = imageUrls.join(','); // 콤마로 구분된 URL 리스트를 문자열로 만듦
+            postForm.appendChild(imageUrlsInput);
+
+            postForm.submit();
+        }
     }
 </script>
 

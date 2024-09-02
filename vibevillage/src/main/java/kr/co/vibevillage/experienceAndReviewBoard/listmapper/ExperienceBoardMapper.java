@@ -16,7 +16,7 @@ public interface ExperienceBoardMapper {
 
     void update(ExperienceBoardDTO experienceBoard);
 
-    void delete(@Param("rId") Long rId);
+
 
     List<ExperienceBoardDTO> search(@Param("keyword") String keyword);
 
@@ -70,6 +70,8 @@ public interface ExperienceBoardMapper {
     void addWriteCount(int userNo);
 
     void subWriteCount(int userNo);
+
+//    Integer countCategoryById(Long categoryId);
 }
 
 

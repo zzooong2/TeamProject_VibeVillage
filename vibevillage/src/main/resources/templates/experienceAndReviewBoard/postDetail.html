@@ -7,28 +7,25 @@
 <body>
 <div th:replace="~{common/nav :: nav}"></div>
 
-
 <div class="post-container">
     <h2 th:text="${post.rTitle}">게시글 제목</h2>
     <p class="author">작성자: <span th:text="${post.uNickname}">작성자</span></p>
     <p class="date">작성일: <span th:text="${post.rCreatedAt}">작성일</span></p>
-    <div class="content" th:text="${post.rContent}">
+
+    <!-- th:utext를 사용하여 HTML로 렌더링 -->
+    <div class="content" th:utext="${post.rContent}">
         게시글 내용
     </div>
 
-    <div th:if="${post.uploadDTOs != null}">
+    <!-- rContent에 이미지가 포함되지 않았다면 uploadDTOs를 통해 이미지 출력 -->
+    <div th:if="${post.uploadDTOs != null && !#strings.contains(post.rContent, 'img')}">
         <div th:each="upload : ${post.uploadDTOs}">
-            <img th:src="@{/uploadReviewFile/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100%; height: auto;">
+            <!-- 이미지 크기 조정 -->
+            <img th:src="@{{fileName}(fileName=${upload.ruServerPath})}" alt="Uploaded Image">
         </div>
     </div>
 
     <!-- 게시글 수정/삭제 버튼 섹션 -->
-    <div th:if="${post.uNo == currentUserId}">
-        <a th:href="@{'/experienceBoard/post/edit/' + ${post.rId}}" class="btn btn-primary">수정</a>
-        <form th:action="@{/experienceBoard/post/delete/{id}(id=${post.rId})}" method="post" style="display:inline;">
-            <button type="submit" class="btn btn-danger">삭제</button>
-        </form>
-    </div>
 
     <div class="post-interaction">
         <form th:action="@{/experienceBoard/like/{id}(id=${post.rId})}" method="post">
@@ -41,6 +38,14 @@
     </div>
 </div>
 
+
+
+<div class="edit-del" th:if="${post.uNo == currentUserId}">
+    <a th:href="@{'/experienceBoard/post/edit/' + ${post.rId}}" class="btn btn-g btn-circle">수정</a>
+    <form th:action="@{/experienceBoard/post/delete/{id}(id=${post.rId})}" method="post" style="display:inline;">
+        <button type="submit"  class="btn btn-g btn-circle" >삭제</button>
+    </form>
+</div>
 
 <div class="comment-section">
     <h2>댓글</h2>
@@ -81,7 +86,7 @@
     }
 </script>
 
-    <div th:replace="~{common/footer :: footer}"></div>
-    <div th:replace="~{common/js :: js}"></div>
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
 </body>
 </html>

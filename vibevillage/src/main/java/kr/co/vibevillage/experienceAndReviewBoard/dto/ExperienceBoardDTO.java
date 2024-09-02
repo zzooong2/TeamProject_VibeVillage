@@ -20,7 +20,11 @@ public class ExperienceBoardDTO {
     private int commentCount = 0;
     private List<UploadDTO> uploadDTOs;
     private String categoryName;
-
+    private String imageUrl;
     private String userId;
+
+
+    private List<String> imageUrls;  // 다중 파일 업로드를 위한
+
 }
 

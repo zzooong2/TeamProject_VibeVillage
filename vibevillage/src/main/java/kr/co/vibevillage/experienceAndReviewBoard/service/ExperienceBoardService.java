@@ -7,10 +7,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface ExperienceBoardService {
     List<ExperienceBoardDTO> getAllPosts(int page, int size);
-    void createPost(ExperienceBoardDTO experienceBoardDto, int userNo, MultipartFile[] files) throws IOException;
+//    void createPost(ExperienceBoardDTO experienceBoardDto, int userNo, MultipartFile[] files) throws IOException;
+    void createPost(ExperienceBoardDTO experienceBoardDTO, int userNo) throws IOException;
 
     void updatePost(Long rId, ExperienceBoardDTO experienceBoardDto, MultipartFile[] files) throws IOException;
 
@@ -27,13 +29,15 @@ public interface ExperienceBoardService {
     String getCategoryNameById(Long categoryId);
     int countTotalRecommendedPosts();
 
+
+//    void uploadImage(MultipartFile[] files) throws Exception;
+
+    void uploadImage(MultipartFile[] files, Long rId) throws Exception;
+
     void deleteUploadsByIds(Long[] deleteImageIds);
 
+//    Map<String, Object> uploadImage(MultipartFile file) throws IOException;
 
-
-
-
-
-
+//    boolean isCategoryValid(Long categoryId);
 }
 

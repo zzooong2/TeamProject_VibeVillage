@@ -151,6 +151,8 @@ function postCodeValidation() {
 // 계정 중복검사
 function checkId() {
     const userId = document.getElementById("userId").value;
+    console.log("?????")
+    console.log(userId)
 
     if(userId === "") {
         swal("계정을 입력해주세요.", "", "error");
@@ -170,6 +172,7 @@ function checkId() {
                 }
             },
             error: function error(err) {
+                swal("오류 발생", "서버와의 통신 중 오류가 발생했습니다.", "error");
             }
         });
     }

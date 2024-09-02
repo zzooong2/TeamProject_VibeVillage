@@ -35,51 +35,89 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     }
 
     @Override
-    public void createPost(ExperienceBoardDTO experienceBoardDto, int userNo, MultipartFile[] files) throws IOException {
-        experienceBoardDto.setUNo((long) userNo);  // 사용자 번호 설정
-
-        // 게시글 생성
-        experienceBoardMapper.createPost(experienceBoardDto);
+    public void createPost(ExperienceBoardDTO experienceBoardDTO, int userNo) throws IOException {
+        // 게시글 생성 로직
+        experienceBoardDTO.setUNo((long) userNo);
+        experienceBoardMapper.createPost(experienceBoardDTO);
         experienceBoardMapper.addWriteCount(userNo);
 
-        // 생성된 게시글의 ID 가져오기 (MyBatis의 selectKey 사용)
-        Long rId = experienceBoardDto.getRId();
+        // 이미지 URL들이 있는 경우 처리
+        if (experienceBoardDTO.getImageUrls() != null && !experienceBoardDTO.getImageUrls().isEmpty()) {
 
-        // 파일 업로드 처리
-        if (files != null && files.length > 0) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    handleFileUpload(file, rId);  // 파일 개별 처리
-                }
+            for (String imageUrl : experienceBoardDTO.getImageUrls()) {
+                UploadDTO uploadDTO = new UploadDTO();
+                uploadDTO.setRId(experienceBoardDTO.getRId());
+                uploadDTO.setRuName(imageUrl);
+                uploadDTO.setRuUniqueName(UUID.randomUUID().toString());
+                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile");
+                uploadDTO.setRuServerPath(imageUrl);
+
+                // 파일 타입 추출
+                String fileType = extractFileTypeFromUrl(imageUrl);
+                uploadDTO.setRuFileType(fileType != null ? fileType : "unknown");
+
+                experienceBoardMapper.insertUpload(uploadDTO);
+            }
+        } else {
+            System.out.println("이미지 URL이 없습니다. 게시글만 저장되었습니다.");
+        }
+    }
+
+
+    private String extractFileTypeFromUrl(String url) {
+        if (url != null) {
+            if (url.endsWith(".jpg") || url.endsWith(".jpeg")) {
+                return "image/jpeg";
+            } else if (url.endsWith(".png")) {
+                return "image/png";
+            } else if (url.endsWith(".gif")) {
+                return "image/gif";
+            } else if (url.endsWith(".bmp")) {
+                return "image/bmp";
+            } else if (url.endsWith(".webp")) {
+                return "image/webp";
             }
         }
+        return null;
     }
 
-    @Override
-    public void deleteUploadsByIds(Long[] deleteImageIds) {
-        for (Long id : deleteImageIds) {
-
-            experienceBoardMapper.deleteUploadById(id);
-        }
-    }
 
     @Override
-    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files) throws IOException {
-        // 기존 게시글 업데이트
-        experienceBoardMapper.updatePost(rId, experienceBoardDTO.getRTitle(), experienceBoardDTO.getRContent());
+    public void uploadImage(MultipartFile[] files, Long rId) throws Exception {
+        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
 
-        // 파일 업로드 처리
-        if (files != null && files.length > 0) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    handleFileUpload(file, rId);
+        for (MultipartFile file : files) {
+            if (!file.isEmpty()) {
+                File directory = new File(uploadDirectory);
+                if (!directory.exists()) {
+                    directory.mkdirs(); // 디렉터리 생성
+                }
+
+                String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+                File destinationFile = new File(uploadDirectory + "/" + fileName);
+
+                file.transferTo(destinationFile);
+
+                // 파일 정보를 데이터베이스에 저장하는 로직 추가
+                UploadDTO uploadDTO = new UploadDTO();
+                uploadDTO.setRId(rId); // R_ID 값을 설정
+                uploadDTO.setRuName(file.getOriginalFilename());
+                uploadDTO.setRuUniqueName(fileName);
+                uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
+                uploadDTO.setRuServerPath("/uploadReviewFile/" + fileName);
+                uploadDTO.setRuFileType(file.getContentType());
+
+                try {
+                    experienceBoardMapper.insertUpload(uploadDTO);
+                } catch (Exception e) {
+                    throw e;  // 예외를 다시 던져서 상위 계층에서 처리하도록 함
                 }
             }
         }
     }
 
     private void handleFileUpload(MultipartFile file, Long rId) throws IOException {
-        String uploadDirectory = "C:\\dev\\final\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
+        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
         File directory = new File(uploadDirectory);
         if (!directory.exists()) {
             directory.mkdirs(); // 디렉터리 생성
@@ -95,12 +133,56 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         uploadDTO.setRuName(fileName);
         uploadDTO.setRuUniqueName(file.getOriginalFilename());
         uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
-        uploadDTO.setRuServerPath("/static/uploadReviewFile/" + fileName);
+        uploadDTO.setRuServerPath("/uploadReviewFile/" + fileName);
         uploadDTO.setRuFileType(file.getContentType());
 
         // 파일 정보 DB 저장
         experienceBoardMapper.insertUpload(uploadDTO);
     }
+
+
+    @Override
+    public void deleteUploadsByIds(Long[] deleteImageIds) {
+        for (Long id : deleteImageIds) {
+
+            experienceBoardMapper.deleteUploadById(id);
+        }
+    }
+
+    @Override
+    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files) throws IOException {
+        // 기존 게시글 업데이트
+        experienceBoardMapper.updatePost(rId, experienceBoardDTO.getRTitle(), experienceBoardDTO.getRContent());
+
+        // 기존 이미지 URL이 있는 경우 처리
+        if (experienceBoardDTO.getImageUrls() != null && !experienceBoardDTO.getImageUrls().isEmpty()) {
+            for (String imageUrl : experienceBoardDTO.getImageUrls()) {
+                UploadDTO uploadDTO = new UploadDTO();
+                uploadDTO.setRId(rId);
+                uploadDTO.setRuName(imageUrl);
+                uploadDTO.setRuUniqueName(UUID.randomUUID().toString());
+                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile");
+                uploadDTO.setRuServerPath(imageUrl);
+
+                // 파일 타입 추출
+                String fileType = extractFileTypeFromUrl(imageUrl);
+                uploadDTO.setRuFileType(fileType != null ? fileType : "unknown");
+
+                experienceBoardMapper.insertUpload(uploadDTO);
+            }
+        }
+
+        // 새로운 파일 업로드 처리
+        if (files != null && files.length > 0) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    handleFileUpload(file, rId);
+                }
+            }
+        }
+    }
+
+
 
     @Override
     public void deletePost(Long rId) {
@@ -205,5 +287,12 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         int offset = (page - 1) * size;
         return experienceBoardMapper.findTopLikedPosts(offset, size);
     }
+
+//    @Override
+//    public boolean isCategoryValid(Long categoryId) {
+//        // 데이터베이스에서 카테고리 ID의 존재 여부를 확인하는 로직
+//        Integer count = experienceBoardMapper.countCategoryById(categoryId);
+//        return count != null && count > 0;
+//    }
 
 }

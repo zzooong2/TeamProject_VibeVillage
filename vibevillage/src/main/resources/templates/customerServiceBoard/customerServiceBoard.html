@@ -223,7 +223,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
             </div>
         </section>
         <hr class="divider-d">
@@ -251,7 +250,7 @@
             if (selectedCategory !== null) {
                 document.getElementById("category").value = selectedCategory;
                 localStorage.removeItem('selectedCategory');
-               // localStorage.removeItem('lastTab');
+                //localStorage.removeItem('lastTab');
             }
         }
 
@@ -272,8 +271,8 @@
         // 고객센터 페이지를 떠날 때 로컬 스토리지 초기화
         if (window.location.pathname.startsWith('/customerService/csList')) {
             // 이 부분은 선택된 카테고리의 초기화를 제거하여 유지하도록 변경
-            // localStorage.removeItem('selectedCategory');
-            // localStorage.removeItem('lastTab');
+             localStorage.removeItem('selectedCategory');
+             localStorage.removeItem('lastTab');
         }
     });
 </script>

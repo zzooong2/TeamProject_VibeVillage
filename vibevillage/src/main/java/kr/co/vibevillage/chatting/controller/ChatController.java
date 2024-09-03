@@ -13,7 +13,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +26,6 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatController {
 
-    public final SimpMessageSendingOperations sendingOperations;
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final LoginServiceImpl loginService;

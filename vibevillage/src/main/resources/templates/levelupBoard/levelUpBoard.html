@@ -78,11 +78,14 @@
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
 
+
+
 <script>
   function filterStatus(lrStatus) {
   const url = `/levelUp/levelUpBoard/${lrStatus}`
     window.location.href = url;
   }
 </script>
+
 </body>
 </html>

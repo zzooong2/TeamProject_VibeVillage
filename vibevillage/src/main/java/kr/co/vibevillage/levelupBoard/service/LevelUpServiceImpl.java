@@ -82,6 +82,7 @@ public class LevelUpServiceImpl implements LevelUpService {
         return levelUpMapper.levelUpApprove(lbNo, levelUpDTO);
     }
 
+    // 등업 반려
     @Override
     public int levelUpReject(int uNo, LevelUpDTO levelUpDTO) {
 

@@ -155,7 +155,7 @@ public class LevelUpController {
 
          int result = levelUpService.levelUpApprove(uNo, lbNo, levelUpDTO);
 
-         return "redirect:/levelUp/levelUpBoard/전체";
+         return "redirect:/levelUp/levelUpBoard/all";
     }
 
     // 등업 반려
@@ -165,6 +165,6 @@ public class LevelUpController {
 
         int result = levelUpService.levelUpReject(lbNo, levelUpDTO);
 
-        return "redirect:/levelUp/levelUpBoard/전체";
+        return "redirect:/levelUp/levelUpBoard/all";
     }
 }

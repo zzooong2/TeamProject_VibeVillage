@@ -127,7 +127,7 @@ public class ExperienceBoardController {
     public Map<String, Object> uploadImage(@RequestParam("file") MultipartFile file, HttpSession session) {
         Map<String, Object> response = new HashMap<>();
         try {
-            String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images\\";
+            String uploadDirectory = "C:\\dev\\File\\FinalProject\\Vibevillage\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
             File directory = new File(uploadDirectory);
             if (!directory.exists()) {
                 directory.mkdirs();

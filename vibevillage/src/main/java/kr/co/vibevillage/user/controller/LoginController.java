@@ -1,5 +1,6 @@
 package kr.co.vibevillage.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -8,6 +9,7 @@ import kr.co.vibevillage.jwt.provider.JwtTokenProvider;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 
+import kr.co.vibevillage.user.model.service.OAuth2UserService;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +18,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -40,11 +42,19 @@ public class LoginController {
     private final JwtTokenProvider jwtTokenProvider;
     // 로그인 유저 정보 가져오기 위한 객체 생성
     private final LoginServiceImpl loginServiceImpl;
+    private final OAuth2UserService oAuth2UserService;
 
     @Value("${jwt.secret}")
     private String secretKey; // 토큰 생성시 포함하는 시크릿 키
     @Value("${jwt.expiration_time}")
-    private Long expiredMs; // 유효 시간 86400
+    private Long expiredMs; // 유효 시간 86400000ms
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String kakaoRestApiKey; // 카카오 로그인 API KEY
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String kakaoRedirectUri; // 카카오 로그인 RedirectURI
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    private String kakaoSecretKey; // 카카오 로그인 토큰 관련 보안 코드
 
     @ResponseBody
     @PostMapping("/login")
@@ -95,5 +105,25 @@ public class LoginController {
             return "로그인 실패";
         }
     }
+
+
+    @GetMapping("/oauth2/callback/kakao")
+    public String kakaoCallback(Model model,
+                                @RequestParam(required = false) String code,
+                                @RequestParam(required = false) String error,
+                                HttpServletResponse response) throws JsonProcessingException {
+
+        if (error != null) {
+            return "redirect:/form/login";
+        } else {
+            UserDTO kakaoUser = loginService.kakaoLogin(model, code);
+            if (kakaoUser == null) {
+                return "redirect:/form/login";
+            } else {
+                return "redirect:/login";  // 성공 후 리다이렉트할 경로
+            }
+        }
+    }
+
 }
 

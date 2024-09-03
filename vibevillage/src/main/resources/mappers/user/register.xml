@@ -26,6 +26,30 @@
                                             )
     </insert>
 
+<!--    <insert id="registerByKakaoId" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">-->
+
+<!--        <selectKey keyProperty="userNo" resultType="_int" order="BEFORE">-->
+<!--            SELECT USER_VIBEVILLAGE_SEQ.nextval FROM dual-->
+<!--        </selectKey>-->
+
+<!--        INSERT INTO USER_VIBEVILLAGE VALUES (#{userNo},-->
+<!--                                            #{userName},-->
+<!--                                            #{userId},-->
+<!--                                            #{userPassword},-->
+<!--                                            #{userNickName},-->
+<!--                                            #{userPhone},-->
+<!--                                            #{userPostCode},-->
+<!--                                            #{userAddress},-->
+<!--                                            #{userDetailAddress},-->
+<!--                                            #{userExtraAddress},-->
+<!--                                            default,-->
+<!--                                            #{userBirthDate},-->
+<!--                                            default,-->
+<!--                                            default,-->
+<!--                                            #{userKakaoId}-->
+<!--        )-->
+<!--    </insert>-->
+
     <insert id="registerLevel"  parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
         INSERT INTO USER_LEVEL_MANAGEMENT VALUES(#{userNo}, default, default, default, default, default)
     </insert>

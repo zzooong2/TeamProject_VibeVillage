@@ -138,7 +138,7 @@ public class ExperienceBoardController {
 
             file.transferTo(destinationFile);
 
-            String fileUrl = "/uploadReviewFile/" + fileName;
+            String fileUrl = "/images/" + fileName;
             response.put("url", fileUrl);
             response.put("message", "이미지 업로드 성공");
 
@@ -227,6 +227,7 @@ public class ExperienceBoardController {
     public String updatePost(@PathVariable Long id,
                              @ModelAttribute ExperienceBoardDTO experienceBoardDTO,
                              @RequestParam(value = "imageUrls", required = false) String imageUrls,
+                             @RequestParam(value = "deletedImageUrls", required = false) String deletedImageUrls,
                              @RequestParam(value = "file", required = false) MultipartFile[] files,
                              RedirectAttributes redirectAttributes) {
 
@@ -243,8 +244,11 @@ public class ExperienceBoardController {
                 experienceBoardDTO.setImageUrls(new ArrayList<>());
             }
 
+            List<String> deletedImages = (deletedImageUrls != null && !deletedImageUrls.isEmpty()) ?
+                    Arrays.asList(deletedImageUrls.split(",")) : new ArrayList<>();
+
             // 게시글 수정 로직
-            experienceBoardService.updatePost(id, experienceBoardDTO, files);
+            experienceBoardService.updatePost(id, experienceBoardDTO, files, deletedImages);
             redirectAttributes.addFlashAttribute("message", "게시글이 성공적으로 수정되었습니다.");
             return "redirect:/experienceBoard/post/" + id;
 
@@ -253,6 +257,7 @@ public class ExperienceBoardController {
             return "redirect:/experienceBoard/post/edit/" + id;
         }
     }
+
 
 
 

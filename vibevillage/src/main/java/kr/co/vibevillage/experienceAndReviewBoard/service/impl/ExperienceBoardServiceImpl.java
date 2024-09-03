@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+
 @Service
 public class ExperienceBoardServiceImpl implements ExperienceBoardService {
 
@@ -63,6 +64,11 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         }
     }
 
+    @Override
+    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDto, MultipartFile[] files) throws IOException {
+
+    }
+
 
     private String extractFileTypeFromUrl(String url) {
         if (url != null) {
@@ -104,7 +110,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
                 uploadDTO.setRuName(file.getOriginalFilename());
                 uploadDTO.setRuUniqueName(fileName);
                 uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
-                uploadDTO.setRuServerPath("/images/" + fileName);
+                uploadDTO.setRuServerPath("/uploadReviewFile/" + fileName);
                 uploadDTO.setRuFileType(file.getContentType());
 
                 try {
@@ -150,11 +156,18 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     }
 
     @Override
-    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files) throws IOException {
+    public void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files, List<String> deletedImages) throws IOException {
         // 기존 게시글 업데이트
         experienceBoardMapper.updatePost(rId, experienceBoardDTO.getRTitle(), experienceBoardDTO.getRContent());
 
-        // 기존 이미지 URL이 있는 경우 처리
+        // 삭제된 이미지 처리
+        if (deletedImages != null && !deletedImages.isEmpty()) {
+            for (String deletedUrl : deletedImages) {
+                experienceBoardMapper.deleteUploadByUrl(deletedUrl);
+            }
+        }
+
+        // 남아있는 이미지 URL 처리
         if (experienceBoardDTO.getImageUrls() != null && !experienceBoardDTO.getImageUrls().isEmpty()) {
             for (String imageUrl : experienceBoardDTO.getImageUrls()) {
                 UploadDTO uploadDTO = new UploadDTO();
@@ -164,7 +177,6 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
                 uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images");
                 uploadDTO.setRuServerPath(imageUrl);
 
-                // 파일 타입 추출
                 String fileType = extractFileTypeFromUrl(imageUrl);
                 uploadDTO.setRuFileType(fileType != null ? fileType : "unknown");
 

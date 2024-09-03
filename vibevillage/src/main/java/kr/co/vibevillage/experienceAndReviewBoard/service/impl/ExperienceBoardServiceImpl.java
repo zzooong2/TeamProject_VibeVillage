@@ -49,7 +49,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
                 uploadDTO.setRId(experienceBoardDTO.getRId());
                 uploadDTO.setRuName(imageUrl);
                 uploadDTO.setRuUniqueName(UUID.randomUUID().toString());
-                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile");
+                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images");
                 uploadDTO.setRuServerPath(imageUrl);
 
                 // 파일 타입 추출
@@ -84,7 +84,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
 
     @Override
     public void uploadImage(MultipartFile[] files, Long rId) throws Exception {
-        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
+        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images";
 
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {
@@ -104,7 +104,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
                 uploadDTO.setRuName(file.getOriginalFilename());
                 uploadDTO.setRuUniqueName(fileName);
                 uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
-                uploadDTO.setRuServerPath("/uploadReviewFile/" + fileName);
+                uploadDTO.setRuServerPath("/images/" + fileName);
                 uploadDTO.setRuFileType(file.getContentType());
 
                 try {
@@ -117,7 +117,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
     }
 
     private void handleFileUpload(MultipartFile file, Long rId) throws IOException {
-        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
+        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images";
         File directory = new File(uploadDirectory);
         if (!directory.exists()) {
             directory.mkdirs(); // 디렉터리 생성
@@ -133,7 +133,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
         uploadDTO.setRuName(fileName);
         uploadDTO.setRuUniqueName(file.getOriginalFilename());
         uploadDTO.setRuLocalPath(destinationFile.getAbsolutePath());
-        uploadDTO.setRuServerPath("/uploadReviewFile/" + fileName);
+        uploadDTO.setRuServerPath("/images/" + fileName);
         uploadDTO.setRuFileType(file.getContentType());
 
         // 파일 정보 DB 저장
@@ -161,7 +161,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
                 uploadDTO.setRId(rId);
                 uploadDTO.setRuName(imageUrl);
                 uploadDTO.setRuUniqueName(UUID.randomUUID().toString());
-                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile");
+                uploadDTO.setRuLocalPath("C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images");
                 uploadDTO.setRuServerPath(imageUrl);
 
                 // 파일 타입 추출

@@ -39,7 +39,7 @@
                             <!-- 이미 업로드된 파일들을 보여줌 -->
                             <div th:each="upload : ${post.uploadDTOs}">
                                 <div style="display: flex; align-items: center;">
-                                    <img th:src="@{/uploadReviewFile/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100px; margin: 10px;">
+                                    <img th:src="@{/images/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100px; margin: 10px;">
                                 </div>
                             </div>
                         </div>

@@ -43,6 +43,27 @@ public class RegisterServiceImpl implements RegisterService{
         }
     }
 
+//    // 회원가입
+//    @Override
+//    public int registerByKakaoId(UserDTO userDTO) {
+//        // 유저가 입력한 비밀번호를 passwordEncoder객체를 이용하여 암호화를 진행한다.
+//        String bcryptPassword = passwordEncoder.encode(userDTO.getUserPassword());
+//        // 암호화된 비밀번호를 userDTO갹채에 초기화한다.
+//        userDTO.setUserPassword(bcryptPassword);
+//
+//        // 회원가입 진행
+//        int result = registerMapper.registerByKakaoId(userDTO);
+//
+//        if (result == 1) {
+//            // 회원가입이 오류없이 진행되면 회원 등급을 생성
+//            int result2 = registerMapper.registerLevel(userDTO.getUserNo());
+//            return result2;
+//        } else {
+//            System.out.println("회원가입 에러발생");
+//            return 0;
+//        }
+//    }
+
     // 닉네임 중복검사
     @Override
     public int checkNickName(String userNickName){

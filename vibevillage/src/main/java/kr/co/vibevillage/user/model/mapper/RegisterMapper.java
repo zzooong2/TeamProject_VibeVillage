@@ -9,6 +9,9 @@ public interface RegisterMapper {
     // 회원가입
     public int register(UserDTO userDTO);
 
+//    // 카카오 계정으로 회원가입
+//    public int registerByKakaoId(UserDTO userDTO);
+
     // 회원등급 생성
     public int registerLevel(int userNo);
 

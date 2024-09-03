@@ -1,110 +1,47 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head th:replace="~{common/head :: head}">
-  <head>
-    <meta charset="utf-8">
-<meta content="IE=edge" http-equiv="X-UA-Compatible">
-<meta content="width=device-width, initial-scale=1" name="viewport">
-<title>VibeVillage</title>
-  </head>
+  <meta charset="utf-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>VibeVillage</title>
+</head>
+
   <body data-offset="60" data-spy="scroll" data-target=".onpage-navigation">
+
     <main>
       <nav th:replace="~{common/nav :: nav}"></nav>
       <div class="page-loader">
         <div class="loader">Loading...</div>
       </div>
 
-      <section class="bg-dark-30 showcase-page-header module parallax-bg" data-background="resources/images/camera_image.jpg">
+      <section class="showcase-page-header parallax-bg">
         <div class="titan-caption">
           <div class="caption-content">
-            <div class="font-alt mb-30 titan-title-size-1">취미 공유 커뮤니티</div>
-            <div class="font-alt mb-40 titan-title-size-4">VibeVillage</div><a class="section-scroll btn btn-border-w btn-round" href="#demos">See Demos</a>
+            <video autoplay muted loop playsinline id="background-video" class="hj-main-video">
+              <source src="/videos/main_people_face.mp4" type="video/mp4">
+            </video>
           </div>
         </div>
       </section>
+
+      <section class="showcase-page-header parallax-bg">
+        <div class="titan-caption">
+          <div class="caption-content">
+            <br>
+            <br>
+            <div class="font-alt" style="font-size:30px;">VibeVillage</div>
+            <div class="font-alt mb-40" style="font-size:15px;">취미 공유 커뮤니티</div>
+          </div>
+        </div>
+      </section>
+
       <div class="main showcase-page">
-        <section class="module-extra-small bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-md-8 col-lg-9">
-                <div class="callout-text font-alt">
-                  <h4 style="margin-top: 0px; font-;">Start Creating Beautiful Websites</h4>
-                  <p style="margin-bottom: 0px;">Download Titan Free today!</p>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="callout-btn-box"><a class="btn btn-border-w btn-circle" href="#">Down</a></div>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="module-medium" id="demos">
-          <div class="container">
-            <div class="row multi-columns-row">
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_mp_fullscreen_video_background.html">
-                  <div class="content-box-image"><img alt="Main Demo" src="resources/images/screenshots/main_demo.jpg"></div>
-                  <h3 class="content-box-title font-serif">Main Demo</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_agency.html">
-                  <div class="content-box-image"><img alt="Agency" src="resources/images/screenshots/agency.jpg"></div>
-                  <h3 class="content-box-title font-serif">Agency</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_portfolio.html">
-                  <div class="content-box-image"><img alt="Portfolio" src="resources/images/screenshots/portfolio.jpg"></div>
-                  <h3 class="content-box-title font-serif">Portfolio</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_restaurant.html">
-                  <div class="content-box-image"><img alt="Restaurant" src="resources/images/screenshots/restaurant.jpg"></div>
-                  <h3 class="content-box-title font-serif">Restaurant</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_finance.html">
-                  <div class="content-box-image"><img alt="Finance" src="resources/images/screenshots/finance.jpg"></div>
-                  <h3 class="content-box-title font-serif">Finance</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_landing.html">
-                  <div class="content-box-image"><img alt="Landing" src="resources/images/screenshots/landing.jpg"></div>
-                  <h3 class="content-box-title font-serif">Landing</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_photography.html">
-                  <div class="content-box-image"><img alt="Photography" src="resources/images/screenshots/photography.jpg"></div>
-                  <h3 class="content-box-title font-serif">Photography</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_shop.html">
-                  <div class="content-box-image"><img alt="Shop" src="resources/images/screenshots/shop.jpg"></div>
-                  <h3 class="content-box-title font-serif">Shop</h3></a></div>
-              <div class="col-md-4 col-sm-6 col-xs-12"><a class="content-box" href="index_op_fullscreen_gradient_overlay.html">
-                  <div class="content-box-image"><img alt="One Page" src="resources/images/screenshots/one_page.jpg"></div>
-                  <h3 class="content-box-title font-serif">One Page</h3></a></div>
-            </div>
-          </div>
-        </section>
-        <section class="module-extra-small bg-dark">
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-6 col-md-8 col-lg-9">
-                <div class="callout-text font-alt">
-                  <h4 style="margin-top: 0px;">Company Info</h4>
-                  <p style="margin: 0 0 10px;">팀장: 김현중</p>
-                  <p style="margin: 0 0 10px;">팀원: 이은섭, 백성오, 전해원</p>
-                  <p style="margin-bottom: 0px;">전화번호: 010-0000-0000</p>
-                </div>
-              </div>
-              <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="callout-btn-box"><a class="btn btn-border-w btn-circle" href="customerServiceCenter.html">고객센터</a></div>
-              </div>
-            </div>
-          </div>
-        </section>
         <footer th:replace="~{common/footer :: footer}"></footer>
         <th:block th:replace="~{common/js :: js}"></th:block>
       </div>
       <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
     </main>
-    <script src="resources/lib/jquery/dist/jquery.js"></script>
-    <script src="resources/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="resources/lib/wow/dist/wow.js"></script>
-    <script src="resources/lib/jquery.mb.ytplayer/dist/jquery.mb.YTPlayer.js"></script>
-    <script src="resources/lib/isotope/dist/isotope.pkgd.js"></script>
-    <script src="resources/lib/imagesloaded/imagesloaded.pkgd.js"></script>
-    <script src="resources/lib/flexslider/jquery.flexslider.js"></script>
-    <script src="resources/lib/owl.carousel/dist/owl.carousel.min.js"></script>
-    <script src="resources/lib/smoothscroll.js"></script>
-    <script src="resources/lib/magnific-popup/dist/jquery.magnific-popup.js"></script>
-    <script src="resources/lib/simple-text-rotator/jquery.simple-text-rotator.min.js"></script>
-    <script src="resources/js/plugins.js"></script>
-    <script src="resources/js/main.js"></script>
+
   </body>
 </html>

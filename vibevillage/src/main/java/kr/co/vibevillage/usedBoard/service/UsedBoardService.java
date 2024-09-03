@@ -30,7 +30,7 @@ public interface UsedBoardService {
     public int deleteDetail(int id);
     public List<UsedBoardDto> getMyBoards(int id);
 
-    void updateUsedBoard(UsedBoardDto usedBoard);
+    void updateUsedBoard(UsedBoardDto usedBoard,List<Integer> deleteList);
     public int convertProductStatus(int id ,String status);
 
 }

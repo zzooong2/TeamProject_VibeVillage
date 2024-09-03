@@ -5,15 +5,12 @@ import kr.co.vibevillage.chatting.model.ChatRoom;
 import kr.co.vibevillage.chatting.service.ChatMessageService;
 import kr.co.vibevillage.chatting.service.ChatRoomService;
 import kr.co.vibevillage.user.model.dto.UserDTO;
-import kr.co.vibevillage.user.model.service.LoginService;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +24,6 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatController {
 
-        public final SimpMessageSendingOperations sendingOperations;
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatMessageService;
     private final LoginServiceImpl loginService;
@@ -44,7 +40,16 @@ public class ChatController {
         response.put("roomId", roomId);
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/room_list")
+    public String getChatRoomList(Model model) {
+        UserDTO user = loginService.getLoginUserInfo();
+        String currentUser = user.getUserNickName();
+        List<ChatRoom> chatRooms =chatRoomService.getChatRoomList(user.getUserNo());
+        model.addAttribute("chatRoomList", chatRooms);
+        model.addAttribute("currentUser", currentUser);
 
+        return "chat/chatList";
+    }
 
     // 채팅방 입장
     @GetMapping("/room/{roomId}")

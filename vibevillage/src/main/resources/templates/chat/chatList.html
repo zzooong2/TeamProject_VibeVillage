@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+
+  <style>
+    .product-status{
+      font-size: large;
+      font-weight: bold;
+      text-align: -webkit-left;
+    }
+    .used_location_style{
+      text-align: -webkit-left;
+    }
+  </style>
+  <div th:replace="~{common/head :: head}"></div>
+</head>
+<body data-offset="60" data-spy="scroll" data-target=".onpage-navigation">
+<main>
+  <div class="page-loader">
+    <div class="loader">Loading...</div>
+  </div>
+  <div th:replace="~{common/nav :: nav}"></div>
+  <div class="main">
+      <div id="map" style="width:100%; height: 500px;"></div>
+
+    <section class="module-small">
+      <div class="container">
+        <form class="row">
+          <div class="col-sm-2 mb-sm-20">
+
+
+
+          </div>
+          <div class="col-sm-2 mb-sm-20">
+
+          </div>
+          <div class="col-sm-2 mb-sm-20" >
+
+
+          </div>
+          <div class="col-sm-2" style="float: right;">
+            <a th:href="@{/used/boardCreate}">
+              <button class="btn btn-block btn-round btn-g" type="button" >글쓰기
+              </button>
+            </a>
+          </div>
+          <div class="col-sm-2" style="float: right;">
+            <a th:href="@{/used/my_boards}">
+              <button class="btn btn-block btn-round btn-g" type="button" >내 글보기
+              </button>
+            </a>
+          </div>
+        </form>
+      </div>
+    </section>
+    <hr class="divider-w">
+    <section class="module-small">
+      <div class="container">
+        <script th:inline="javascript">
+          let usedList = /*[[${usedList}]]*/ [];
+        </script>
+        <div class="row multi-columns-row">
+          <div class="col-sm-6 col-md-3 col-lg-3" th:each="item : ${chatRoomList}">
+            <div class="shop-item">
+              <div>
+              <p class="product-status" th:text="${item.otherUserNickName + '님과의 대화'}"></p>
+              </div>
+
+              <h4 class="shop-item-title font-alt">
+                <a th:href="@{/chat/room/{roomId}(roomId=${item.roomId})}">
+                <p th:text="${'판매자'+item.otherUserNickName}"></p>
+                <p th:text="${'구매자'+item.createrNickName}"></p>
+                </a>
+              </h4>
+
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <!-- 페이지네이션 -->
+
+          </div>
+        </div>
+      </div>
+    </section>
+    <hr class="divider-d">
+  </div>
+  <div class="scroll-up"><a href="#totop"><i class="fa fa-angle-double-up"></i></a></div>
+</main>
+<div th:replace="~{common/footer :: footer}"></div>
+<!--
+JavaScripts
+=============================================
+-->
+<div th:replace="~{common/js :: js}"></div>
+
+
+<script th:src="@{/js/usedBoard/common/cityCategory.js}"></script>
+
+</body>
+</html>

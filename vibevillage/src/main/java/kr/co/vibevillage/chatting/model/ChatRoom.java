@@ -12,4 +12,6 @@ public class ChatRoom {
     private String name;    // 채팅방 이름
     private Long creatorId; // 채팅방 생성자 ID
     private Long otherUserId;
+    private String createrNickName;
+    private String otherUserNickName;
 }

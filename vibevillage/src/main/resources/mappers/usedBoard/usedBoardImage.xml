@@ -5,6 +5,8 @@
     <resultMap id="usedBoardImageMap" type="kr.co.vibevillage.usedBoard.model.UsedBoardImageDto">
         <result column="UPLOAD_UNIQUE_NAME" property="uploadUniqueName"/>
         <result column="UPLOAD_IMAGE_PATH" property="uploadImagePath"/>
+        <result column="UPLOAD_IMAGE_ID" property="imageId"/>
+        <result column="UPLOAD_IMAGE_TYPE" property="uploadImageType"/>
     </resultMap>
 
 
@@ -15,17 +17,18 @@
         </insert>
 
         <select id="usedBoardGetImageListXML"  resultMap="usedBoardImageMap" >
-        SELECT UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH
+        SELECT UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH,Upload_image_id,Upload_image_type
         FROM USED_BOARD_IMAGE WHERE used_post_id = #{id} and upload_image_type = 'PREVIEW'
         </select>
     <select id="usedBoardGetImageListOnceXML" resultMap="usedBoardImageMap">
-        SELECT UPLOAD_UNIQUE_NAME, UPLOAD_IMAGE_PATH
+        SELECT  UPLOAD_UNIQUE_NAME,UPLOAD_IMAGE_PATH,Upload_image_id,Upload_image_type
         FROM USED_BOARD_IMAGE WHERE used_post_id = #{id} and upload_image_type = 'MAIN'
     </select>
 
     <delete id="deleteImages" parameterType="int">
         delete from USED_BOARD_IMAGE
-        where used_post_id = #{id}
+        where upload_image_id = #{id}
+
     </delete>
 
 </mapper>

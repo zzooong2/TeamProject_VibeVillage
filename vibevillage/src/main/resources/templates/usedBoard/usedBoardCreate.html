@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head>
+  <style>
+   .img-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.img-wrapper .gallery {
+  display: block;
+}
+
+.img-wrapper .delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: gray;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.fit-content{
+  display: flex;
+}
+  </style>
   <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services" type="text/javascript"></script>
 
   <div th:replace="~{common/head :: head}"></div>
@@ -18,15 +47,11 @@
         <form id="upload-form" method="POST">
           <div class="row">
             <div class="col-sm-6 mb-sm-40">
-              메인 이미지
-              <div class="gallery" id="mainImg">
-
-              </div>
-                  <input class="btn btn-g btn-circle" type="file" id="main-file-input" name="mainFile">
-              서브 이미지
-              <ul class="product-gallery" id="preview-container">
-              </ul>
-                  <input class="btn btn-g btn-circle" type="file" multiple id="preview-file-input" name="previewFiles">
+              <div class="gallery" id="mainImg"></div>
+              
+              
+              <ul class="product-gallery" id="preview-container"></ul>
+              
             </div>
             <div class="col-sm-6">
               <div class="row">
@@ -58,10 +83,23 @@
                 </div>
               </div>
 
-              <div class="row mb-20">
-                <div class="col-sm-8 mb-sm-40">
-                  <input class="form-control" id="sample5_address" placeholder="주소" type="text" >
-                  <input class="btn btn-g btn-round" onclick="sample5_execDaumPostcode()" type="button" value="주소 검색" ><br>
+              <div class="row mb-20 ">
+                <div class="col-sm-12">
+                  <input class="form-control" id="sample5_address" placeholder="주소" type="text" disabled>
+                </div>
+              </div>
+
+              <div class="row mb-20 fit-content">
+                <div class="col-sm-10">
+                  <input class="btn btn-g btn-round" onclick="sample5_execDaumPostcode()" type="button" value="주소 검색" >
+                </div>
+                <div class="col-sm-10">
+                  <label class="btn btn-g btn-round" for="main-file-input">메인 이미지</label>
+                  <input type="file" id="main-file-input" name="mainFile" style="display: none;">
+                </div>
+                <div class="col-sm-10">
+                  <label class="btn btn-g btn-round" for="preview-file-input">서브 이미지</label>
+                  <input type="file" multiple id="preview-file-input" name="previewFiles" style="display: none;">
                 </div>
               </div>
 
@@ -89,7 +127,7 @@
                     <option value="19">기타중고물품</option>
                   </select>
                 </div>
-                <div class="col-sm-8">
+                <div class="col-sm-8 button-container">
                   <button type="button" class="btn btn-g btn-round" id="submit-button">제출</button>
                 </div>
               </div>
@@ -114,8 +152,10 @@
 
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
-<script th:src="@{/js/usedBoard/cityCategory.js}"></script>
-<script th:src="@{/js/usedBoard/boardCreate.js}"></script>
-<script th:src="@{/js/usedBoard/common/preview.js}"></script>
+<script th:src="@{/js/usedBoard/common/locationData.js}"></script>
+<script th:src="@{/js/usedBoard/boardEnroll.js}"></script>
+<script th:src="@{/js/usedBoard/common/image_event.js}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </body>
 </html>

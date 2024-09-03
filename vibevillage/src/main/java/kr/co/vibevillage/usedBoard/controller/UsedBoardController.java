@@ -1,7 +1,5 @@
 package kr.co.vibevillage.usedBoard.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import kr.co.vibevillage.common.UploadFile;
 import kr.co.vibevillage.common.UsedPagination;
 import kr.co.vibevillage.usedBoard.model.UsedBoardCommentDto;
@@ -13,16 +11,15 @@ import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import kr.co.vibevillage.env.Env;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +73,7 @@ public class UsedBoardController {
             usedBoard.setImages(images);
             usedBoard.setUserNo(user.getUserNo());
             usedBoardService.enrollUsedBoard(usedBoard);
-            response.put("message", "Upload successful!");
+            response.put("message", "글쓰기 성공");
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -152,16 +149,23 @@ public class UsedBoardController {
     @PostMapping("/update")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> updateBoard(@ModelAttribute UsedBoardDto usedBoard,
-                                                           @RequestParam("mainFile") MultipartFile mainFile,
-                                                           @RequestParam("previewFiles") List<MultipartFile> previewFiles) {
+                                                           @RequestParam(value = "mainFile", required = false) MultipartFile mainFile,
+                                                           @RequestParam(value = "previewFiles", required = false) List<MultipartFile> previewFiles,
+                                                           @RequestParam(value ="deleteList", required = false) List<Integer> deleteList) {
         try {
             // 서비스 호출하여 게시물 및 이미지 업데이트
-            System.out.println(usedBoard.getUsedBoardId());
-            System.out.println(usedBoard.getUsedBoardContent());
-            List<MultipartFile> mainImages = List.of(mainFile);
-            List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles);
-            usedBoard.setImages(images);
-            usedBoardService.updateUsedBoard(usedBoard);
+            if(mainFile == null&& previewFiles == null){
+                usedBoardService.updateUsedBoard(usedBoard,deleteList);
+            }
+            else {
+                List<MultipartFile> mainImages = new ArrayList<>();
+                if(mainFile != null){
+                     mainImages = List.of(mainFile);
+                }
+                List<UsedBoardImageDto> images = uploadFile.upload(mainImages, previewFiles);
+                usedBoard.setImages(images);
+                usedBoardService.updateUsedBoard(usedBoard,deleteList);
+            }
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Update successful!");
             return ResponseEntity.ok(response);
@@ -178,8 +182,10 @@ public class UsedBoardController {
     @GetMapping("/convert_status/{id}/{status}")
     public String convertProductStatus(@PathVariable(value = "status") String status,
                                        @PathVariable(value = "id" ) int id){
+        System.out.println("여기 들어옴");
         usedBoardService.convertProductStatus(id,status);
-
+        System.out.println(status);
+        System.out.println(id);
         return "redirect:/used/my_boards";
     }
     @GetMapping("/delete_comment/{commentId}")

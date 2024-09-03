@@ -54,6 +54,12 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
         long now = (new Date()).getTime();
 
         // refresh Token 생성
+        String accessToken = Jwts.builder()
+                .setExpiration(new Date(now + ACCESS_TOKEN_EXPIRE_TIME))
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+
+        // refresh Token 생성
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -65,30 +71,23 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
                 .build();
     }
 
+
     // JWT 토큰을 복호화하여 토큰에 들어있는 정보를 꺼내는 메서드
     public Authentication getAuthentication(String accessToken) {
-        // 토큰 복호화
         Claims claims = parseClaims(accessToken);
-
-        // 사용자 계정이 null이거나 비어있는지 확인
         String userId = claims.getSubject();
-        if (userId == null || userId.trim().isEmpty()) {
-            throw new IllegalArgumentException("userId cannot be null or empty");
-        }
 
-        // 권한 정보가 null이거나 비어있는지 확인
-        String authorityClaim = claims.get(AUTHORITIES_KEY, String.class);
-        if (authorityClaim == null || authorityClaim.trim().isEmpty()) {
-            throw new IllegalArgumentException("Authorities cannot be null or empty");
-        }
+        log.info("토큰에서 추출한 사용자 ID: {}", userId);
 
         // 클레임에서 권한 정보 가져오기
+        String authorityClaim = claims.get(AUTHORITIES_KEY, String.class);
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(authorityClaim.split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // UserDetails 객체를 만들어서 Authentication 리턴
+        log.info("사용자의 권한 정보: {}", authorityClaim);
+
         UserDetails principal = new User(userId, "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
@@ -96,7 +95,8 @@ public class JwtTokenProvider { // JWT 토큰 생성, 토큰 복호화 및 추�
     // 토큰 정보를 검증하는 메서드
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            log.info("JWT 토큰이 성공적으로 검증되었습니다. 만료 시간: {}", claims.getBody().getExpiration());
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);

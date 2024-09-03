@@ -19,7 +19,6 @@ public class LoginServiceImpl implements LoginService{
     // 로그인
     @Override
     public String login(String userId, String userPassword) {
-
         return loginMapper.login(userId, userPassword);
     }
 
@@ -41,5 +40,11 @@ public class LoginServiceImpl implements LoginService{
     public UserDTO getLoginUserInfo() {
         String loginUserId = getLoginUserId();
         return loginMapper.getLoginUserInfo(loginUserId);
+    }
+
+    // 로그인시 방문횟수 증가
+    @Override
+    public void addAccessCount(int userNo) {
+        loginMapper.addAccessCount(userNo);
     }
 }

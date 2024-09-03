@@ -8,6 +8,7 @@
         <result column="U_NAME" property="userName"></result>
         <result column="U_ID" property="userId"></result>
         <result column="U_PASSWORD" property="userPassword"></result>
+        <result column="U_BIRTHDATE" property="userBirthDate"></result>
         <result column="U_NICKNAME" property="userNickName"></result>
         <result column="U_PHONE" property="userPhone"></result>
         <result column="U_POSTCODE" property="userPostCode"></result>
@@ -31,4 +32,7 @@
         SELECT * FROM ONAIR.USER_VIBEVILLAGE uv JOIN USER_LEVEL_MANAGEMENT ulm ON uv.U_NO = ulm.U_NO WHERE uv.U_ID = #{loginUserId}
     </select>
 
+    <update id="addAccessCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_ACCESS_COUNT = ULM_ACCESS_COUNT + 1 WHERE U_NO = #{userNO}
+    </update>
 </mapper>

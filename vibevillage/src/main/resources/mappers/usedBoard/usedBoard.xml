@@ -12,12 +12,16 @@
         <result column="used_post_status" property="usedBoardStatus"/>
         <result column="used_create_at" property="usedBoardCreateAt"/>
         <result column="location" property="usedBoardLocation"/>
+        <result column="GPS_LATITUDE" property="gpsLatitude"/>
+        <result column="GPS_LONGITUDE" property="gpsLongitude"/>
         <result column="views" property="usedBoardViews"/>
         <result column="product_name" property="usedBoardProductName"/>
         <result column="product_price" property="usedBoardProductPrice"/>
 <!--       카테고리-->
         <result column="category_id" property="categoryId"/>
         <result column="category_name" property="categoryName"/>
+        <!--        유저-->
+        <result column="u_nickname" property="userNickName"/>
 
     </resultMap>
 
@@ -40,39 +44,53 @@
     <select id="usedBoardPaginationXML" resultMap="usedBoardMap">
         SELECT *
         FROM (
-                 SELECT
-                     u.U_NO,
-                     u.USED_POST_ID,
-                     u.USED_POST_TITLE,
-                     u.USED_POST_CONTENT,
-                     u.USED_POST_STATUS,
-                     u.LOCATION,
-                     u.USED_DELETE,
-                     u.USED_UPDATE_AT,
-                     u.VIEWS,
-                     p.PRODUCT_NAME,
-                     p.PRODUCT_PRICE,
-                     c.CATEGORY_NAME,
-                     ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
-                 FROM USED_BOARD u
-                          JOIN product p ON p.used_post_id = u.used_post_id
-                          JOIN category c ON c.category_id = p.category_id
+        SELECT
+        u.U_NO,
+        u.USED_POST_ID,
+        u.USED_POST_TITLE,
+        u.USED_POST_CONTENT,
+        u.USED_POST_STATUS,
+        u.LOCATION,
+        u.USED_DELETE,
+        u.USED_UPDATE_AT,
+        u.province,
+        u.city,
+        u.GPS_LATITUDE,
+        u.GPS_LONGITUDE,
+        u.VIEWS,
+        p.PRODUCT_NAME,
+        p.PRODUCT_PRICE,
+        c.CATEGORY_NAME,
+        uv.U_NICKNAME,
+        ROW_NUMBER() OVER (ORDER BY u.USED_CREATE_AT) AS rn
+        FROM USED_BOARD u
+        JOIN product p ON p.used_post_id = u.used_post_id
+        JOIN category c ON c.category_id = p.category_id
+        join USER_VIBEVILLAGE uv on u.U_NO = uv.U_NO
+        WHERE u.used_delete = 'N'
         <choose>
             <when test="category > 0">
-                where c.category_id = #{category}
+                AND c.category_id = #{category}
+            </when>
+            <when test="province != '' and citySelect != ''">
+                AND province LIKE '%' || #{province} || '%'
+                and city Like '%' || #{citySelect} || '%'
             </when>
             <otherwise>
-                -- 카테고리가 0일 때는 where 절을 생략하거나 기본적인 쿼리를 작성합니다.
+                -- 기본적인 조건이 필요할 경우 여기에 추가
             </otherwise>
         </choose>
-             ) subquery
-        WHERE subquery.rn BETWEEN #{pi.startPage} AND #{pi.endPage}*#{pi.boardLimit}
+        ) subquery
+        WHERE subquery.rn BETWEEN #{pi.offset} AND #{pi.limit}
     </select>
+
+
     <select id="usedBoardDetailXML" resultMap="usedBoardMap">
         SELECT *
         FROM USED_BOARD u
         join product p  on p.used_post_id = u.used_post_id
         join category c on c.category_id = p.category_id
+        join USER_VIBEVILLAGE uv on uv.u_no= u.u_no
         where p.used_post_id = #{id}
     </select>
 
@@ -80,8 +98,8 @@
             <selectKey keyProperty="usedBoard.usedBoardId" resultType="_int" order="BEFORE">
                 SELECT USED_BOARD_SEQ.NEXTVAL FROM DUAL
             </selectKey>
-            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views)
-            VALUES (#{usedBoard.usedBoardId}, 1, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, 3, 3, default, null, default, default, 0)
+            INSERT INTO USED_BOARD (used_post_id,u_no,used_post_title,used_post_content,location,gps_latitude,gps_longitude,used_create_at,used_update_at,used_delete,used_post_status,views,province,city)
+            VALUES (#{usedBoard.usedBoardId}, #{usedBoard.userNo}, #{usedBoard.usedBoardTitle}, #{usedBoard.usedBoardContent}, #{usedBoard.usedBoardLocation}, #{usedBoard.gpsLatitude}, #{usedBoard.gpsLongitude}, default, null, default, default, 0,#{usedBoard.province} ,#{usedBoard.city})
         </insert>
 
     <insert id="usedBoardProductEnrollXML" >
@@ -96,5 +114,64 @@
         WHERE used_post_id = #{boardId}
     </update>
 
+    <!-- 디테일 삭제 -->
+    <update id="deleteDetail" parameterType="int">
+        UPDATE used_board
+        SET USED_DELETE = 'Y'
+        WHERE used_post_id = #{id}
+    </update>
+
+
+    <select id="getMyBoards" resultMap="usedBoardMap">
+        SELECT
+            u.U_NO,
+                u.USED_POST_ID,
+               u.USED_POST_TITLE,
+               u.USED_POST_CONTENT,
+               u.USED_POST_STATUS,
+               u.LOCATION,
+               u.USED_DELETE,
+               u.USED_UPDATE_AT,
+               u.province,
+               u.city,
+               u.VIEWS,
+               p.PRODUCT_NAME,
+               p.PRODUCT_PRICE,
+               c.CATEGORY_NAME
+        FROM USED_BOARD u
+        JOIN product p ON p.used_post_id = u.used_post_id
+        JOIN category c ON c.category_id = p.category_id
+        WHERE u.used_delete = 'N' and u.u_no = #{id}
+    </select>
+
+    <update id="updateUsedBoard" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+        UPDATE USED_BOARD
+        SET used_post_title = #{usedBoardTitle},
+            used_post_content = #{usedBoardContent},
+            location = #{usedBoardLocation},
+            gps_latitude=#{gpsLatitude},
+            gps_longitude = #{gpsLongitude},
+            used_update_at = sysdate
+        WHERE used_post_id = #{usedBoardId}
+    </update>
+
+    <update id="updateProduct" parameterType="kr.co.vibevillage.usedBoard.model.UsedBoardDto">
+        UPDATE PRODUCT
+        SET product_name = #{usedBoardProductName},
+            product_price = #{usedBoardProductPrice},
+            category_id = #{categoryId}
+        WHERE used_post_id = #{usedBoardId}
+    </update>
+    <update id="convertProductStatus" >
+        UPDATE used_board
+        SET used_post_status = #{status}
+        WHERE used_post_id = #{id}
+    </update>
+
+    <update id="increaseUserWriteCount">
+        Update USER_LEVEL_MANAGEMENT
+        set ULM_WRITE_COUNT = ULM_WRITE_COUNT+1
+        where U_NO = #{id}
+    </update>
 
 </mapper>

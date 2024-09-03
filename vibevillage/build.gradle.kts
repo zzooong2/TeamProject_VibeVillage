@@ -58,6 +58,24 @@ dependencies {
 	// 웹 소캣
 	implementation("org.springframework.boot:spring-boot-starter-websocket:3.2.1")
 	implementation("org.webjars:stomp-websocket:2.3.4")
+	implementation("org.webjars:stomp-websocket:2.3.3")
+
+
+	// 테스트 코드
+	// JUnit 5
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+	testRuntimeOnly ("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+
+	// Mockito
+	testImplementation("org.mockito:mockito-core:5.10.0")
+	testImplementation("org.mockito:mockito-junit-jupiter:5.10.0")
+
+	// https://mvnrepository.com/artifact/org.mockito/mockito-inline
+	testImplementation("org.mockito:mockito-inline:5.2.0")
+
+
+
 }
 
 tasks.withType<Test> {

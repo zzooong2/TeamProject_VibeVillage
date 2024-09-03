@@ -3,6 +3,7 @@ package kr.co.vibevillage.security.config;
 import kr.co.vibevillage.jwt.filter.JwtAuthorizationFilter;
 import kr.co.vibevillage.jwt.filter.LoginPageFilter;
 import kr.co.vibevillage.jwt.provider.JwtTokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity // 스프링시큐리티 필터가 스프링 필터체인에 등록된다
 public class SecurityConfig {
@@ -40,6 +42,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/lib/**", "/scss/**").permitAll() // 정적 리소스에 대한 접근을 허용
                         .requestMatchers("/form/login").permitAll() // 로그인 페이지 접근 허용
+                        .requestMatchers("/form/findUserInfo").permitAll() // 계정, 비밀번호 찾기 페이지 접근 허용
                         .requestMatchers("/login").permitAll() // 로그인 처리 URL 접근 허용
                         .requestMatchers("/form").permitAll() // 메인 페이지 접근 허용
                         .requestMatchers("/sendCertificationNumber").permitAll() // coolSMS
@@ -55,6 +58,10 @@ public class SecurityConfig {
                         // 성오 작업 영역
 
                         .requestMatchers("/profile").permitAll() // 회원정보 가져오기
+                        .requestMatchers("/findUserId").permitAll() // 회원계정 찾기
+                        .requestMatchers("/findUserPassword").permitAll() // 회원계정 찾기
+                        .requestMatchers("/checkUserInfoByPhone").permitAll() // 회원계정 찾기
+                        .requestMatchers("/checkUserInfoById").permitAll() // 비밀번호 찾기
                         .requestMatchers(
                                 "/experienceBoard/**",
                                 "/used/**",
@@ -65,24 +72,30 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 모든 다른 요청은 인증이 필요함
                 )
                 .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화
+                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new LoginPageFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
                 .formLogin(form -> form
                         .loginPage("/form/login") // 커스텀 로그인 페이지 설정
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("/form"); // 로그인 성공 시 리다이렉트
-                        })
-                        .permitAll()) // 로그인 관련 요청 허용
+                        }).permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout") // 로그아웃 처리 URL 설정
                         .logoutSuccessUrl("/form/login") // 로그아웃 후 리다이렉트할 URL 설정
                         .deleteCookies("JWT", "AccessToken", "JSESSIONID") // 로그아웃 시 삭제할 쿠키들 설정
                         .invalidateHttpSession(true) // 로그아웃 시 세션 무효화
                         .clearAuthentication(true) // 로그아웃 시 인증 정보 제거
-                        .permitAll()) // 로그아웃 관련 모든 요청 허용
-                .headers(headers -> headers
-                        .frameOptions(frameOptions -> frameOptions.sameOrigin()) // X-Frame-Options 설정
+                        .permitAll()
+                        .addLogoutHandler((request, response, authentication) -> log.info("로그아웃이 성공적으로 처리되었습니다."))
                 )
-                .addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new LoginPageFilter(jwtTokenProvider()), UsernamePasswordAuthenticationFilter.class)
+
+//                .logout(logout -> logout
+//                        .logoutUrl("/logout") // 로그아웃 처리 URL 설정
+//                        .logoutSuccessUrl("/form/login") // 로그아웃 후 리다이렉트할 URL 설정
+//                        .deleteCookies("JWT", "AccessToken", "JSESSIONID") // 로그아웃 시 삭제할 쿠키들 설정
+//                        .invalidateHttpSession(true) // 로그아웃 시 세션 무효화
+//                        .clearAuthentication(true) // 로그아웃 시 인증 정보 제거
+//                        .permitAll())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 무상태 세션 설정
                 );

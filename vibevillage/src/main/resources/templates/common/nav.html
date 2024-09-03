@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" xmlns:th="http://www.thymeleaf.org">
 
 
 <th:block th:fragment="nav">
@@ -23,14 +23,14 @@
                     </li>
 
                     <li>
-                        <a href="customerServiceCenter.html">고객센터</a>
+                        <a th:href="@{/customerService/csList/0}">고객센터</a>
                     </li>
 
                     <li class="dropdown">
-                        <a class="dropdown-toggle" href="" data-toggle="dropdown">게시판</a>
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="">게시판</a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="">중고거래</a>
+                                <a href="/used/boardList/1">중고거래</a>
                             </li>
 
                             <li>
@@ -42,12 +42,13 @@
                             </li>
 
                             <li>
-                                <a href="">등업</a>
+                                <a th:href="@{/levelUp/levelUpBoard}">등업</a>
                             </li>
                         </ul>
                     </li>
 
-                    <li>
+                    <!-- 로그인 상태에 따라 조건부 렌더링 -->
+                    <li sec:authorize="isAuthenticated()">
                         <a href="/form/myPage">마이페이지</a>
                     </li>
 
@@ -56,7 +57,7 @@
                         <a href="/logout">로그아웃</a>
                     </li>
                     <li sec:authorize="!isAuthenticated()">
-                        <a href="/form/login">로그인 및 회원가입</a>
+                        <a href="/form/login">로그인</a>
                     </li>
                 </ul>
             </div>

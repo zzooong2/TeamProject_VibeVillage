@@ -9,6 +9,7 @@ import lombok.Setter;
 public class UsedBoardCommentDto {
     private int usedCommentId;
     private int uNo;
+    private String userNickName;
     private String usedCommentContent;
     private String usedCommentCreateAt;
     private String usedCommentUpdateAt;

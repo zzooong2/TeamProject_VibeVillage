@@ -41,6 +41,7 @@ function startCertification() {
                 swal("인증완료", "", "success");
                 certificationArea.style.display = "none"; // 숨겨진 인증 영역 안보이게 설정
                 showText.innerText = "인증이 완료되었습니다.";
+                checkFlag.innerText = "인증완료"; // 인증이 성공했을 때 checkFlag에 "인증완료" 추가
             }
         },
         error: function error(err) {

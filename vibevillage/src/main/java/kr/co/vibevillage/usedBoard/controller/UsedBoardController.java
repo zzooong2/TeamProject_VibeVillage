@@ -155,6 +155,11 @@ public class UsedBoardController {
                                                            @RequestParam(value = "previewFiles", required = false) List<MultipartFile> previewFiles,
                                                            @RequestParam(value ="deleteList", required = false) List<Integer> deleteList) {
         try {
+            for(Integer item: deleteList){
+                System.out.println(item);
+            }
+            System.out.println(usedBoard.getUsedBoardLocation());
+            System.out.println(usedBoard.getUsedBoardId());
             // 서비스 호출하여 게시물 및 이미지 업데이트
             if(mainFile == null&& previewFiles == null){
                 usedBoardService.updateUsedBoard(usedBoard,deleteList);
@@ -169,13 +174,13 @@ public class UsedBoardController {
                 usedBoardService.updateUsedBoard(usedBoard,deleteList);
             }
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "Update successful!");
+            response.put("message", "수정 성공");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             // 예외 처리: 예외 메시지를 로그에 기록하고 클라이언트에 응답
             e.printStackTrace();
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "Update failed");
+            response.put("message", "수정 실패");
             response.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }

@@ -75,7 +75,7 @@
                 </h4>
                 <a th:href="@{/used/boardDetail/{id}(id=${item.usedBoardId})}">
                   <p style="font-weight: bold; text-align: left;" th:text="${item.usedBoardProductPrice + '원'}"></p>
-                  <p class="used_location_style" th:text="${item.province}+' '+${item.city}+' '+${item.usedBoardLocation}"></p>
+                  <p class="used_location_style" th:text="${item.usedBoardLocation}"></p>
                   <p class="used_location_style" th:text="'카테고리:'+${item.categoryName}"></p>
                   <p class="used_location_style" th:text="'조회수:'+${item.usedBoardViews}"></p>
                 </a>

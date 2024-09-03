@@ -1,11 +1,4 @@
 
-let addressData = {
-    sido: null,
-    sigungu: null
-};  // 주소 데이터를 저장할 전역 변수
-let latitude = null;     // 위도를 저장할 전역 변수
-let longitude = null;    // 경도를 저장할 전역 변수
-
 function sample5_execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {

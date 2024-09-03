@@ -11,6 +11,7 @@ import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,8 @@ public class UsedBoardController {
     private final UploadFile uploadFile;
     private final UsedBoardServiceImpl usedBoardService;
     private final LoginServiceImpl loginService;
-    private final String USE = "usedBoard/usedBoard";
+    @Value("${USED_BOARD_PATH}")
+    private String USE;
 
     // 게시글 리스트 조회
     @GetMapping("/boardList/{cpage}")
@@ -78,7 +80,7 @@ public class UsedBoardController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            response.put("message", "Upload failed!");
+            response.put("message", "업로드에 실패했습니다.");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -192,6 +194,13 @@ public class UsedBoardController {
     public String deleteComment(@PathVariable("commentId") int commentId) {
         commentService.deleteComment(commentId);
         return "redirect:/used/boardList/1";
+    }
+
+    @GetMapping("/search_used_board/")
+    public String searchUsedBoard(@RequestParam(value = "keyword") String keyword ,Model model) {
+        List<UsedBoardDto> searchList = usedBoardService.searchUsedBoard(keyword);
+        model.addAttribute("usedList",searchList);
+        return "usedBoard/searchBoardList";
     }
 
 

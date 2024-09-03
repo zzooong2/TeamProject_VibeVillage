@@ -26,9 +26,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     submitButton.addEventListener('click', function () {
         const formData = new FormData();
-        if (mainImage) {
-            formData.append('mainFile', mainImage);
+
+        if(mainImage == null){
+            swal('메인 이미지를 업로드 해주세요', "", "error");
+            return;
         }
+
+        if (previewImages.length > 3) {
+            swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
+            return;
+        }
+        else if(previewImages == null){
+            swal('서브 이미지를 업로드 해주세요', "", "error");
+            return;
+        }
+        formData.append('mainFile', mainImage);
         previewImages.forEach(image => {
             formData.append('previewFiles', image);
         });

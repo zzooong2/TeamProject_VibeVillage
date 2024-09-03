@@ -1,14 +1,11 @@
 package kr.co.vibevillage.usedBoard.service;
 
-import kr.co.vibevillage.usedBoard.mapper.UsedBoardCommentMapper;
 import kr.co.vibevillage.usedBoard.mapper.UsedBoardImageMapper;
 import kr.co.vibevillage.usedBoard.mapper.UsedBoardMapper;
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
-import kr.co.vibevillage.user.model.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,8 +90,6 @@ public class UsedBoardServiceImpl implements UsedBoardService {
 
     @Override
     public List<UsedBoardDto> getMyBoards(int id){
-
-
         List<UsedBoardDto> list =  usedBoardMapper.getMyBoards(id);;
         // 각 게시글에 대해 반복문을 돌립니다.
         for (UsedBoardDto board : list) {
@@ -131,6 +126,16 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         return result;
     }
 
+    @Override
+    public List<UsedBoardDto> searchUsedBoard(String keyword){
+
+     List<UsedBoardDto> searchList = usedBoardMapper.searchUsedBoard(keyword);
+     for (UsedBoardDto board : searchList) {
+         List<UsedBoardImageDto> mainImage = getUsedBoardMainImage(board.getUsedBoardId());
+         board.setImages(mainImage);
+     }
+     return searchList;
+    }
 
 
 

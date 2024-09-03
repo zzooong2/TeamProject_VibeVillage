@@ -17,7 +17,7 @@ submitButton.addEventListener('click', function() {
 
     for (const field of fields) {
         if (!field.value) {
-            swal(field.message, "", "error");   
+            swal(field.message, "", "error");
             return;
         }
         formData.append(field.key, field.value);
@@ -26,6 +26,20 @@ submitButton.addEventListener('click', function() {
     if (mainImage) {
         formData.append('mainFile', mainImage);
     }
+    else if(mainImage == null){
+        swal('메인 이미지를 업로드 해주세요', "", "error");
+        return;
+    }
+
+    if (previewImages.length > 3) {
+        swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
+        return;
+    }
+    else if(previewImages == null){
+        swal('서브 이미지를 업로드 해주세요', "", "error");
+        return;
+    }
+
     previewImages.forEach(image => {
         formData.append('previewFiles', image);
     });
@@ -34,16 +48,24 @@ submitButton.addEventListener('click', function() {
         method: 'POST',
         body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        swal(data.message, "", "success");
-        if (data.message === "글쓰기 성공") {
-            window.location.href = "/used/boardList/1";
-        }
-    })
-    .catch(error => {
-        swal(error,"","error");
-        alert('Upload failed!');
-    });
+        .then(response => response.json())
+        .then(data => {
+            swal({
+                title: data.message,
+                icon: "success",
+                buttons: "OK"
+            }).then((value) => {
+                if (value && data.message === "글쓰기 성공") {
+                    window.location.href = "/used/boardList/1";
+                }
+            });
+        })
+        .catch(error => {
+            swal({
+                title: 'Error',
+                text: error,
+                icon: 'error',
+                buttons: "OK"
+            });
+        });
 });

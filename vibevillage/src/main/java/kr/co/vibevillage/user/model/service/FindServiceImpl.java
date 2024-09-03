@@ -30,7 +30,6 @@ public class FindServiceImpl implements FindService{
         return findMapper.findUserId(userDTO);
     }
 
-
     // 비밀번호 찾기
     @Override
     public UserDTO findUserPassword(UserDTO userDTO){

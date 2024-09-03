@@ -15,7 +15,7 @@ function checkUserInfoByPhone() {
         url: "/checkUserInfoByPhone",
         data: { userPhone: userPhone },
         success: function success(res) {
-            if(res === 1) {
+            if(res !== 0) {
                 certificationByFindId();
             } else if(res === 0){
                 swal("회원정보가 없습니다.", "연락처를 확인해주세요.", "error");
@@ -38,7 +38,7 @@ function checkUserInfoByPhone2() {
         url: "/checkUserInfoByPhone",
         data: { userPhone: userPhone },
         success: function success(res) {
-            if(res === 1) {
+            if(res !== 0) {
                 certificationByFindPassword();
             } else if(res === 0){
                 swal("회원정보가 없습니다.", "연락처를 확인해주세요.", "error");
@@ -96,7 +96,7 @@ function startCertificationByFindId() {
     const certificationInput = document.getElementById("certificationInputByFindId").value; // 유저가 입력한 인증번호
     const certificationArea = document.getElementById("certificationAreaByFindId"); // 인증 영역
     const showText = document.getElementById("showPhoneByFindId"); // 인증 완료되었을 때 문구 나타낼 영역
-
+    console.log("인증코드 문자 발송 함수 실행")
     // 인증 시작
     $.ajax({
         type: "POST",
@@ -107,6 +107,7 @@ function startCertificationByFindId() {
         },
         success: function success(res) {
             if(res === "인증실패"){
+                console.log("인증코드 문자 발송 함수 실행");
                 swal("인증실패", "인증번호를 확인해주세요.", "error");
             } else if (res === "인증성공") {
                 swal("인증완료", "", "success");

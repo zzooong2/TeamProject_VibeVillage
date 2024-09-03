@@ -33,4 +33,13 @@
     <select id="checkUserInfoById" parameterType="string" resultType="_int">
         SELECT count(*) FROM ONAIR.USER_VIBEVILLAGE WHERE U_ID = #{userId}
     </select>
+
+    <select id="findUserByKakaoId" parameterType="string" resultType="_int">
+        SELECT count(*) FROM ONAIR.USER_VIBEVILLAGE WHERE U_ID = #{userId}
+    </select>
+
+    <select id="getUserByKakaoId" resultMap="findUserInfo">
+        SELECT * FROM ONAIR.USER_VIBEVILLAGE uv WHERE uv.U_ID = #{userId}
+    </select>
+
 </mapper>

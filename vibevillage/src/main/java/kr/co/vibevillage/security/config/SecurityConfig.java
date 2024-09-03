@@ -50,6 +50,13 @@ public class SecurityConfig {
                         .requestMatchers("/checkId").permitAll() // 닉네임 중복검사
                         .requestMatchers("/checkNickName").permitAll() // 닉네임 중복검사
                         .requestMatchers("/register").permitAll() // 회원가입
+
+                        // 성오 작업 영역
+                        .requestMatchers("/experienceBoard").permitAll() // 경험 및 리뷰 게시판
+                        .requestMatchers("/experienceBoard/new").permitAll() // 경험 및 리뷰 게시판 글 작성 url
+                        .requestMatchers("/experienceBoard/write").permitAll() // 경험 및 리뷰 게시판 글 등록 url
+                        // 성오 작업 영역
+
                         .requestMatchers("/profile").permitAll() // 회원정보 가져오기
                         .requestMatchers("/findUserId").permitAll() // 회원계정 찾기
                         .requestMatchers("/findUserPassword").permitAll() // 회원계정 찾기

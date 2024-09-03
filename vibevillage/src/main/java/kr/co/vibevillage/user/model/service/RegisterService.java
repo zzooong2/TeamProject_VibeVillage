@@ -7,6 +7,9 @@ public interface RegisterService {
     // 회원가입
     public int register(UserDTO userDTO);
 
+//    // 카카오 계정으로 회원가입
+//    public int registerByKakaoId(UserDTO userDTO);
+
     // 닉네임 중복검사
     public int checkNickName(String userNickName);
 

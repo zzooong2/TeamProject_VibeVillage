@@ -34,6 +34,9 @@
                             <div class="form-group">
                                 <button class="btn btn-block btn-round btn-g" onclick="login()" type="button">로그인</button>
                             </div>
+                            <div class="form-group">
+                                <button class="btn btn-block btn-round btn-g" onclick="window.location.href='/oauth2/authorization/kakao'" type="button" style="background-color:#F7E600; color: #3A1D1D;">kakao</button>
+                            </div>
                         </form>
 
                             <div style="display:none;" id="errorMessage" th:if="${errorMessage}" th:text="${errorMessage}"></div>

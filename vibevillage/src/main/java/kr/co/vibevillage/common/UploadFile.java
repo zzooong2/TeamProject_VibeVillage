@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -19,20 +20,25 @@ public class UploadFile {
 
 	
 	// UPLOAD_PATH에는 이미지를 담을 경로를 써주세요
-	private final String UPLOAD_PATH = "/Users/keem/finalProject/vibevillage/src/main/resources/static/uploadUsedImages";
+	private final String UPLOAD_PATH = "C:/DEV/IntelliJ/FINAL_PROJECT/TeamProject_VibeVillage/vibevillage/src/main/resources/static/uploadUsedImages/";
 
 	// 메인이미지와 프리뷰이미지를 구분
 	public List<UsedBoardImageDto> upload(List<MultipartFile> mainImage, List<MultipartFile> previewImages) {
+		List<UsedBoardImageDto> totalImageDtos = new ArrayList<>();
+		if(!mainImage.isEmpty()){
 		List<UsedBoardImageDto> mainImageDtos = mainImage.stream()
 				.map(file -> uploadSingleFile(file, "MAIN"))
 				.collect(Collectors.toList());
+		totalImageDtos.addAll(mainImageDtos);
+		}
+		if(!previewImages.isEmpty()){
+			List<UsedBoardImageDto> previewImageDtos = previewImages.stream()
+					.map(file -> uploadSingleFile(file, "PREVIEW"))
+					.collect(Collectors.toList());
+			totalImageDtos.addAll(previewImageDtos);
+		}
 
-		List<UsedBoardImageDto> previewImageDtos = previewImages.stream()
-				.map(file -> uploadSingleFile(file, "PREVIEW"))
-				.collect(Collectors.toList());
-
-		mainImageDtos.addAll(previewImageDtos);
-		return mainImageDtos;
+		return totalImageDtos;
 	}
 	// 파일 이름 암호화 및 경로 지정 후 DTO에 담기
 	private UsedBoardImageDto uploadSingleFile(MultipartFile upload, String imageType) {

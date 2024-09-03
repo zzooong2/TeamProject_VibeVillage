@@ -136,7 +136,7 @@ public class MyPageController {
         UserDTO profileResult = myPageService.getProfileInfo(loginUserNo); // 회원 프로필 정보 가져오기
 
         // 업로드할 파일 경로 설정
-        String uploadPath = "/static/images/userProfile";
+        String uploadPath = "C:\\DEV\\IntelliJ\\FINAL_PROJECT\\TeamProject_VibeVillage\\vibevillage\\src\\main\\resources\\static\\uploadUsedImages";
         // userDTO 객체에 경로 초기화
         userDTO.setUploadFilePath(uploadPath);
 

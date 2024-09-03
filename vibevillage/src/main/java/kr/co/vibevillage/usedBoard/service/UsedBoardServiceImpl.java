@@ -7,29 +7,21 @@ import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
 import kr.co.vibevillage.user.model.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UsedBoardServiceImpl implements UsedBoardService {
     private final UsedBoardImageMapper imageMapper;
     private final UsedBoardMapper usedBoardMapper;
     private final UsedBoardImageMapper usedBoardImageMapper;
-    private final UsedBoardCommentMapper usedBoardCommentMapper;
 
-    @Autowired
-    public UsedBoardServiceImpl(UsedBoardMapper usedBoardMapper,
-                                UsedBoardImageMapper imageMapper, UsedBoardImageMapper usedBoardImageMapper, UsedBoardCommentMapper usedBoardCommentMapper)
-    {
-        this.imageMapper = imageMapper;
-        this.usedBoardMapper = usedBoardMapper;
-        this.usedBoardImageMapper = usedBoardImageMapper;
-        this.usedBoardCommentMapper = usedBoardCommentMapper;
-    }
+
 
     // 전체 리스트 가져오기
     @Override
@@ -114,18 +106,23 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         return list;
     }
     @Override
-    public void updateUsedBoard(UsedBoardDto usedBoard) {
+    public void updateUsedBoard(UsedBoardDto usedBoard,List<Integer> deleteList) {
         // 게시물 정보 업데이트
         usedBoardMapper.updateUsedBoard(usedBoard);
         usedBoardMapper.updateProduct(usedBoard);
-        int deleteResult = usedBoardImageMapper.deleteImages(usedBoard.getUsedBoardId());
-        // 메인 이미지 업데이트
-        if( deleteResult > 0) {
-        for (UsedBoardImageDto image : usedBoard.getImages()) {
-            image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
-            imageMapper.usedBoardEnrollImageXML(image);
+        int deleteResult;
+        // 삭제할 이미지가 있을 경우
+        if(deleteList != null){
+            for (Integer id : deleteList) {
+                deleteResult = usedBoardImageMapper.deleteImages(id);
+            }
         }
-
+        // 등록할 이미지가 있을 경우
+        if( usedBoard.getImages() != null) {
+            for (UsedBoardImageDto image : usedBoard.getImages()) {
+                image.setUsedBoardId(usedBoard.getUsedBoardId()); // 새로 생성된 게시물 ID 설정
+                imageMapper.usedBoardEnrollImageXML(image);
+            }
         }
     }
     @Override
@@ -133,6 +130,7 @@ public class UsedBoardServiceImpl implements UsedBoardService {
         int result = usedBoardMapper.convertProductStatus(id,status);
         return result;
     }
+
 
 
 

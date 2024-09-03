@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link th:href="@{/css/experienceAndReviewBoard/postDetail.css}" rel="stylesheet" />
+    <div th:replace="~{common/head :: head}"></div>
+</head>
+<body>
+<div th:replace="~{common/nav :: nav}"></div>
+
+<div class="post-container">
+    <h2 th:text="${post.rTitle}">게시글 제목</h2>
+    <p class="author">작성자: <span th:text="${post.uNickname}">작성자</span></p>
+    <p class="date">작성일: <span th:text="${post.rCreatedAt}">작성일</span></p>
+
+    <!-- th:utext를 사용하여 HTML로 렌더링 -->
+    <div class="content" th:utext="${post.rContent}">
+        게시글 내용
+    </div>
+
+    <!-- rContent에 이미지가 포함되지 않았다면 uploadDTOs를 통해 이미지 출력 -->
+    <div th:if="${post.uploadDTOs != null && !#strings.contains(post.rContent, 'img')}">
+        <div th:each="upload : ${post.uploadDTOs}">
+            <!-- 이미지 크기 조정 -->
+            <img th:src="@{{fileName}(fileName=${upload.ruServerPath})}" alt="Uploaded Image">
+        </div>
+    </div>
+
+    <!-- 게시글 수정/삭제 버튼 섹션 -->
+
+    <div class="post-interaction">
+        <form th:action="@{/experienceBoard/like/{id}(id=${post.rId})}" method="post">
+            <button class="like-btn" type="submit" th:classappend="${hasLiked ? 'liked' : ''}">
+                <i class="fa fa-thumbs-up"></i>
+                <span th:text="${hasLiked ? '좋아요 취소' : '좋아요'}"></span>
+            </button>
+            <span class="like-count" th:text="${likeCount}">0</span>개의 좋아요
+        </form>
+    </div>
+</div>
+
+
+
+<div class="edit-del" th:if="${post.uNo == currentUserId}">
+    <a th:href="@{'/experienceBoard/post/edit/' + ${post.rId}}" class="btn btn-g btn-circle">수정</a>
+    <form th:action="@{/experienceBoard/post/delete/{id}(id=${post.rId})}" method="post" style="display:inline;">
+        <button type="submit"  class="btn btn-g btn-circle" >삭제</button>
+    </form>
+</div>
+
+<div class="comment-section">
+    <h2>댓글</h2>
+
+    <div th:if="${#lists.isEmpty(comments)}">
+        <p>댓글이 없습니다. 첫 번째 댓글을 작성해보세요!</p>
+    </div>
+
+    <div th:each="comment : ${comments}">
+        <p th:text="${comment.content}">댓글 내용</p>
+        <p>작성자: <span th:text="${comment.userNickname}">닉네임</span></p>
+        <p>작성일: <span th:text="${#temporals.format(comment.cCreatedAt, 'yyyy-MM-dd HH:mm:ss')}">작성일</span></p>
+        <form th:action="@{/experienceBoard/comment/delete/{commentId}(commentId=${comment.commentId})}" method="post">
+            <input type="hidden" name="postId" th:value="${post.rId}" />
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+    <form th:action="@{/experienceBoard/post/{id}/comment(id=${post.rId})}" method="post">
+        <textarea name="content" placeholder="댓글을 입력하세요"></textarea>
+        <button class="btn btn-g btn-circle" type="submit">댓글 작성</button>
+    </form>
+</div>
+
+<div class="other-posts">
+    <h3>다른 게시글 목록</h3>
+    <ul>
+        <li th:each="otherPost : ${otherPosts}">
+            <a th:href="@{'/experienceBoard/post/' + ${otherPost.rId}}" th:text="${otherPost.rTitle}">게시글 제목</a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function likePost(postId) {
+        fetch('/experienceBoard/like/' + postId, { method: 'GET' })
+            .then(response => window.location.reload())
+            .catch(error => console.error('Error:', error));
+    }
+</script>
+
+<div th:replace="~{common/footer :: footer}"></div>
+<div th:replace="~{common/js :: js}"></div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="kr.co.vibevillage.experienceAndReviewBoard.listmapper.ExperienceBoardMapper">
+
+    <!-- 게시글 목록 조회 (페이지네이션 포함) -->
+    <select id="findAllWithPagination" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+    <![CDATA[
+        SELECT * FROM (
+                          SELECT
+                              ROWNUM AS rn,
+                              r.R_ID as rId,
+                              r.U_NO as uNo,
+                              u.U_NICKNAME as uNickname,
+                              r.C_ID as categoryId,
+                              c.C_NAME as categoryName,
+                              r.R_TITLE as rTitle,
+                              r.R_CONTENT as rContent,
+                              r.R_CREATED_AT as rCreatedAt,
+                              r.R_UPDATED_AT as rUpdatedAt,
+                              r.R_VIEW_COUNT as rViewCount
+                          FROM REVIEWS r
+                                   JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                                   JOIN CATEGORIES c ON r.C_ID = c.C_ID
+                          WHERE ROWNUM <= #{offset} + #{limit}
+                      )
+        WHERE rn > #{offset}
+        ]]>
+    </select>
+
+    <update id="addWriteCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_WRITE_COUNT = ULM_WRITE_COUNT +1
+    </update>
+
+    <update id="subWriteCount" parameterType="kr.co.vibevillage.user.model.dto.UserDTO">
+        UPDATE USER_LEVEL_MANAGEMENT SET ULM_WRITE_COUNT = ULM_WRITE_COUNT -1
+    </update>
+
+    <!-- 게시글 삽입 -->
+    <insert id="createPost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        INSERT INTO REVIEWS (R_ID, U_NO, C_ID, R_TITLE, R_CONTENT, R_CREATED_AT)
+        VALUES (REVIEWS_SEQ.nextval, #{uNo}, #{categoryId}, #{rTitle}, #{rContent}, CURRENT_TIMESTAMP)
+        <selectKey keyProperty="rId" resultType="long" order="AFTER">
+            SELECT REVIEWS_SEQ.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <!-- 파일 업로드 정보 삽입 -->
+    <insert id="insertUpload" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO">
+        INSERT INTO R_UPLOAD (RU_NO, R_ID, RU_NAME, RU_UNIQUE_NAME, RU_LOCAL_PATH, RU_SERVER_PATH, RU_FILE_TYPE)
+        VALUES (R_UPLOAD_SEQ.nextval, #{rId}, #{ruName}, #{ruUniqueName}, #{ruLocalPath}, #{ruServerPath}, #{ruFileType})
+    </insert>
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        UPDATE REVIEWS
+        SET R_TITLE = #{rTitle}, R_CONTENT = #{rContent}, R_UPDATED_AT = CURRENT_TIMESTAMP
+        WHERE R_ID = #{rId}
+    </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteCommentsByPostId" parameterType="long">
+        DELETE FROM R_COMMENTS WHERE R_ID = #{postId}
+    </delete>
+
+    <delete id="deleteUploadsByPostId" parameterType="Long">
+        DELETE FROM R_UPLOAD WHERE R_ID = #{postId}
+    </delete>
+
+    <delete id="deletePost" parameterType="long">
+        DELETE FROM REVIEWS WHERE R_ID = #{rId}
+    </delete>
+
+    <delete id="deleteUploadById" parameterType="long">
+        DELETE FROM R_UPLOAD WHERE RU_NO = #{ruNo}
+    </delete>
+
+    <!-- 게시글 검색 -->
+    <select id="searchPosts" parameterType="string" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID as rId,
+            r.U_NO as uNo,
+            u.U_NICKNAME as uNickname,
+            r.C_ID as categoryId,
+            c.C_NAME as categoryName,
+            r.R_TITLE as rTitle,
+            r.R_CONTENT as rContent,
+            r.R_CREATED_AT as rCreatedAt,
+            r.R_UPDATED_AT as rUpdatedAt,
+            r.R_VIEW_COUNT as rViewCount
+        FROM REVIEWS r
+                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        WHERE r.R_TITLE LIKE '%' || #{keyword} || '%'
+           OR r.R_CONTENT LIKE '%' || #{keyword} || '%'
+    </select>
+
+    <select id="findById" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+        r.R_ID as rId,
+        r.U_NO as uNo,
+        u.U_ID as userId,
+        u.U_NICKNAME as uNickname,
+        r.C_ID as categoryId,
+        c.C_NAME as categoryName,
+        r.R_TITLE as rTitle,
+        r.R_CONTENT as rContent,
+        r.R_CREATED_AT as rCreatedAt,
+        r.R_UPDATED_AT as rUpdatedAt,
+        r.R_VIEW_COUNT as rViewCount
+        FROM REVIEWS r
+        JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+        JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        WHERE r.R_ID = #{rId}
+
+    </select>
+
+    <select id="findUploadsByPostId" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.UploadDTO">
+        SELECT
+            RU_NO as ruNo,
+            R_ID as rId,
+            RU_NAME as ruName,
+            RU_UNIQUE_NAME as ruUniqueName,
+            RU_LOCAL_PATH as ruLocalPath,
+            RU_SERVER_PATH as ruServerPath,
+            RU_FILE_TYPE as ruFileType
+        FROM R_UPLOAD
+        WHERE R_ID = #{rId}
+    </select>
+
+
+    <!-- 다른 게시글 조회 (특정 게시글 제외) -->
+    <select id="findOtherPosts" parameterType="long" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT *
+        FROM REVIEWS
+        WHERE R_ID != #{excludeId}
+        ORDER BY R_CREATED_AT DESC
+    </select>
+
+    <!-- 조회수 증가 -->
+    <update id="incrementViewCount" parameterType="long">
+        UPDATE REVIEWS
+        SET R_VIEW_COUNT = R_VIEW_COUNT + 1
+        WHERE R_ID = #{rId}
+    </update>
+
+    <!-- 댓글 수와 함께 게시글 조회 -->
+    <select id="getPostsWithCommentCount" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID as rId,
+            r.R_TITLE as rTitle,
+            (SELECT COUNT(*) FROM R_COMMENTS c WHERE c.R_ID = r.R_ID) AS commentCount
+        FROM REVIEWS r
+    </select>
+
+    <!-- 좋아요 수 기준 상위 게시글 조회 (댓글 수 포함) -->
+    <select id="getTopLikedPosts" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID AS rId,
+            r.U_NO AS uNo,
+            u.U_NICKNAME AS uNickname,
+            r.C_ID AS categoryId,
+            c.C_NAME AS categoryName,
+            r.R_TITLE AS rTitle,
+            r.R_CONTENT AS rContent,
+            r.R_CREATED_AT AS rCreatedAt,
+            r.R_UPDATED_AT AS rUpdatedAt,
+            r.R_VIEW_COUNT AS rViewCount,
+            (SELECT COUNT(*) FROM R_LIKES l WHERE l.R_ID = r.R_ID) AS rLikeCount,
+            (SELECT COUNT(*) FROM R_COMMENTS com WHERE com.R_ID = r.R_ID) AS commentCount
+        FROM REVIEWS r
+                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        ORDER BY rLikeCount DESC
+            FETCH FIRST 10 ROWS ONLY
+    </select>
+
+
+    <!-- 카테고리 이름과 함께 게시글 조회 -->
+    <select id="findAllWithCategory" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+    <![CDATA[
+        SELECT
+            r.R_ID as rId,
+            r.U_NO as uNo,
+            u.U_NICKNAME as uNickname,
+            c.C_NAME as categoryName,
+            r.R_TITLE as rTitle,
+            r.R_CONTENT as rContent,
+            r.R_CREATED_AT as rCreatedAt,
+            r.R_UPDATED_AT as rUpdatedAt,
+            r.R_VIEW_COUNT as rViewCount
+        FROM REVIEWS r
+                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        WHERE ROWNUM <= #{offset} + #{limit}
+        ]]>
+    </select>
+
+
+    <select id="getAllPosts" resultMap="PostWithCategoryResultMap">
+        SELECT
+            p.*,
+            c.name AS categoryName
+        FROM
+            posts p
+                JOIN
+            categories c ON p.category_id = c.id
+        ORDER BY
+            p.r_created_at DESC
+            LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <resultMap id="PostWithCategoryResultMap" type="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        <result property="rId" column="r_id"/>
+        <result property="rTitle" column="r_title"/>
+        <result property="uNickname" column="u_nickname"/>
+        <result property="rCreatedAt" column="r_created_at"/>
+        <result property="rViewCount" column="r_view_count"/>
+        <result property="rLikeCount" column="r_like_count"/>
+        <result property="categoryName" column="categoryName"/>
+        <!-- 기타 필요한 필드들 -->
+    </resultMap>
+
+    <select id="getCategoryNameById" resultType="String">
+        SELECT C_NAME
+        FROM CATEGORIES
+        WHERE C_ID = #{categoryId}
+    </select>
+
+    <!-- 카테고리 ID로 게시글 조회 -->
+    <select id="findPostsByCategory" parameterType="long" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID as rId,
+            r.U_NO as uNo,
+            u.U_NICKNAME as uNickname,
+            r.C_ID as categoryId,
+            c.C_NAME as categoryName,
+            r.R_TITLE as rTitle,
+            r.R_CONTENT as rContent,
+            r.R_CREATED_AT as rCreatedAt,
+            r.R_UPDATED_AT as rUpdatedAt,
+            r.R_VIEW_COUNT as rViewCount,
+            (SELECT COUNT(*) FROM R_LIKES l WHERE l.R_ID = r.R_ID) AS rLikeCount,
+            (SELECT COUNT(*) FROM R_COMMENTS com WHERE com.R_ID = r.R_ID) AS commentCount
+        FROM REVIEWS r
+                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        WHERE r.C_ID = #{categoryId}
+    </select>
+
+    <select id="countTotalPosts" resultType="int">
+        SELECT COUNT(*) AS totalPostsCount FROM REVIEWS
+    </select>
+
+<!--추천글-->
+    <select id="findTopLikedPosts" resultType="kr.co.vibevillage.experienceAndReviewBoard.dto.ExperienceBoardDTO">
+        SELECT
+            r.R_ID AS rId,
+            r.U_NO AS uNo,
+            u.U_NICKNAME AS uNickname,
+            r.C_ID AS categoryId,
+            c.C_NAME AS categoryName,
+            r.R_TITLE AS rTitle,
+            r.R_CONTENT AS rContent,
+            r.R_CREATED_AT AS rCreatedAt,
+            r.R_UPDATED_AT AS rUpdatedAt,
+            r.R_VIEW_COUNT AS rViewCount,
+            (SELECT COUNT(*) FROM R_LIKES l WHERE l.R_ID = r.R_ID) AS rLikeCount,
+            (SELECT COUNT(*) FROM R_COMMENTS com WHERE com.R_ID = r.R_ID) AS commentCount
+        FROM REVIEWS r
+                 JOIN USER_VIBEVILLAGE u ON r.U_NO = u.U_NO
+                 JOIN CATEGORIES c ON r.C_ID = c.C_ID
+        ORDER BY rLikeCount DESC
+            FETCH FIRST 10 ROWS ONLY
+    </select>
+
+
+</mapper>

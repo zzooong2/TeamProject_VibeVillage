@@ -77,7 +77,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.mockito/mockito-inline
 	testImplementation("org.mockito:mockito-inline:5.2.0")
 
-
+	implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+	testImplementation("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 
 }
 
@@ -92,7 +93,7 @@ tasks.withType<Jar> {
 
 tasks.withType<War> {
 	enabled = true
-	archiveFileName.set("ROOT.war")
+	archiveFileName.set("vibevillage.war")
 }
 
 

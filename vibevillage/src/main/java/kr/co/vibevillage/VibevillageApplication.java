@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@MapperScan(basePackages = {"kr.co.vibevillage.chatting.mapper","kr.co.vibevillage.customerServiceBoard.mapper","kr.co.vibevillage.levelupBoard.mapper","kr.co.vibevillage.usedBoard.mapper","kr.co.vibevillage.user.model.mapper"})
 public class VibevillageApplication extends SpringBootServletInitializer {
 
 	@Override

@@ -24,7 +24,7 @@
         SELECT room_id AS roomId, room_name AS name, creator_id AS creatorId,
                other_user_id AS otherUserId
         FROM chat_room
-        WHERE other_user_id = #{userNo}
+        WHERE other_user_id = #{userNo} or creator_id = #{userNo}
     </select>
     <select id="getUserNickNameById">
             select u_nickname from USER_VIBEVILLAGE

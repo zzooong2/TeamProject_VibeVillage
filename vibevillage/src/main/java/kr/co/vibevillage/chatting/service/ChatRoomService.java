@@ -37,10 +37,14 @@ public class ChatRoomService {
     public List<ChatRoom> getChatRoomList(int userNo){
         List<ChatRoom> chatRoomList = chatRoomMapper.getChatRoomList(userNo);
         for(ChatRoom chatRoom : chatRoomList){
-            long otherNo = chatRoom.getCreatorId(); // 구매자 아이디
-            String nickName = chatRoomMapper.getUserNickNameById(otherNo);
-            System.out.println(nickName);
-            chatRoom.setOtherUserNickName(nickName);
+            long otherNo = chatRoom.getOtherUserId(); // 판매자
+            long creatorId = chatRoom.getCreatorId(); // 구매자
+            System.out.println(otherNo);
+            System.out.println(creatorId);
+            String otherNickName = chatRoomMapper.getUserNickNameById(otherNo);
+            String creatorNickName = chatRoomMapper.getUserNickNameById(creatorId);
+            chatRoom.setOtherUserNickName(otherNickName);
+            chatRoom.setCreaterNickName(creatorNickName);
         }
         return chatRoomList;
     }

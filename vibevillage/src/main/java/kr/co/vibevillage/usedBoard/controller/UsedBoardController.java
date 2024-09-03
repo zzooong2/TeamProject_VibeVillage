@@ -73,7 +73,7 @@ public class UsedBoardController {
             usedBoard.setImages(images);
             usedBoard.setUserNo(user.getUserNo());
             usedBoardService.enrollUsedBoard(usedBoard);
-            response.put("message", "Upload successful!");
+            response.put("message", "글쓰기 성공");
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } catch (Exception e) {

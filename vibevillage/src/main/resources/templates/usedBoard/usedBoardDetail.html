@@ -203,65 +203,12 @@
     </script>
 
     <script th:inline="javascript">
-      function startChat() {
         const boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId'; // 게시물 ID
         const boardOwnerId = /*[[${usedBoard.userNo}]]*/ 'defaultUserId';  // 게시물 작성자 ID
-        fetch('/chat/start', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            boardId: boardId,
-            boardOwnerId: boardOwnerId,
-          })
-        })
-                .then(response => response.json())
-                .then(data => {
-                  if (data.roomId) {
-                    window.location.href = `/chat/room/${data.roomId}`;
-                  } else {
-                    alert('채팅방 생성에 실패했습니다.');
-                  }
-                })
-                .catch(error => console.error('Error:', error));
-      }
+
     </script>
-  <script>
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1]; // JWT의 두 번째 부분 (payload) 추출
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Base64 URL을 일반 Base64로 변환
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
 
-      return JSON.parse(jsonPayload); // JSON 문자열을 객체로 변환
-    }
 
-    function getJwtFromCookie() {
-      var name = "jwt=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(';');
-      for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
 
-    var jwtToken = getJwtFromCookie(); // 쿠키에서 JWT 가져오기
-    if (jwtToken) {
-      var decodedToken = parseJwt(jwtToken); // JWT 디코딩
-      var userId = decodedToken.sub; // 'sub'에서 사용자 ID 추출
-      console.log("User ID:", userId);
-    } else {
-      console.log("No JWT found in cookies");
-    }
-  </script>
   </body>
 </html>

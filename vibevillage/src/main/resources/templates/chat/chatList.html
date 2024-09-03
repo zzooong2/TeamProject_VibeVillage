@@ -68,8 +68,8 @@
 
               <h4 class="shop-item-title font-alt">
                 <a th:href="@{/chat/room/{roomId}(roomId=${item.roomId})}">
-                <p th:text="${item.otherUserNickName}"></p>
-                <p th:text="${currentUser}"></p>
+                <p th:text="${'판매자'+item.otherUserNickName}"></p>
+                <p th:text="${'구매자'+item.createrNickName}"></p>
                 </a>
               </h4>
 
@@ -97,7 +97,7 @@ JavaScripts
 <div th:replace="~{common/js :: js}"></div>
 
 
-<script th:src="@{/js/usedBoard/cityCategory.js}"></script>
+<script th:src="@{/js/usedBoard/common/cityCategory.js}"></script>
 
 </body>
 </html>

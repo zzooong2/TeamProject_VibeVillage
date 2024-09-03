@@ -7,29 +7,21 @@ import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
 import kr.co.vibevillage.user.model.dto.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UsedBoardServiceImpl implements UsedBoardService {
     private final UsedBoardImageMapper imageMapper;
     private final UsedBoardMapper usedBoardMapper;
     private final UsedBoardImageMapper usedBoardImageMapper;
-    private final UsedBoardCommentMapper usedBoardCommentMapper;
 
-    @Autowired
-    public UsedBoardServiceImpl(UsedBoardMapper usedBoardMapper,
-                                UsedBoardImageMapper imageMapper, UsedBoardImageMapper usedBoardImageMapper, UsedBoardCommentMapper usedBoardCommentMapper)
-    {
-        this.imageMapper = imageMapper;
-        this.usedBoardMapper = usedBoardMapper;
-        this.usedBoardImageMapper = usedBoardImageMapper;
-        this.usedBoardCommentMapper = usedBoardCommentMapper;
-    }
+
 
     // 전체 리스트 가져오기
     @Override

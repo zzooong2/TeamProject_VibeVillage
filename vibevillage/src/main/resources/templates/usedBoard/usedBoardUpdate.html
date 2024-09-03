@@ -119,163 +119,19 @@
 </main>
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
-<script th:src="@{/js/usedBoard/boardCreate.js}"></script>
+<script th:src="@{/js/usedBoard/boardUpdate.js}"></script>
+<script th:src="@{/js/usedBoard/common/locationData.js}"></script>
+<script th:src="@{/js/usedBoard/common/image_event.js}"></script>
 <script th:inline="javascript">
   let usedBoard = /*[[${usedBoard}]]*/ {};
   let deleteList = [];
-  let subImages = [[${subImages}]]; // DB에 저장되어 있던 서브 이미지
-  let mainImages = [[${mainImages}]]; // DB에 저장되어 있던 이미지
-  let mainImage = null; // 메인 업로드 파일
-  let previewImages = []; // 서브 업로드 파일
-  //
   let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
-
-
   addressData = {
     sido: `${usedBoard.province}`,
     sigungu:`${usedBoard.city}`
   }
   latitude =`${usedBoard.gpsLatitude}`;
   longitude =`${usedBoard.gpsLongitude}`
-
-  function deleteCurrentMainImage(item) {
-    const main = document.getElementById("currentMain");
-    if (main) {
-      deleteList.push(item);  // 삭제 리스트에 추가
-      main.remove();  // 화면에서 이미지 제거
-    }
-  }
-
-  function deleteCurrentSubImage(item) {
-    const subImage = document.querySelector(`img[name="${item}"]`);
-    if (subImage) {
-      deleteList.push(item);  // 삭제 리스트에 추가
-      // item의 인덱스를 찾은 후, 해당 인덱스의 요소를 배열에서 제거
-      const index = previewImages.indexOf(item);
-      if (index > -1) {  // item이 배열에 존재하는 경우
-        previewImages.splice(index, 1);
-      }
-      subImage.closest('li').remove();  // 화면에서 이미지 제거
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const mainFileInput = document.getElementById('main-file-input');
-    const previewFileInput = document.getElementById('preview-file-input');
-    const mainImgContainer = document.getElementById('mainImg');
-    const previewContainer = document.getElementById('preview-container');
-    const submitButton = document.getElementById('submit-button');
-
-
-
-    mainFileInput.addEventListener('change', function () {
-      const file = mainFileInput.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          mainImage = file;
-          addMainImage(e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    previewFileInput.addEventListener('change', function () {
-      const files = Array.from(previewFileInput.files);
-
-      files.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          previewImages.push(file);
-          addPreviewImage(e.target.result, previewImages.length - 1);
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-
-    function addMainImage(imageSrc) {
-      mainImgContainer.innerHTML = '';
-      const imgWrapper = document.createElement('div');
-      const img = document.createElement('img');
-      img.classList.add('gallery');
-      img.src = imageSrc;
-      const deleteButton = document.createElement('button');
-      deleteButton.classList.add('delete');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', function () {
-        imgWrapper.remove();
-        mainImage = null;
-        mainFileInput.value = ''; // Reset the file input
-      });
-      imgWrapper.appendChild(img);
-      imgWrapper.appendChild(deleteButton);
-      mainImgContainer.appendChild(imgWrapper);
-    }
-
-    function addPreviewImage(imageSrc, index) {
-      const previewItem = document.createElement('li');
-      previewItem.classList.add('preview-item');
-      const img = document.createElement('img');
-      img.classList.add('gallery');
-      img.src = imageSrc;
-      const deleteButton = document.createElement('button');
-      deleteButton.classList.add('delete');
-      deleteButton.textContent = 'Delete';
-      deleteButton.addEventListener('click', function () {
-        previewItem.remove();
-        previewImages.splice(index, 1);
-        updatePreviewInput(); // Update the file input to reflect the current state
-      });
-      previewItem.appendChild(img);
-      previewItem.appendChild(deleteButton);
-      previewContainer.appendChild(previewItem);
-    }
-
-    function updatePreviewInput() {
-      const dataTransfer = new DataTransfer();
-      previewImages.forEach(file => dataTransfer.items.add(file));
-      previewFileInput.files = dataTransfer.files;
-    }
-
-    submitButton.addEventListener('click', function () {
-      const formData = new FormData();
-      if (mainImage) {
-        formData.append('mainFile', mainImage);
-      }
-      previewImages.forEach(image => {
-        formData.append('previewFiles', image);
-      });
-      formData.append('province', addressData.sido);
-      formData.append('city', addressData.sigungu);
-      formData.append('usedBoardTitle', document.getElementById('usedBoardTitle').value);
-      formData.append('usedBoardProductName', document.getElementById('usedBoardProductName').value);
-      formData.append('usedBoardProductPrice', document.getElementById('usedBoardProductPrice').value);
-      formData.append('usedBoardContent', document.getElementById('usedBoardContent').value);
-      formData.append('usedBoardLocation', document.getElementById('sample5_address').value);
-      formData.append('categoryId', document.getElementById('categoryId').value);
-      formData.append('usedBoardId', boardId);
-      formData.append('gpsLatitude', latitude);
-      formData.append('gpsLongitude', longitude);
-      formData.append('deleteList', deleteList);
-      fetch('/used/update', {
-        method: 'POST',
-        body: formData,
-      })
-              .then(response => response.json())  // 응답을 JSON 형식으로 변환
-              .then(data => {
-                console.log(data);
-                alert(data.message);  // JSON 응답의 메시지 출력
-                if (data.message === "Update successful!") {
-                  window.location.href = "/used/boardList/1";  // 성공 시 리디렉션
-                }
-              })
-              .catch(error => {
-                console.error(error);
-                alert('Update failed!');
-              });
-    });
-  });
-
 </script>
 </body>
 </html>

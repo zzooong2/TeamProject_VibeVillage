@@ -155,11 +155,6 @@ public class UsedBoardController {
                                                            @RequestParam(value = "previewFiles", required = false) List<MultipartFile> previewFiles,
                                                            @RequestParam(value ="deleteList", required = false) List<Integer> deleteList) {
         try {
-            for(Integer item: deleteList){
-                System.out.println(item);
-            }
-            System.out.println(usedBoard.getUsedBoardLocation());
-            System.out.println(usedBoard.getUsedBoardId());
             // 서비스 호출하여 게시물 및 이미지 업데이트
             if(mainFile == null&& previewFiles == null){
                 usedBoardService.updateUsedBoard(usedBoard,deleteList);

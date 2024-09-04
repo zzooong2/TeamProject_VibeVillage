@@ -1,6 +1,8 @@
 package kr.co.vibevillage.common;
 
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,9 +20,9 @@ import java.util.stream.Collectors;
 @Component
 public class UploadFile {
 
-	
 	// UPLOAD_PATH에는 이미지를 담을 경로를 써주세요
-	private final String UPLOAD_PATH = "C:/DEV/IntelliJ/FINAL_PROJECT/TeamProject_VibeVillage/vibevillage/src/main/resources/static/uploadUsedImages/";
+	@Value("${EUN_UPLOAD_PATH}")
+	private String UPLOAD_PATH;
 
 	// 메인이미지와 프리뷰이미지를 구분
 	public List<UsedBoardImageDto> upload(List<MultipartFile> mainImage, List<MultipartFile> previewImages) {

@@ -1,6 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-US" dir="ltr">
 <head>
+  <style>
+    .img-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .img-wrapper .gallery {
+      display: block;
+    }
+
+    .img-wrapper .delete {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background-color: gray;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .fit-content{
+      display: flex;
+    }
+  </style>
   <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=eaaccd59d5ca5cca9cba679898f98117&libraries=services" type="text/javascript"></script>
   <div th:replace="~{common/head :: head}"></div>
   <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -11,31 +40,30 @@
     <div class="loader">Loading...</div>
   </div>
   <div th:replace="~{common/nav :: nav}"></div>
+
   <div class="main">
     <section class="module">
       <div class="container">
         <form id="upload-form" method="POST">
           <div class="row">
             <div class="col-sm-6 mb-sm-40">
-              메인 이미지
               <div class="gallery" id="mainImg">
-                <div id="currentMain" th:each="item:${mainImages}">
+                <div class="img-wrapper" id="currentMain" th:each="item:${mainImages}">
                   <img class="gallery"  th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
-                  <button class="btn btn-g btn-circle" th:onclick="deleteCurrentMainImage([[${item?.imageId}]])" type="button">Delete</button>
+                  <button class="delete" th:onclick="deleteCurrentMainImage([[${item?.imageId}]])" type="button">X</button>
                 </div>
               </div>
-              <input class="btn btn-g btn-circle" id="main-file-input" name="mainFile" type="file">
-
-              서브 이미지
 
               <ul class="product-gallery" id="preview-container">
               <li class="gallery" th:each="item:${subImages}">
-                <img class="gallery" th:name="${item.imageId}" th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
-                <button class="btn btn-g btn-circle"  th:onclick="deleteCurrentSubImage([[${item?.imageId}]])" type="button">Delete</button>
+                <div class="img-wrapper">
+                  <img class="gallery" th:name="${item.imageId}" th:src="@{${item.PROJECTREACTOR} + ${item.uploadUniqueName}}">
+                  <button class="delete"  th:onclick="deleteCurrentSubImage([[${item?.imageId}]])" type="button">X</button>
+
+                </div>
 
               </li>
               </ul>
-              <input class="btn btn-g btn-circle" id="preview-file-input" multiple name="previewFiles" type="file">
             </div>
             <div class="col-sm-6">
               <div class="row">
@@ -53,7 +81,7 @@
                     <input class="form-control input-lg" id="usedBoardProductName" placeholder="상품이름" th:value="${usedBoard.usedBoardProductName}" type="text"/>
                   </div>
                   <div class="form-group">
-                    <input class="form-control input-lg" id="usedBoardProductPrice" placeholder="가격" th:value="${usedBoard.usedBoardProductPrice}" type="text"/>
+                    <input class="form-control input-lg" id="usedBoardProductPrice" placeholder="가격" th:value="${usedBoard.usedBoardProductPrice}" type="number"/>
                   </div>
                 </div>
               </div>
@@ -67,36 +95,42 @@
                 </div>
               </div>
 
-              <div class="row mb-20">
-                <div class="col-sm-4 mb-sm-20">
-                  <input class="form-control" id="sample5_address" placeholder="주소"  th:value="${usedBoard.usedBoardLocation}" type="text">
-                  <input onclick="sample5_execDaumPostcode()" type="button" value="주소 검색" ><br>
-
+              <div class="row mb-20 fit-content">
+                <div class="col-sm-10">
+                  <input class="btn btn-g btn-round" id="sample5_address" onclick="sample5_execDaumPostcode()" th:value="${usedBoard.usedBoardLocation}" type="button"  >
+                </div>
+                <div class="col-sm-10">
+                  <label class="btn btn-g btn-round" for="main-file-input">메인 이미지</label>
+                  <input id="main-file-input" name="mainFile" style="display: none;" type="file">
+                </div>
+                <div class="col-sm-10">
+                  <label class="btn btn-g btn-round" for="preview-file-input">서브 이미지</label>
+                  <input id="preview-file-input" multiple name="previewFiles" style="display: none;" type="file">
                 </div>
               </div>
 
               <div class="row mb-20">
                 <div class="col-sm-4 mb-sm-20">
-                  <select class="form-control" id="categoryId" th:value="${usedBoard.categoryId}">
-                    <option value="1">디지털기기</option>
-                    <option value="2">가구/인테리어</option>
-                    <option value="3">유아동</option>
-                    <option value="4">여성의류</option>
-                    <option value="5">여성잡화</option>
-                    <option value="6">남성패션/잡화</option>
-                    <option value="7">생활가전</option>
-                    <option value="8">생활/주방</option>
-                    <option value="9">스포츠/레저</option>
-                    <option value="10">취미/게임/음반</option>
-                    <option value="11">뷰티/미용</option>
-                    <option value="12">식물</option>
-                    <option value="13">가공식품</option>
-                    <option value="14">건강기능식품</option>
-                    <option value="15">반려동물용품</option>
-                    <option value="16">티켓/교환권</option>
-                    <option value="17">도서</option>
-                    <option value="18">유아도서</option>
-                    <option value="19">기타중고물품</option>
+                  <select class="form-control" id="categoryId" name="categoryId">
+                    <option th:selected="${usedBoard.categoryId == 1}" value="1">디지털기기</option>
+                    <option th:selected="${usedBoard.categoryId == 2}" value="2">가구/인테리어</option>
+                    <option th:selected="${usedBoard.categoryId == 3}" value="3">유아동</option>
+                    <option th:selected="${usedBoard.categoryId == 4}" value="4">여성의류</option>
+                    <option th:selected="${usedBoard.categoryId == 5}" value="5">여성잡화</option>
+                    <option th:selected="${usedBoard.categoryId == 6}" value="6">남성패션/잡화</option>
+                    <option th:selected="${usedBoard.categoryId == 7}" value="7">생활가전</option>
+                    <option th:selected="${usedBoard.categoryId == 8}" value="8">생활/주방</option>
+                    <option th:selected="${usedBoard.categoryId == 9}" value="9">스포츠/레저</option>
+                    <option th:selected="${usedBoard.categoryId == 10}" value="10">취미/게임/음반</option>
+                    <option th:selected="${usedBoard.categoryId == 11}" value="11">뷰티/미용</option>
+                    <option th:selected="${usedBoard.categoryId == 12}" value="12">식물</option>
+                    <option th:selected="${usedBoard.categoryId == 13}" value="13">가공식품</option>
+                    <option th:selected="${usedBoard.categoryId == 14}" value="14">건강기능식품</option>
+                    <option th:selected="${usedBoard.categoryId == 15}" value="15">반려동물용품</option>
+                    <option th:selected="${usedBoard.categoryId == 16}" value="16">티켓/교환권</option>
+                    <option th:selected="${usedBoard.categoryId == 17}" value="17">도서</option>
+                    <option th:selected="${usedBoard.categoryId == 18}" value="18">유아도서</option>
+                    <option th:selected="${usedBoard.categoryId == 19}" value="19">기타중고물품</option>
                   </select>
                 </div>
                 <div class="col-sm-8">
@@ -117,21 +151,27 @@
     <a href="#totop"><i class="fa fa-angle-double-up"></i></a>
   </div>
 </main>
+<script th:inline="javascript">
+  let usedBoard = /*[[${usedBoard}]]*/ {};
+  let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
+  let deleteList = [];
+  let previousFile = [[${subImages.size}]];
+  let currentFile;
+  addressData = {
+    sido: `${usedBoard.province}`,
+    sigungu: `${usedBoard.city}`
+  }
+
+   latitude =`${usedBoard.gpsLatitude}`;
+    longitude =`${usedBoard.gpsLongitude}`
+</script>
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
 <script th:src="@{/js/usedBoard/boardUpdate.js}"></script>
 <script th:src="@{/js/usedBoard/common/locationData.js}"></script>
 <script th:src="@{/js/usedBoard/common/image_event.js}"></script>
-<script th:inline="javascript">
-  let usedBoard = /*[[${usedBoard}]]*/ {};
-  let deleteList = [];
-  let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
-  addressData = {
-    sido: `${usedBoard.province}`,
-    sigungu:`${usedBoard.city}`
-  }
-  latitude =`${usedBoard.gpsLatitude}`;
-  longitude =`${usedBoard.gpsLongitude}`
-</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 </body>
 </html>

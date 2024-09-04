@@ -108,9 +108,9 @@
     </section>
     <div class="row mb-60">
       <div class="col-sm-8 col-sm-offset-2">
-        <form method="get" role="form" th:action="@{/used/search_used_board/}">
+        <form role="form" th:action="@{/used/search_used_board/}" method="get">
           <div class="search-box">
-            <input class="form-control" name="keyword" placeholder="Search..." th:value="${keyword}" type="text"/>
+            <input class="form-control" type="text" name="keyword" placeholder="Search..." th:value="${keyword}"/>
             <button class="search-btn" type="submit"><i class="fa fa-search"></i></button>
           </div>
         </form>
@@ -132,10 +132,11 @@
             <div class="shop-item">
               <div>
                 <p class="product-status"
-                   th:classappend="${item.usedBoardStatus == '판매중'} ? 'status-selling' : (item.usedBoardStatus == '판매완료' ? 'status-sold-out' : '')"
-                   th:text="${item.usedBoardStatus}">
+                   th:text="${item.usedBoardStatus}"
+                   th:classappend="${item.usedBoardStatus == '판매중'} ? 'status-selling' : (item.usedBoardStatus == '판매완료' ? 'status-sold-out' : '')">
                 </p>
               </div>
+
               <div class="shop-item-image" th:each="image : ${item.images}">
 
                 <img th:src="@{${image.PROJECTREACTOR} + ${image.uploadUniqueName}}" style="width: 345px; height: 345px" alt="Accessories Pack"/>
@@ -158,41 +159,7 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <!-- 페이지네이션 -->
-            <div class="pagination font-alt">
 
-               <a th:if="${pi.currentPage == 1}" href="#">
-             <i class="fa fa-angle-left" >
-             </i>
-               </a>
-
-               <a th:if="${pi.currentPage > 1}" th:href="@{/used/boardList/{cpage}(cpage=${pi.currentPage - 1})}">
-                 <i class="fa fa-angle-left">
-                 </i>
-               </a>
-              <a th:each="page : ${#numbers.sequence(pi.startPage, pi.endPage > 0 ? pi.endPage : 1)}"
-                 th:href="@{/used/boardList/{cpage}(cpage=${page})}"
-                 th:text="${page}"></a>
-
-
-
-              <a href="#" th:if="${pi.currentPage == pi.maxPage && pi.maxPage > 0}">
-                <i class="fa fa-angle-right"></i>
-              </a>
-              <a href="#" th:if="${pi.maxPage == 0}">
-                <i class="fa fa-angle-right"></i>
-              </a>
-
-              <a th:href="@{/used/boardList/{cpage}(cpage=${pi.currentPage + 1})}" th:if="${pi.currentPage < pi.maxPage}">
-                  <i class="fa fa-angle-right">
-                  </i>
-                </a>
-
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   </div>

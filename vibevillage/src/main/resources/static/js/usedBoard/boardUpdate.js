@@ -23,42 +23,67 @@ function deleteCurrentSubImage(item) {
 document.addEventListener('DOMContentLoaded', function () {
     const submitButton = document.getElementById('submit-button');
 
-
     submitButton.addEventListener('click', function () {
         const formData = new FormData();
-        if (mainImage) {
-            formData.append('mainFile', mainImage);
+        formData.append('usedBoardId', boardId);
+        const fields = [
+            { key: 'usedBoardTitle', value: document.getElementById('usedBoardTitle').value, message: '제목을 입력해주세요' },
+            { key: 'usedBoardProductName', value: document.getElementById('usedBoardProductName').value, message: '물품을 입력해주세요' },
+            { key: 'usedBoardProductPrice', value: document.getElementById('usedBoardProductPrice').value, message: '가격을 입력해주세요' },
+            { key: 'usedBoardContent', value: document.getElementById('usedBoardContent').value, message: '내용을 입력해주세요' },
+            { key: 'usedBoardLocation', value: document.getElementById('sample5_address').value, message: '주소를 입력해주세요' },
+            { key: 'categoryId', value: document.getElementById('categoryId').value, message: '카테고리를 선택해주세요' },
+            { key: 'province', value: addressData.sido, message: '주소를 입력해주세요' },
+            { key: 'city', value: addressData.sigungu, message: '주소를 입력해주세요' },
+            { key: 'gpsLatitude', value: latitude, message: 'Latitude is required' },
+            { key: 'gpsLongitude', value: longitude, message: 'Longitude is required' }
+        ];
+
+        // 필수 필드가 채워져 있는지 확인
+        for (const field of fields) {
+            if (!field.value) {
+                swal(field.message, "", "error");
+                return;
+            }
+            formData.append(field.key, field.value);
         }
+
+        // 서브 이미지가 3개 이하인지 확인
+        if ((previewImages.length+previousFile)-deleteList.length > 3) {
+            swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
+            return;
+        }
+
+        formData.append('mainFile', mainImage);
         previewImages.forEach(image => {
             formData.append('previewFiles', image);
         });
-        formData.append('province', addressData.sido);
-        formData.append('city', addressData.sigungu);
-        formData.append('usedBoardTitle', document.getElementById('usedBoardTitle').value);
-        formData.append('usedBoardProductName', document.getElementById('usedBoardProductName').value);
-        formData.append('usedBoardProductPrice', document.getElementById('usedBoardProductPrice').value);
-        formData.append('usedBoardContent', document.getElementById('usedBoardContent').value);
-        formData.append('usedBoardLocation', document.getElementById('sample5_address').value);
-        formData.append('categoryId', document.getElementById('categoryId').value);
-        formData.append('usedBoardId', boardId);
-        formData.append('gpsLatitude', latitude);
-        formData.append('gpsLongitude', longitude);
         formData.append('deleteList', deleteList);
+
+
         fetch('/used/update', {
             method: 'POST',
             body: formData,
         })
-            .then(response => response.json())  // 응답을 JSON 형식으로 변환
+            .then(response => response.json())
             .then(data => {
-                console.log(data);
-                alert(data.message);  // JSON 응답의 메시지 출력
-                if (data.message === "Update successful!") {
-                    window.location.href = "/used/boardList/1";  // 성공 시 리디렉션
-                }
+                swal({
+                    title: data.message,
+                    icon: "success",
+                    buttons: "OK"
+                }).then((value) => {
+                    if (value && data.message === "수정 성공") {
+                        window.location.href = "/used/boardList/1";
+                    }
+                });
             })
             .catch(error => {
-                console.error(error);
-                alert('Update failed!');
+                swal({
+                    title: 'Error',
+                    text: error,
+                    icon: 'error',
+                    buttons: "OK"
+                });
             });
     });
 });

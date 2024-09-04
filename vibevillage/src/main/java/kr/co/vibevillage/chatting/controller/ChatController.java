@@ -4,7 +4,6 @@ import kr.co.vibevillage.chatting.model.ChatMessage;
 import kr.co.vibevillage.chatting.model.ChatRoom;
 import kr.co.vibevillage.chatting.service.ChatMessageService;
 import kr.co.vibevillage.chatting.service.ChatRoomService;
-import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;

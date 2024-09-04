@@ -3,9 +3,7 @@ package kr.co.vibevillage.usedBoard.service;
 import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import kr.co.vibevillage.usedBoard.model.UsedPageInfoDto;
-import kr.co.vibevillage.user.model.dto.UserDTO;
-import org.springframework.ui.Model;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 

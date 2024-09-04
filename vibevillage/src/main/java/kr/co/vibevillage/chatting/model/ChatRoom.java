@@ -4,7 +4,6 @@ import kr.co.vibevillage.usedBoard.model.UsedBoardDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
 
 @Getter
 @Setter

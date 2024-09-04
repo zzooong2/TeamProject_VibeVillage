@@ -21,4 +21,6 @@ public interface UsedBoardMapper {
     void updateProduct(UsedBoardDto usedBoard);
     public int convertProductStatus(int id ,String status);
     public int increaseUserWriteCount(int id);
+
+    public List<UsedBoardDto> searchUsedBoard(String keyword);
 }

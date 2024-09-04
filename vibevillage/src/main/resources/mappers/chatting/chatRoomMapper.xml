@@ -12,7 +12,7 @@
 
     <insert id="createChatRoom" useGeneratedKeys="true" keyProperty="roomId" keyColumn="room_id">
         INSERT INTO chat_room (room_id,room_name, creator_id, other_user_id)
-        VALUES (chat_room_seq.nextval,#{chatRoom.name}, #{chatRoom.creatorId}, #{chatRoom.otherUserId})
+        VALUES (#{chatRoom.roomId},#{chatRoom.name}, #{chatRoom.creatorId}, #{chatRoom.otherUserId})
     </insert>
     <!-- 특정 roomId로 채팅방 찾기 -->
     <select id="findRoomById" resultType="kr.co.vibevillage.chatting.model.ChatRoom">
@@ -22,8 +22,9 @@
     </select>
     <select id="getChatRoomList" resultType="kr.co.vibevillage.chatting.model.ChatRoom">
         SELECT room_id AS roomId, room_name AS name, creator_id AS creatorId,
-               other_user_id AS otherUserId
+               other_user_id AS otherUserId, USED_POST_TITLE as usedBoardTitle, used_post_id as usedBoardId
         FROM chat_room
+        join used_board ON used_post_id = room_id
         WHERE other_user_id = #{userNo} or creator_id = #{userNo}
     </select>
     <select id="getUserNickNameById">

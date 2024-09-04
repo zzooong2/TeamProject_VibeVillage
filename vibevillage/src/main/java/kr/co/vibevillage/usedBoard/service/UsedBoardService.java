@@ -32,5 +32,5 @@ public interface UsedBoardService {
 
     void updateUsedBoard(UsedBoardDto usedBoard,List<Integer> deleteList);
     public int convertProductStatus(int id ,String status);
-
+    public List<UsedBoardDto> searchUsedBoard(String keyword);
 }

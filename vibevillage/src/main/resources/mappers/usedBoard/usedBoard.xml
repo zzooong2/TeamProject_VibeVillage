@@ -174,4 +174,35 @@
         where U_NO = #{id}
     </update>
 
+    <!-- 게시글 검색 쿼리 -->
+    <select id="searchUsedBoard" resultMap="usedBoardMap">
+        SELECT
+        u.U_NO,
+        u.USED_POST_ID,
+        u.USED_POST_TITLE,
+        u.USED_POST_CONTENT,
+        u.USED_POST_STATUS,
+        u.LOCATION,
+        u.USED_CREATE_AT,
+        u.GPS_LATITUDE,
+        u.GPS_LONGITUDE,
+        u.VIEWS,
+        p.PRODUCT_NAME,
+        p.PRODUCT_PRICE,
+        c.CATEGORY_NAME,
+        uv.U_NICKNAME
+        FROM USED_BOARD u
+        JOIN product p ON p.used_post_id = u.used_post_id
+        JOIN category c ON c.category_id = p.category_id
+        JOIN USER_VIBEVILLAGE uv ON u.U_NO = uv.U_NO
+        WHERE u.USED_DELETE = 'N'
+        <if test="keyword != null and keyword != ''">
+            AND (u.USED_POST_TITLE LIKE '%' || #{keyword} || '%'
+            OR u.USED_POST_CONTENT LIKE '%' || #{keyword} || '%'
+            OR p.PRODUCT_NAME LIKE '%' || #{keyword} || '%')
+        </if>
+        ORDER BY u.USED_CREATE_AT DESC
+    </select>
+
+
 </mapper>

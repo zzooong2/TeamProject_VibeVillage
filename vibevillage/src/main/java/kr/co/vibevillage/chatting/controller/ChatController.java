@@ -4,6 +4,7 @@ import kr.co.vibevillage.chatting.model.ChatMessage;
 import kr.co.vibevillage.chatting.model.ChatRoom;
 import kr.co.vibevillage.chatting.service.ChatMessageService;
 import kr.co.vibevillage.chatting.service.ChatRoomService;
+import kr.co.vibevillage.usedBoard.service.UsedBoardServiceImpl;
 import kr.co.vibevillage.user.model.dto.UserDTO;
 import kr.co.vibevillage.user.model.service.LoginServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,8 @@ public class ChatController {
         UserDTO user = loginService.getLoginUserInfo();
         Long currentUserId = Long.valueOf(user.getUserNo());
         Long boardOwnerId = request.get("boardOwnerId");
-        Long roomId = chatRoomService.createOrFindRoom(currentUserId, boardOwnerId);
+        Long boardId = request.get("boardId");
+        Long roomId = chatRoomService.createOrFindRoom(currentUserId, boardOwnerId,boardId);
 
         Map<String, Long> response = new HashMap<>();
         response.put("roomId", roomId);
@@ -45,6 +47,7 @@ public class ChatController {
         UserDTO user = loginService.getLoginUserInfo();
         String currentUser = user.getUserNickName();
         List<ChatRoom> chatRooms =chatRoomService.getChatRoomList(user.getUserNo());
+
         model.addAttribute("chatRoomList", chatRooms);
         model.addAttribute("currentUser", currentUser);
 

@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-sm-10">
                   <label class="btn btn-g btn-round" for="main-file-input">메인 이미지</label>
-                  <input id="main-file-input" name="mainFile" style="display: none;" type="file">
+                  <input disabled id="main-file-input" name="mainFile" style="display: none;" type="file">
                 </div>
                 <div class="col-sm-10">
                   <label class="btn btn-g btn-round" for="preview-file-input">서브 이미지</label>
@@ -155,8 +155,9 @@
   let usedBoard = /*[[${usedBoard}]]*/ {};
   let boardId = /*[[${usedBoard.usedBoardId}]]*/ 'defaultBoardId';
   let deleteList = [];
-  let previousFile = [[${subImages.size}]];
-  let currentFile;
+  let deleteSubList = [];
+  let deleteMainList = [];
+  let previousSubFile = [[${subImages.size}]];
   addressData = {
     sido: `${usedBoard.province}`,
     sigungu: `${usedBoard.city}`

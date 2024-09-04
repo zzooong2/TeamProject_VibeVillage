@@ -32,7 +32,7 @@ public class UploadFile {
 				.collect(Collectors.toList());
 		totalImageDtos.addAll(mainImageDtos);
 		}
-		if(!previewImages.isEmpty()){
+		if(previewImages !=null && !previewImages.isEmpty()){
 			List<UsedBoardImageDto> previewImageDtos = previewImages.stream()
 					.map(file -> uploadSingleFile(file, "PREVIEW"))
 					.collect(Collectors.toList());

@@ -1,16 +1,17 @@
-
+let mainFile = document.getElementById('main-file-input');
 function deleteCurrentMainImage(item) {
     const main = document.getElementById("currentMain");
     if (main) {
-        deleteList.push(item);  // 삭제 리스트에 추가
-        main.remove();  // 화면에서 이미지 제거
+        deleteMainList.push(item);  // 삭제 리스트에 추가
+        main.remove();
+        mainFile.removeAttribute('disabled');// 화면에서 이미지 제거
     }
 }
 
 function deleteCurrentSubImage(item) {
     const subImage = document.querySelector(`img[name="${item}"]`);
     if (subImage) {
-        deleteList.push(item);  // 삭제 리스트에 추가
+        deleteSubList.push(item);  // 삭제 리스트에 추가
         // item의 인덱스를 찾은 후, 해당 인덱스의 요소를 배열에서 제거
         const index = previewImages.indexOf(item);
         if (index > -1) {  // item이 배열에 존재하는 경우
@@ -49,16 +50,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // 서브 이미지가 3개 이하인지 확인
-        if ((previewImages.length+previousFile)-deleteList.length > 3) {
+        if ((previewImages.length+previousSubFile)-deleteSubList.length > 3) {
             swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
             return;
         }
-        if ((previewImages.length+previousFile)-deleteList.length == 0) {
+        if ((previewImages.length+previousSubFile)-deleteSubList.length == 0) {
             swal('이미지를 최소 한개 이상 업로드 해주세요', "", "error");
             return;
         }
-
+        deleteList = deleteList.concat(deleteMainList,deleteSubList);
         formData.append('mainFile', mainImage);
+
         previewImages.forEach(image => {
             formData.append('previewFiles', image);
         });

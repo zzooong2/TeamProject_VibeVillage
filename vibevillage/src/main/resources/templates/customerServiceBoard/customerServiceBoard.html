@@ -140,7 +140,6 @@
                                         </ul>
                                         <!-- 카테고리 필터 -->
                                         <div style="margin-top: 20px; margin-bottom: 20px;">
-                                                <div th:if="${csiaList != null and !csiaList.isEmpty()}">
                                             <select name="category" id="category"
                                                     class="form-control" onchange="filterAnswers()">
                                                 <option value="0">전체</option>
@@ -154,7 +153,7 @@
                                         <div class="tab-panel active" id="inquiry_Answer"
                                              style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion">
-
+                                                <div th:if="${csiaList != null and !csiaList.isEmpty()}">
                                                 <!-- 답변이 있을시에만 보임-->
                                                 <div th:if="${csiaList.iaContent != null}"
                                                      class="categoryPanel panel panel-default"

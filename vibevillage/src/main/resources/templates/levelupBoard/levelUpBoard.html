@@ -38,7 +38,6 @@
     <div style="height:500px;">
     <!-- 상태 필터링 버튼 추가 -->
     <section class="status_filter" style="padding-top: 40px; text-align: center;">
-   <div th:if="${lbList != null and !lbList.isEmpty()}">
       <div class="container">
         <div class="button-container">
           <button style="padding: 10px 20px;" class="btn btn-g btn-circle" value="전체" th:onclick="filterStatus('all')">전체</button>
@@ -54,6 +53,7 @@
       <div class="container">
         <div class="row multi-columns-row" style="display: flex; justify-content: center;">
           <div class="col-sm-6">
+            <div th:if="${lbList != null and !lbList.isEmpty()}">
             <div class="menu" th:each="lbList : ${lbList}">
               <div class="row">
                 <div class="col-sm-8" >
@@ -74,10 +74,10 @@
             </div>
         </div>
           <!-- 목록이 비어 있을 때 표시할 메시지 -->
+      </div>
           <div th:if="${lbList == null or lbList.isEmpty()}" style="text-align: center; padding-top: 20px;">
             <h5>아직 등록된 글이 없습니다.</h5>
           </div>
-      </div>
     </section>
     </div>
   </div>

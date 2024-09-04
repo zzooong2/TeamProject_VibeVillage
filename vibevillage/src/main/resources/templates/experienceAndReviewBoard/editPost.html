@@ -12,13 +12,14 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <h4 class="font-alt mb-0">글 수정</h4>
                 <hr class="divider-w mt-10 mb-20">
-                <!-- Form action 경로를 업데이트하고, th:action으로 설정 -->
                 <form class="form" role="form" th:action="@{/experienceBoard/post/update/{id}(id=${post.rId})}" method="post" enctype="multipart/form-data" id="postForm">
 
+                    <!-- 제목 입력 -->
                     <div class="form-group">
                         <input class="form-control" type="text" placeholder="제목을 입력해주세요." name="rTitle" id="rTitle" th:value="${post.rTitle}" required/>
                     </div>
 
+                    <!-- 카테고리 선택 -->
                     <div class="form-group">
                         <label for="categoryId">카테고리</label>
                         <select id="categoryId" name="categoryId" required>
@@ -32,24 +33,25 @@
                         </select>
                     </div>
 
+                    <!-- 이미지 업로드 -->
                     <div class="form-group">
                         <label for="imageUpload">이미지 업로드:</label>
                         <input type="file" class="form-control-file" id="imageUpload" name="files" accept="image/*" multiple onchange="uploadAndPreviewImages(event)" />
                         <div id="imagePreviewContainer" style="margin-top: 10px;">
-                            <!-- 이미 업로드된 파일들을 보여줌 -->
                             <div th:each="upload : ${post.uploadDTOs}">
                                 <div style="display: flex; align-items: center;">
-                                    <img th:src="@{/images/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100px; margin: 10px;">
+                                    <img th:src="@{/uploadReviewFile/{fileName}(fileName=${upload.ruName})}" alt="Uploaded Image" style="max-width: 100px; margin: 10px;" data-url="${upload.ruServerPath}">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- `textarea` 대신 `div`로 변경 -->
+                    <!-- 내용 입력 -->
                     <div class="form-group">
                         <div class="form-control" id="rContent" contenteditable="true" style="min-height: 200px; max-width: 100%; overflow: auto;" th:utext="${post.rContent}"></div>
                     </div>
 
+                    <!-- 폼 액션 버튼 -->
                     <div class="form-actions">
                         <button class="btn btn-g btn-circle" type="submit" onclick="return submitForm()">수정</button>
                         <button class="btn btn-g btn-circle" type="button" th:onclick="|location.href='@{/experienceBoard}'|">취소</button>
@@ -62,6 +64,7 @@
 
 <script>
     let imageUrls = [];
+    let deletedImageUrls = [];
 
     function uploadAndPreviewImages(event) {
         const files = event.target.files;
@@ -81,7 +84,6 @@
                     if (data.url) {
                         imageUrls.push(data.url);
 
-                        // 이미지 태그 생성 및 삽입
                         const imgTag = `<img src="${data.url}" style="max-width: 100%; margin: 10px;" />`;
                         container.innerHTML += imgTag;
 
@@ -116,7 +118,6 @@
             return false;
         }
 
-        // Hidden input 추가
         const hiddenInput = document.createElement('input');
         hiddenInput.type = 'hidden';
         hiddenInput.name = 'rContent';
@@ -140,6 +141,19 @@
             postForm.submit();
         }
     }
+
+    document.getElementById('rContent').addEventListener('input', function() {
+        const currentImages = document.querySelectorAll('#rContent img');
+        const currentImageUrls = Array.from(currentImages).map(img => img.src);
+
+        const allImages = document.querySelectorAll('#imagePreviewContainer img');
+        Array.from(allImages).forEach(img => {
+            if (!currentImageUrls.includes(img.src)) {
+                deletedImageUrls.push(img.dataset.url);
+                img.parentElement.remove();
+            }
+        });
+    });
 </script>
 
 <div th:replace="~{common/footer :: footer}"></div>

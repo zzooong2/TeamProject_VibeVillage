@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
             swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
             return;
         }
+        if ((previewImages.length+previousFile)-deleteList.length == 0) {
+            swal('이미지를 최소 한개 이상 업로드 해주세요', "", "error");
+            return;
+        }
 
         formData.append('mainFile', mainImage);
         previewImages.forEach(image => {

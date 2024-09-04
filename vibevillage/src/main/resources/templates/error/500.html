@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+<head>
+    <div th:replace="~{common/head :: head}"></div>
+
+</head>
+<body data-offset="60" data-spy="scroll" data-target=".onpage-navigation">
+<main>
+    <div class="page-loader">
+        <div class="loader">Loading...<div>
+    </div>
+    <section class="home-section home-parallax home-fade home-full-height bg-dark bg-dark-30" data-background="assets/images/section-4.jpg" id="home">
+        <div class="titan-caption">
+            <div class="caption-content">
+                <div class="font-alt mb-30 titan-title-size-4">Error 500</div>
+                <div class="font-alt">Data was wrong on this server.<br/>That is all we know.
+                </div>
+                <div class="font-alt mt-30"><a class="btn btn-border-w btn-round" href="/form">Back to home page</a></div>
+            </div>
+        </div>
+    </section>
+</main>
+<!--
+JavaScripts
+=============================================
+-->
+<div th:replace="~{common/js :: js}"></div>
+</body>
+</html>

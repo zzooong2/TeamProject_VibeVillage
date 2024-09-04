@@ -2,11 +2,9 @@ package kr.co.vibevillage.common;
 
 import kr.co.vibevillage.usedBoard.model.UsedBoardImageDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

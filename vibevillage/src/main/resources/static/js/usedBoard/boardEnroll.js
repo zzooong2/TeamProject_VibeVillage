@@ -42,7 +42,7 @@ submitButton.addEventListener('click', function() {
         swal('이미지는 최대 3개까지 업로드할 수 있습니다.', "", "error");
         return;
     }
-    else if(previewImages == null){
+    else if(previewImages.length == 0){
         swal('서브 이미지를 업로드 해주세요', "", "error");
         return;
     }

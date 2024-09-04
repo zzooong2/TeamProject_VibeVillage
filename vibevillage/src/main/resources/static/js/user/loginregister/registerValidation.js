@@ -152,7 +152,6 @@ function postCodeValidation() {
 function checkId() {
     console.log("checkId 메소드 실행");
     const userId = document.getElementById("userId").value;
-    console.log("?????")
     console.log(userId)
 
     if(userId === "") {

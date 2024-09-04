@@ -71,6 +71,8 @@ public interface ExperienceBoardMapper {
 
     void subWriteCount(int userNo);
 
+    void deleteUploadByUrl(String deletedUrl);
+
 //    Integer countCategoryById(Long categoryId);
 }
 

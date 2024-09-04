@@ -28,16 +28,32 @@
             <!-- 회원만이 들어가서 수정 할수있음 다른 회원은 보지못함 -->
             <h4 class="module-title font-alt mb-0">등 업 게 시 판</h4>
             <div class="text-center mt-4">
-              <a th:href="@{levelUpEnroll}" class="btn btn-g btn-circle" style="margin-top: 10px;">등 업 신 청</a>
+              <a th:href="@{/levelUp/levelUpEnroll}" class="btn btn-g btn-circle" style="margin-top: 10px;">등 업 신 청</a>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <section class="module" style="padding-top: 100px;">
+
+    <div style="height:500px;">
+    <!-- 상태 필터링 버튼 추가 -->
+    <section class="status_filter" style="padding-top: 40px; text-align: center;">
+      <div class="container">
+        <div class="button-container">
+          <button style="padding: 10px 20px;" class="btn btn-g btn-circle" value="전체" th:onclick="filterStatus('all')">전체</button>
+          <button style="padding: 10px 20px;" class="btn btn-g btn-circle" value="진행중" th:onclick="filterStatus('진행중')">진행중</button>
+          <button style="padding: 10px 20px;" class="btn btn-g btn-circle" value="반려" th:onclick="filterStatus('반려')">반려</button>
+          <button style="padding: 10px 20px;" class="btn btn-g btn-circle" value="완료" th:onclick="filterStatus('완료')">완료</button>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="module" style="padding-top: 70px;">
       <div class="container">
         <div class="row multi-columns-row" style="display: flex; justify-content: center;">
           <div class="col-sm-6">
+            <div th:if="${lbList != null and !lbList.isEmpty()}">
             <div class="menu" th:each="lbList : ${lbList}">
               <div class="row">
                 <div class="col-sm-8" >
@@ -55,12 +71,28 @@
                 </div>
               </div>
             </div>
+            </div>
         </div>
+          <!-- 목록이 비어 있을 때 표시할 메시지 -->
       </div>
+          <div th:if="${lbList == null or lbList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+            <h5>아직 등록된 글이 없습니다.</h5>
+          </div>
     </section>
+    </div>
   </div>
 </main>
 <div th:replace="~{common/footer :: footer}"></div>
 <div th:replace="~{common/js :: js}"></div>
+
+
+
+<script>
+  function filterStatus(lrStatus) {
+  const url = `/levelUp/levelUpBoard/${lrStatus}`
+    window.location.href = url;
+  }
+</script>
+
 </body>
 </html>

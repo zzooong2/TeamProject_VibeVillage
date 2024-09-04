@@ -24,8 +24,8 @@ public class LevelUpServiceImpl implements LevelUpService {
 
     // 등업신청 목록
     @Override
-    public List<LevelUpDTO> getLevelUpList(String userNickName) {
-        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList(userNickName);
+    public List<LevelUpDTO> getLevelUpList(String userNickName, String lrStatus) {
+        List<LevelUpDTO> lbList = levelUpMapper.getLevelUpList(userNickName, lrStatus);
         return lbList;
     }
 
@@ -73,12 +73,20 @@ public class LevelUpServiceImpl implements LevelUpService {
         return levelUpMapper.lbCountMinus(uNo);
     }
 
+    // 등업 승인
     @Override
-    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO, UserDTO userDTO) {
+    public int levelUpApprove(int uNo, int lbNo, LevelUpDTO levelUpDTO) {
 
-        int result = levelUpMapper.levelUpXML(uNo, levelUpDTO, userDTO);
+        int result = levelUpMapper.levelUpXML(uNo, levelUpDTO);
 
-        return levelUpMapper.levelUpApprove(lbNo, levelUpDTO, userDTO);
+        return levelUpMapper.levelUpApprove(lbNo, levelUpDTO);
+    }
+
+    // 등업 반려
+    @Override
+    public int levelUpReject(int uNo, LevelUpDTO levelUpDTO) {
+
+        return levelUpMapper.levelUpReject(uNo, levelUpDTO);
     }
 
 }

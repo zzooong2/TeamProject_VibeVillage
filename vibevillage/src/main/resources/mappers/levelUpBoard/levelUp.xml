@@ -39,6 +39,17 @@
         full join USER_LEVEL_MANAGEMENT ulm
         ON ulm.U_NO = uv.U_NO
         where LB_DELETE_YN = 'N'
+        <choose>
+            <when test="lrStatus == 'all' ">
+
+            </when>
+            <when test="lrStatus != null and lrStatus != ''">
+                AND LR_STATUS = #{lrStatus}
+            </when>
+
+
+        </choose>
+
         ORDER BY LB_INDATE DESC
     </select>
 
@@ -120,5 +131,14 @@
             LR_INDATE = SYSDATE
         where LB_NO = #{lbNo}
     </update>
+
+    <!--등업신청서 반려-->
+    <update id="levelUpReject" parameterType="kr.co.vibevillage.levelupBoard.model.LevelUpDTO">
+        update LEVELUP_RESULT_BOARD lrb
+        set LR_STATUS = '반려',
+            LR_INDATE = SYSDATE
+        where LB_NO = #{levelUpDTO.lbNo}
+    </update>
+
 
 </mapper>

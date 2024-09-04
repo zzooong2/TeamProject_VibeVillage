@@ -90,7 +90,7 @@ public class ExperienceBoardServiceImpl implements ExperienceBoardService {
 
     @Override
     public void uploadImage(MultipartFile[] files, Long rId) throws Exception {
-        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\images";
+        String uploadDirectory = "C:\\dev\\workspace\\finalproject\\vibevillage\\src\\main\\resources\\static\\uploadReviewFile";
 
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {

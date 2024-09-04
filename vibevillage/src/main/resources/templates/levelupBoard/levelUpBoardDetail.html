@@ -70,15 +70,18 @@
                             <!-- 등업 승인은 관리자만 가능 -->
                             <!-- 가을 > 여름으로
                                  여름 > 봄으로 등업 가능   -->
-                                <a th:if="${userLevel == '겨울'} and ${lbDetail.lrStatus != '완료'}" th:href="@{/levelUp/levelUpApprove/{lbNo}/{uNo}(lbNo=${lbDetail.lbNo}, uNo=${lbDetail.uNo})}">
+                                <a th:if="${userLevel == '겨울'} and ${lbDetail.lrStatus != '완료'} and ${lbDetail.lrStatus != '반려'}" th:href="@{/levelUp/levelUpApprove/{lbNo}/{uNo}(lbNo=${lbDetail.lbNo}, uNo=${lbDetail.uNo})}">
                                     <button class="btn btn-g btn-circle" type="button">등 업</button>
                                 </a>
-                            <!-- 본인만 삭제 가능 -->
-                                <a th:if="${userNickName == lbDetail.userNickName} and ${lbDetail.lrStatus != '완료'}" th:href="@{/levelUp/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                                <a th:if="${userLevel == '겨울'} and ${lbDetail.lrStatus != '완료'} and ${lbDetail.lrStatus != '반려'}" th:href="@{/levelUp/levelUpReject/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                                <button class="btn btn-g btn-circle" type="button">반 려</button>
+                                </a>
+                            <!-- 본인만 삭제 가능,  답변이 본인도 있으면 삭제 불가 -->
+                                <a th:if="${userNickName == lbDetail.userNickName} and ${lbDetail.lrStatus != '완료'} and ${lbDetail.lrStatus != '반려'}" th:href="@{/levelUp/levelUpBoardDelete/{lbNo}(lbNo=${lbDetail.lbNo})}">
                                     <button class="btn btn-g btn-circle" type="button">삭 제</button>
                                 </a>
-                            <!-- 본인만 수정 가능 -->
-                                <a th:if="${userNickName == lbDetail.userNickName} and ${lbDetail.lrStatus != '완료'}" th:href="@{/levelUp/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
+                            <!-- 본인만 수정 가능,  답변이 본인도 있으면 삭제 불가 -->
+                                <a th:if="${userNickName == lbDetail.userNickName} and ${lbDetail.lrStatus != '완료'} and ${lbDetail.lrStatus != '반려'}" th:href="@{/levelUp/levelUpBoardEditForm/{lbNo}(lbNo=${lbDetail.lbNo})}">
                              <button class="btn btn-g btn-circle" type="button">수 정</button>
                                 </a>
                             </div>

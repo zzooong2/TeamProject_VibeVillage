@@ -1,5 +1,12 @@
 const submitButton = document.getElementById('submit-button');
 
+let addressData = {
+    sido: null,
+    sigungu: null
+};  // 주소 데이터를 저장할 전역 변수
+let latitude = null;     // 위도를 저장할 전역 변수
+let longitude = null;    // 경도를 저장할 전역 변수
+
 submitButton.addEventListener('click', function() {
     const formData = new FormData();
     const fields = [

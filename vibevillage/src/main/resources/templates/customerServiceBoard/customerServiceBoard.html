@@ -47,6 +47,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="notice_board">
                                     <div class="panel-group" id="accordion">
+                                        <div th:if="${csnbList != null and !csnbList.isEmpty()}">
                                         <div class="panel panel-default" th:each="csnbList, iterStat : ${csnbList}">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title font-alt">
@@ -63,10 +64,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </div>
+                                            <!-- 목록이 비어 있을 때 표시할 메시지 -->
+                                            <div th:if="${csnbList == null or csnbList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+                                                <h5>아직 등록된 글이 없습니다.</h5>
+                                            </div>
                                 </div>
                                 <!-- 자주 묻는 질문 목록 -->
                                 <div class="tab-pane" id="question">
                                     <div class="panel-group" id="accordion">
+                                        <div th:if="${csqaList != null and !csqaList.isEmpty()}">
                                         <div class="panel panel-default" th:each="csqaList, iterStat : ${csqaList}">
                                             <div class="panel-heading">
                                                 <h4 class="panel-title font-alt">
@@ -80,7 +87,12 @@
                                                 </a>
                                             </div>
                                         </div>
+                                        </div>
                                     </div>
+                                        <!-- 목록이 비어 있을 때 표시할 메시지 -->
+                                        <div th:if="${csqaList == null or csqaList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+                                            <h5>아직 등록된 글이 없습니다.</h5>
+                                        </div>
                                 </div>
                                 <!-- 1:1 문의 게시판 -->
                                 <div class="tab-pane" id="inquiry">
@@ -128,6 +140,7 @@
                                         </ul>
                                         <!-- 카테고리 필터 -->
                                         <div style="margin-top: 20px; margin-bottom: 20px;">
+                                                <div th:if="${csiaList != null and !csiaList.isEmpty()}">
                                             <select name="category" id="category"
                                                     class="form-control" onchange="filterAnswers()">
                                                 <option value="0">전체</option>
@@ -141,6 +154,7 @@
                                         <div class="tab-panel active" id="inquiry_Answer"
                                              style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion">
+
                                                 <!-- 답변이 있을시에만 보임-->
                                                 <div th:if="${csiaList.iaContent != null}"
                                                      class="categoryPanel panel panel-default"
@@ -163,6 +177,11 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                                </div>
+                                                <!-- 목록이 비어 있을 때 표시할 메시지 -->
+                                                <div th:if="${csiaList == null or csiaList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+                                                    <h5>아직 등록된 답변이 없습니다.</h5>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -173,6 +192,7 @@
                                         <div class="tab-pane" id="inquiry_Answer2"
                                              style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion" style="margin-top: 20px;">
+                                                <div th:if="${csiamList != null and !csiamList.isEmpty()}">
                                                 <div th:if="${csiamList.iaContent == null}" class="panel panel-default"
                                                      th:each="csiamList, iterStat : ${csiamList}">
                                                     <div class="panel-heading">
@@ -193,11 +213,17 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
+                                            <!-- 목록이 비어 있을 때 표시할 메시지 -->
+                                            <div th:if="${csiamList == null or csiamList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+                                                <h5>아직 등록된 문의가 없습니다.</h5>
+                                            </div>
                                         </div>
 
                                         <div class="tab-pane" id="inquiry_Answer3"
                                              style="padding-top: 20px; padding-bottom: 20px;">
                                             <div class="panel-group" id="accordion" style="margin-top: 20px;">
+                                                <div th:if="${csiamList != null and !csiamList.isEmpty()}">
                                                 <div th:if="${csiamList.iaContent != null}" class="panel panel-default"
                                                      th:each="csiamList, iterStat : ${csiamList}">
                                                     <div class="panel-heading">
@@ -217,6 +243,11 @@
                                                         </a>
                                                     </div>
                                                 </div>
+                                            </div>
+                                            </div>
+                                            <!-- 목록이 비어 있을 때 표시할 메시지 -->
+                                            <div th:if="${csiamList == null or csiamList.isEmpty()}" style="text-align: center; padding-top: 20px;">
+                                                <h5>아직 답변이 완료된 문의가 없습니다.</h5>
                                             </div>
                                         </div>
                                     </div>

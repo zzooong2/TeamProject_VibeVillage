@@ -16,6 +16,10 @@ public interface ExperienceBoardService {
 
     void updatePost(Long rId, ExperienceBoardDTO experienceBoardDto, MultipartFile[] files) throws IOException;
 
+    void uploadImage(MultipartFile[] files, Long rId) throws Exception;
+
+    void updatePost(Long rId, ExperienceBoardDTO experienceBoardDTO, MultipartFile[] files, List<String> deletedImages) throws IOException;
+
     void deletePost(Long rId);
     ExperienceBoardDTO getPostById(Long rId);
 
@@ -32,8 +36,8 @@ public interface ExperienceBoardService {
 
 //    void uploadImage(MultipartFile[] files) throws Exception;
 
-    void uploadImage(MultipartFile[] files, Long rId) throws Exception;
-
+//    void uploadImage(MultipartFile[] files, Long rId) throws Exception;
+//
     void deleteUploadsByIds(Long[] deleteImageIds);
 
 //    Map<String, Object> uploadImage(MultipartFile file) throws IOException;

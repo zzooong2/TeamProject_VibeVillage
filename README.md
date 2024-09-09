@@ -7,7 +7,7 @@
  - *Back-End*: Java(17), SpringBoot
  - *DataBase*: Oracle(21C)
  - *API*: Kakao Map, coolSMS, Kakao Login
- - *Communication Tools*: Notion, GitHub
+ - *Communication Tools*: Notion
    https://hollow-address-1a0.notion.site/VibeVillage-Team-On-Air-7e0583c70f88478f980bdc0b0a2009f2?pvs=74
 
 ### ⏱ 개발 기간

@@ -4,7 +4,7 @@
 ### 🖥 프로젝트 소개
  - *JAVA 기반 풀스택 웹개발자 실무 양성과정을 수강하며 공부했던 내용들을 최대한 활용해보는 프로젝트입니다.*
  - *Front-End*: HTML5, CSS3, JavaScript(ES6), Ajax
- - *Back-End*: Java(17), SpringBoot
+ - *Back-End*: Java(17), SpringBoot, SpringSecurity, JWT
  - *DataBase*: Oracle(21C)
  - *API*: Kakao Map, coolSMS, Kakao Login
  - *Communication Tools*: Notion

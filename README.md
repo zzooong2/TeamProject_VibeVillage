@@ -1,5 +1,7 @@
 <img width="1680" alt="메인" src="https://github.com/user-attachments/assets/66a3774c-af50-420e-a34c-0db30ee18dd5">
 
+<img width="1680" alt="메인" src="https://github.com/user-attachments/assets/d353f483-af2d-45b3-9ee8-61259ef63e63">
+
 ## Team Project - Communication Platform
  - 당근, 중고나라를 참고하여 제작한 비즈니스 플랫폼
 

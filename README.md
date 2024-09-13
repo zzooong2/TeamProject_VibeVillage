@@ -57,7 +57,7 @@
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/8fd57e8d-01cd-4e35-ade0-d021fd386155"></td>
+   <td><img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/e16abdb4-0649-4727-93eb-f99d1555dda6"></td>
    <td><img width="400" alt="로그인 성공" src="https://github.com/user-attachments/assets/5e5cfaf7-008a-47a8-8c4e-37af6bb8eb78"></td>
   </tr>
  </tbody>

@@ -1,4 +1,4 @@
-<img src="/Users/keem/Downloads/자료/JAVA 개발자 양성과정/FinalProject/User/main.gif" width="1000px" height="600px">
+<img width="1680" alt="메인" src="https://github.com/user-attachments/assets/66a3774c-af50-420e-a34c-0db30ee18dd5">
 
 ## Team Project - Communication Platform
  - 당근, 중고나라를 참고하여 제작한 비즈니스 플랫폼

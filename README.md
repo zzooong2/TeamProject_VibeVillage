@@ -47,8 +47,18 @@
 
 ### 🖨️ 페이지 시연
 
+<table>
+ <thead>
+  <tr>
+   <td></td>
+   <td></td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"></td>
+   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"></td>
+  </tr>
+ </tbody>
+</table>
 
-|---|---|
-|<img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63">|<img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563">|
-|1   |2   |
-|1   |2   |

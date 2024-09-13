@@ -59,8 +59,6 @@
   <tr>
    <td style="text-align: center">
      <img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/e16abdb4-0649-4727-93eb-f99d1555dda6">
-   </td>
-   <td style="text-align: center">
      <img width="400" alt="로그인" src="https://github.com/user-attachments/assets/37ef7df3-51e9-403a-ab5f-b20e36eedf2e">
    </td>
   </tr>
@@ -76,8 +74,6 @@
   <tr>
    <td style="text-align: center">
      <img width="400" alt="계정 찾기" src="https://github.com/user-attachments/assets/dfc05aed-e1d3-4479-8f12-6cd371815dd4">
-   </td>
-   <td style="text-align: center">
      <img width="400" alt="비밀번호 찾기" src="https://github.com/user-attachments/assets/b2e854de-53c3-4078-b477-e99d65a347c7">
    </td>
   </tr>
@@ -109,8 +105,6 @@
   <tr>
    <td style="text-align: center">
      <img width="400" alt="경험 및 리뷰 게시판" src="https://github.com/user-attachments/assets/f35376f6-a434-4c6a-80a7-ea12ae50fbc7">
-   </td>
-   <td style="text-align: center">
      <img width="400" alt="글 작성" src="https://github.com/user-attachments/assets/83862cfd-3e8a-47ed-b86f-e14178edb0c8">
    </td>
   </tr>
@@ -126,8 +120,6 @@
   <tr>
    <td style="text-align: center">
      <img width="400" alt="경험 및 리뷰 게시판" src="https://github.com/user-attachments/assets/79dcb488-8a97-4f77-b777-4ab721a58f4a">
-   </td>
-   <td style="text-align: center">
      <img width="400" alt="추천글 조회" src="https://github.com/user-attachments/assets/a73710ad-006f-4361-809f-f25b7ec794d9">
    </td>
   </tr>

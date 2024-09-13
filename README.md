@@ -46,4 +46,4 @@
  - 정은식(팀원): 페르소나 작성, E-R Diagram 작성, 중고거래 게시판 작성, 실시간 채팅 구현
 
 ### 🖨️ 페이지 시연
-|||
+|<img width="600" alt="메인" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63">|<img width="600" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563">|

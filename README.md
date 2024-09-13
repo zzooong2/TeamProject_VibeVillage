@@ -56,8 +56,8 @@
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"></td>
-   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"></td>
+   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"><br>로그인 페이지</td>
+   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"><br>로그인 성공 후 JWT생성된 모습</td>
   </tr>
  </tbody>
 </table>

@@ -28,7 +28,7 @@
 삶의 질 향상: 취미 공유와 다양한 모임을 통해 삶의 질을 높이고, 여가 시간을 더 풍성하게 보낼 수 있습니다.
 이 플랫폼은 지역 기반의 소통을 강화하고, 사람들 간의 유대감을 높이는 데 초점을 맞추고 있습니다. 사용자들이 자신의 취미와 물품을 공유하면서 더 나은 커뮤니티 경험을 누릴 수 있을 것입니다.
 
-### 💻 기술스택
+### 🛠️ 기술스택
  - *Front-End*: HTML5, CSS3, JavaScript(ES6), Ajax
  - *Back-End*: Java(17), SpringBoot, SpringSecurity, JWT
  - *DataBase*: Oracle(21C)

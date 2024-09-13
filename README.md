@@ -47,6 +47,7 @@
 
 ### 🖨️ 페이지 시연
 
+##### 회원가입 / 로그인 
 <table style="width: 100%; border-collapse: collapse;">
  <thead>
   <tr>
@@ -91,6 +92,43 @@
   <tr>
    <td style="text-align: center">
      <img width="400" alt="회원정보 수정" src="https://github.com/user-attachments/assets/08d5c1d7-7c9e-48b4-9318-ce2faa692bad">
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+##### 경험 및 리뷰 게시판
+<table style="width: 100%; border-collapse: collapse;">
+ <thead>
+  <tr>
+   <td style="text-align: center">경험 및 리뷰 게시판</td>
+   <td style="text-align: center">글 작성</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="text-align: center">
+     <img width="400" alt="경험 및 리뷰 게시판" src="https://github.com/user-attachments/assets/f35376f6-a434-4c6a-80a7-ea12ae50fbc7">
+   </td>
+   <td style="text-align: center">
+     <img width="400" alt="글 작성" src="https://github.com/user-attachments/assets/83862cfd-3e8a-47ed-b86f-e14178edb0c8">
+   </td>
+  </tr>
+ </tbody>
+
+  <thead>
+  <tr>
+   <td style="text-align: center">포스팅 조회 및 댓글, 좋아요 작성</td>
+   <td style="text-align: center">추천글 조회</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="text-align: center">
+     <img width="400" alt="경험 및 리뷰 게시판" src="https://github.com/user-attachments/assets/79dcb488-8a97-4f77-b777-4ab721a58f4a">
+   </td>
+   <td style="text-align: center">
+     <img width="400" alt="글 작성" src="[https://github.com/user-attachments/assets/83862cfd-3e8a-47ed-b86f-e14178edb0c8](https://github.com/user-attachments/assets/a73710ad-006f-4361-809f-f25b7ec794d9)">
    </td>
   </tr>
  </tbody>

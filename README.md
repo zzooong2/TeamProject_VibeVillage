@@ -128,7 +128,7 @@
      <img width="400" alt="경험 및 리뷰 게시판" src="https://github.com/user-attachments/assets/79dcb488-8a97-4f77-b777-4ab721a58f4a">
    </td>
    <td style="text-align: center">
-     <img width="400" alt="글 작성" src="[https://github.com/user-attachments/assets/83862cfd-3e8a-47ed-b86f-e14178edb0c8](https://github.com/user-attachments/assets/a73710ad-006f-4361-809f-f25b7ec794d9)">
+     <img width="400" alt="추천글 조회" src="https://github.com/user-attachments/assets/a73710ad-006f-4361-809f-f25b7ec794d9">
    </td>
   </tr>
  </tbody>

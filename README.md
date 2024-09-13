@@ -51,13 +51,13 @@
  
  <thead>
   <tr>
-   <td>로그인 페이지</td>
+   <td>회원가입</td>
    <td>로그인 성공</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="로그인 화면" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"></td>
+   <td><img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/d3b17f3c-6ab1-48fa-a9f3-4259f35756bb"></td>
    <td><img width="400" alt="로그인 성공" src="https://github.com/user-attachments/assets/5e5cfaf7-008a-47a8-8c4e-37af6bb8eb78"></td>
   </tr>
  </tbody>

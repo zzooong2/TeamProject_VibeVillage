@@ -48,6 +48,7 @@
 ### 🖨️ 페이지 시연
 
 <table>
+ 
  <thead>
   <tr>
    <td>로그인 페이지</td>
@@ -60,6 +61,7 @@
    <td><img width="400" alt="로그인 성공" src="https://github.com/user-attachments/assets/5e5cfaf7-008a-47a8-8c4e-37af6bb8eb78"></td>
   </tr>
  </tbody>
+ 
  <thead>
   <tr>
    <td>로그인 성공 후 JWT생성된 모습</td>
@@ -72,6 +74,7 @@
    <td><img width="400" alt="계정, 비밀번호 찾기" src="https://github.com/user-attachments/assets/d0a872f7-ec28-404d-89db-da42fd0fa768"></td>
   </tr>
  </tbody>
+ 
   <thead>
   <tr>
    <td>마이페이지</td>
@@ -84,5 +87,32 @@
    <td><img width="400" alt="프로필 업로드 성공" src="https://github.com/user-attachments/assets/acebfdeb-182d-430a-a8b6-b50b84d86c6b"></td>
   </tr>
  </tbody>
+
+ <thead>
+  <tr>
+   <td>닉네임 중복검사 (실패)</td>
+   <td>닉네임 중복검사 (성공)</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><img width="400" alt="닉네임 중복검사1" src="https://github.com/user-attachments/assets/e349b34e-b78c-421a-b5a2-47e9f8043fcd"></td>
+   <td><img width="400" alt="닉네임 중복검사2" src="https://github.com/user-attachments/assets/4d728e0b-ef02-492f-ab8a-22d875ac5cc0"></td>
+  </tr>
+ </tbody>
+ 
+ <thead>
+  <tr>
+   <td>비밀번호 찾기 > 임시 비밀번호 발급</td>
+   <td>임시 비밀번호로 로그인</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><img width="1680" alt="임시 비밀번호 발급" src="https://github.com/user-attachments/assets/08348e2a-667e-45c0-9155-642813bd90c3"></td>
+   <td><img width="1680" alt="임시 비밀번호 로그인" src="https://github.com/user-attachments/assets/53b1ba52-6c75-4176-bada-08a377c1cb51"></td>
+  </tr>
+ </tbody>
+
 </table>
 

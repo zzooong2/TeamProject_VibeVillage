@@ -50,16 +50,16 @@
 <table style="width: 100%; border-collapse: collapse;">
  <thead>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">회원가입</td>
-   <td style="text-align: center; vertical-align: middle;">로그인</td>
+   <td style="text-align: center">회원가입</td>
+   <td style="text-align: center">로그인</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">
+   <td style="text-align: center">
      <img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/e16abdb4-0649-4727-93eb-f99d1555dda6">
    </td>
-   <td style="text-align: center; vertical-align: middle;">
+   <td style="text-align: center">
      <img width="400" alt="로그인" src="https://github.com/user-attachments/assets/37ef7df3-51e9-403a-ab5f-b20e36eedf2e">
    </td>
   </tr>
@@ -67,16 +67,16 @@
 
  <thead>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">계정 찾기</td>
-   <td style="text-align: center; vertical-align: middle;">비밀번호 찾기</td>
+   <td style="text-align: center">계정 찾기</td>
+   <td style="text-align: center">비밀번호 찾기</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">
+   <td style="text-align: center">
      <img width="400" alt="계정 찾기" src="https://github.com/user-attachments/assets/dfc05aed-e1d3-4479-8f12-6cd371815dd4">
    </td>
-   <td style="text-align: center; vertical-align: middle;">
+   <td style="text-align: center">
      <img width="400" alt="비밀번호 찾기" src="https://github.com/user-attachments/assets/b2e854de-53c3-4078-b477-e99d65a347c7">
    </td>
   </tr>
@@ -84,12 +84,12 @@
 
  <thead>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">회원정보 수정</td>
+   <td style="text-align: center">회원정보 수정</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td style="text-align: center; vertical-align: middle;">
+   <td style="text-align: center">
      <img width="400" alt="회원정보 수정" src="https://github.com/user-attachments/assets/08d5c1d7-7c9e-48b4-9318-ce2faa692bad">
    </td>
   </tr>

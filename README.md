@@ -1,4 +1,4 @@
-<img width="1680" alt="메인" src="https://github.com/user-attachments/assets/66a3774c-af50-420e-a34c-0db30ee18dd5">
+<img width="1680" alt="메인" src="https://github.com/user-attachments/assets/39eb1030-6053-4760-9804-47a82f03ec83">
 
 ## Team Project - Communication Platform
  - 당근, 중고나라를 참고하여 제작한 비즈니스 플랫폼
@@ -45,3 +45,5 @@
  - 전해원(팀원): 페르소나 작성, E-R Diagram 작성, 등업 게시판. 공지사항 게시판 작성
  - 정은식(팀원): 페르소나 작성, E-R Diagram 작성, 중고거래 게시판 작성, 실시간 채팅 구현
 
+### 🖨️ 페이지 시연
+|||

@@ -50,14 +50,22 @@
 <table>
  <thead>
   <tr>
-   <td></td>
-   <td></td>
+   <td>로그인 페이지</td>
+   <td>마이 페이지</td>
+  </tr>
+  <tr>
+   <td>로그인 성공 후 JWT생성된 모습</td>
+   <td>계정, 비밀번호 찾기</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"><br>로그인 페이지</td>
-   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"><br>로그인 성공 후 JWT생성된 모습</td>
+   <td><img width="400" alt="로그인 화면" src="https://github.com/user-attachments/assets/4a465151-327d-4b69-a113-4b8c7934da63"></td>
+   <td><img width="400" alt="마이페이지 화면" src="https://github.com/user-attachments/assets/4c01b2a2-6a99-467d-ab1e-4d2a0cf2b88f"></td>
+  </tr>
+  <tr>
+   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"></td>
+   <td><img width="400" alt="계정, 비밀번호 찾기" src="https://github.com/user-attachments/assets/d0a872f7-ec28-404d-89db-da42fd0fa768"></td>
   </tr>
  </tbody>
 </table>

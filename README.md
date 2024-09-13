@@ -47,72 +47,52 @@
 
 ### 🖨️ 페이지 시연
 
-<table>
- 
+<table style="width: 100%; border-collapse: collapse;">
  <thead>
   <tr>
-   <td>회원가입</td>
-   <td>로그인 성공</td>
+   <td style="text-align: center; vertical-align: middle;">회원가입</td>
+   <td style="text-align: center; vertical-align: middle;">로그인</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/e16abdb4-0649-4727-93eb-f99d1555dda6"></td>
-   <td><img width="400" alt="로그인 성공" src="https://github.com/user-attachments/assets/5e5cfaf7-008a-47a8-8c4e-37af6bb8eb78"></td>
-  </tr>
- </tbody>
- 
- <thead>
-  <tr>
-   <td>로그인 성공 후 JWT생성된 모습</td>
-   <td>계정, 비밀번호 찾기</td>
-  </tr>
- </thead>
- <tbody>
-  <tr>
-   <td><img width="400" alt="JWT 생성 + 쿠키" src="https://github.com/user-attachments/assets/cb790687-09ba-4a00-bdf0-8bbe8d653563"></td>
-   <td><img width="400" alt="계정, 비밀번호 찾기" src="https://github.com/user-attachments/assets/d0a872f7-ec28-404d-89db-da42fd0fa768"></td>
-  </tr>
- </tbody>
- 
-  <thead>
-  <tr>
-   <td>마이페이지</td>
-   <td>프로필 업로드 성공</td>
-  </tr>
- </thead>
- <tbody>
-  <tr>
-   <td><img width="400" alt="마이페이지 화면" src="https://github.com/user-attachments/assets/4c01b2a2-6a99-467d-ab1e-4d2a0cf2b88f"></td>
-   <td><img width="400" alt="프로필 업로드 성공" src="https://github.com/user-attachments/assets/acebfdeb-182d-430a-a8b6-b50b84d86c6b"></td>
+   <td style="text-align: center; vertical-align: middle;">
+     <img width="400" alt="회원가입" src="https://github.com/user-attachments/assets/e16abdb4-0649-4727-93eb-f99d1555dda6">
+   </td>
+   <td style="text-align: center; vertical-align: middle;">
+     <img width="400" alt="로그인" src="https://github.com/user-attachments/assets/37ef7df3-51e9-403a-ab5f-b20e36eedf2e">
+   </td>
   </tr>
  </tbody>
 
  <thead>
   <tr>
-   <td>닉네임 중복검사 (실패)</td>
-   <td>닉네임 중복검사 (성공)</td>
+   <td style="text-align: center; vertical-align: middle;">계정 찾기</td>
+   <td style="text-align: center; vertical-align: middle;">비밀번호 찾기</td>
   </tr>
  </thead>
  <tbody>
   <tr>
-   <td><img width="400" alt="닉네임 중복검사1" src="https://github.com/user-attachments/assets/e349b34e-b78c-421a-b5a2-47e9f8043fcd"></td>
-   <td><img width="400" alt="닉네임 중복검사2" src="https://github.com/user-attachments/assets/4d728e0b-ef02-492f-ab8a-22d875ac5cc0"></td>
-  </tr>
- </tbody>
- 
- <thead>
-  <tr>
-   <td>비밀번호 찾기 > 임시 비밀번호 발급</td>
-   <td>임시 비밀번호로 로그인</td>
-  </tr>
- </thead>
- <tbody>
-  <tr>
-   <td><img width="1680" alt="임시 비밀번호 발급" src="https://github.com/user-attachments/assets/08348e2a-667e-45c0-9155-642813bd90c3"></td>
-   <td><img width="1680" alt="임시 비밀번호 로그인" src="https://github.com/user-attachments/assets/53b1ba52-6c75-4176-bada-08a377c1cb51"></td>
+   <td style="text-align: center; vertical-align: middle;">
+     <img width="400" alt="계정 찾기" src="https://github.com/user-attachments/assets/dfc05aed-e1d3-4479-8f12-6cd371815dd4">
+   </td>
+   <td style="text-align: center; vertical-align: middle;">
+     <img width="400" alt="비밀번호 찾기" src="https://github.com/user-attachments/assets/b2e854de-53c3-4078-b477-e99d65a347c7">
+   </td>
   </tr>
  </tbody>
 
+ <thead>
+  <tr>
+   <td style="text-align: center; vertical-align: middle;">회원정보 수정</td>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td style="text-align: center; vertical-align: middle;">
+     <img width="400" alt="회원정보 수정" src="https://github.com/user-attachments/assets/08d5c1d7-7c9e-48b4-9318-ce2faa692bad">
+   </td>
+  </tr>
+ </tbody>
 </table>
 

@@ -33,6 +33,7 @@
  - *Back-End*: Java(17), SpringBoot, SpringSecurity, JWT
  - *DataBase*: Oracle(21C)
  - *API*: Kakao Map, coolSMS, Kakao Login
+ - *Library*: Redis, websocket, stomp
  - *Communication Tools*: Notion
    https://hollow-address-1a0.notion.site/VibeVillage-Team-On-Air-7e0583c70f88478f980bdc0b0a2009f2?pvs=74
 

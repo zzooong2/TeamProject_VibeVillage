@@ -29,11 +29,11 @@
  4. **이 플랫폼은 지역 기반의 소통을 강화하고, 사람들 간의 유대감을 높이는 데 초점을 맞추고 있습니다.** <br>
 
 ### 🛠️ 기술스택
- - *Front-End*: HTML5, CSS3, JavaScript(ES6), Ajax
+ - *Front-End*: HTML5, CSS3, JavaScript(ES6)
  - *Back-End*: Java(17), SpringBoot, SpringSecurity, JWT
- - *DataBase*: Oracle(21C)
+ - *DataBase*: Oracle(21C), Redis
  - *API*: Kakao Map, coolSMS, Kakao Login
- - *Library*: Redis, websocket, stomp
+ - *Library*: jQuery, Ajax, websocket, stomp
  - *Communication Tools*: Notion
    https://hollow-address-1a0.notion.site/VibeVillage-Team-On-Air-7e0583c70f88478f980bdc0b0a2009f2?pvs=74
 
